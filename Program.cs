@@ -6,7 +6,17 @@ namespace CustomHeroCreator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to Custom Hero Creator!");
+
+            Hero hero = new Hero();
+
+
+            while(hero.IsActive)
+            {
+                hero.LevelUp();
+            }
+
         }
+
     }
 }
