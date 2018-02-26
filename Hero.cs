@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CustomHeroCreator
@@ -13,16 +14,18 @@ namespace CustomHeroCreator
         public uint Level { get; private set; } = 1;
         public bool IsActive { get; internal set; } = true;
 
-
-        public string Stats => "Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
-
         // Some stats for the Hero
-
+        public string Stats => "HitPoints: " + Hp + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
         public int Str { get; private set; } = 1;
         public int Agi { get; private set; } = 1;
         public int Int { get; private set; } = 1;
 
+        public int Hp { get; set; } = 100;
 
+        public enum StatTypes
+        {
+            Str, Agi, Int, Hp
+        };
 
 
         /// <summary>
@@ -49,14 +52,11 @@ namespace CustomHeroCreator
 
             while (!hasChoosen)
             {
-
-
-                var i = 1;
+                var i = 0;
                 foreach (var skill in skillOptions)
                 {
                     Console.WriteLine("[" + i++ + "]: " + skill.Key + " +" + skill.Value);
                 }
-
 
                 var input = Console.ReadLine();
 
@@ -64,50 +64,61 @@ namespace CustomHeroCreator
                 if (input == "q" || input == "Q")
                 {
                     IsActive = false;
-                    hasChoosen = true;
                     break;
                 }
 
                 int option = int.Parse(input);
 
-                switch (option)
+                if (option >= SKILL_OPTIONS_PER_LVL_UP)
                 {
-                    case 1:
-                        Str += skillOptions["str"];
-                        hasChoosen = true;
-                        break;
-                    case 2:
-                        Agi += skillOptions["agi"];
-                        hasChoosen = true;
-                        break;
-                    case 3:
-                        Int += skillOptions["int"];
-                        hasChoosen = true;
-                        break;
-
-                    default:
-                        hasChoosen = false;
-                        break;
-                }
-
-                if (!hasChoosen)
-                {
+                    // invalid option
                     Console.WriteLine();
                     Console.WriteLine("Please choose a valid option");
+                    continue;
                 }
+
+                var type = skillOptions.Keys.ElementAt(option);
+                var value = skillOptions[type];
+
+                switch (type)
+                {
+                    case StatTypes.Str:
+                        Str += value;
+                        break;
+                    case StatTypes.Agi:
+                        Agi += value;
+                        break;
+                    case StatTypes.Int:
+                        Int += value;
+                        break;
+                    case StatTypes.Hp:
+                        Hp += value;
+                        break;
+                    default:
+                        break;
+                }
+
+                hasChoosen = true;
                 Console.WriteLine();
             }
         }
 
-        private Dictionary<string, int> GenerateRandomSkills()
+        private Dictionary<StatTypes, int> GenerateRandomSkills()
         {
-            var skills = new Dictionary<string, int>();
+            var skills = new Dictionary<StatTypes, int>();
 
             Random rnd = new Random();
 
-            skills.Add("str", rnd.Next(1, 5));
-            skills.Add("agi", rnd.Next(1, 5));
-            skills.Add("int", rnd.Next(1, 5));
+            skills.Add(StatTypes.Str, rnd.Next(1, 5));
+            skills.Add(StatTypes.Agi, rnd.Next(1, 5));
+            skills.Add(StatTypes.Int, rnd.Next(1, 5));
+
+            //every now and again remove one of the standard stat options and add health instead
+            if (rnd.Next(1,5) == 4)
+            {
+                skills.Remove(StatTypes.Str);
+                skills.Add(StatTypes.Hp, rnd.Next(1, 10));
+            }
 
             return skills;
         }
