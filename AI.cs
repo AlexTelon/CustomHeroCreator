@@ -6,7 +6,6 @@ namespace CustomHeroCreator
 {
     class AI
     {
-
         internal string ChooseOption(object hero, Dictionary<Hero.StatTypes, int> options)
         {
             // get internal state of the hero, use that later
@@ -19,7 +18,9 @@ namespace CustomHeroCreator
 
             // 1 to count + 1 since thats the way the user chooses (1 indexed)
             return "" + rnd.Next(1, options.Count + 1);
-
         }
+
+
+
     }
 }

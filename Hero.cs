@@ -30,6 +30,17 @@ namespace CustomHeroCreator
         };
 
         /// <summary>
+        /// How powerful is this hero?
+        /// </summary>
+        public double Fitness {
+            get
+            {
+                // start with a Fitness that clearly rewards Hp over the other attributes
+                return Hp * 10 + Str + Agi + Int;
+            }
+        }
+
+        /// <summary>
         /// If this hero has an AI or if it is to be controlled by user
         /// </summary>
         public bool HasAI => AI != null;
@@ -58,6 +69,11 @@ namespace CustomHeroCreator
             Level++;
         }
 
+        internal void PrintFitness()
+        {
+            PrintWithColor("Fitness: ", ConsoleColor.White);
+            PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
+        }
 
         private void ChooseNewSkill()
         {
@@ -71,7 +87,6 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
-                    Console.WriteLine();
                     Console.WriteLine("Choose one of the following or press Q to abort");
 
                     Console.WriteLine();
@@ -181,6 +196,7 @@ namespace CustomHeroCreator
             Console.Write(" Intelligence: ");
             Console.ForegroundColor = StatToColor(StatTypes.Int);
             Console.Write(Int);
+            Console.WriteLine();
 
             Console.ForegroundColor = originalColor;
         }

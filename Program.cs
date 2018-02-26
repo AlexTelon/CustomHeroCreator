@@ -21,7 +21,6 @@ namespace CustomHeroCreator
                 useAI = false;
             }
 
-
             var heroes = new List<Hero>();
 
             for (int i = 0; i < NrOfAgents; i++)
@@ -55,7 +54,10 @@ namespace CustomHeroCreator
             {
                 Console.WriteLine();
                 Console.WriteLine("Hero " + i++ + ":");
+
                 hero.PrintStats();
+
+                hero.PrintFitness();
                 Console.WriteLine();
             }
         }
