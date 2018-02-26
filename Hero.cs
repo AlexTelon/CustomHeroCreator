@@ -33,6 +33,7 @@ namespace CustomHeroCreator
         /// </summary>
         public void LevelUp()
         {
+            Console.Clear();
             Console.WriteLine("========================");
             PrintStats();
             ChooseNewSkill();
@@ -52,7 +53,7 @@ namespace CustomHeroCreator
 
             while (!hasChoosen)
             {
-                var i = 0;
+                var i = 1;
                 foreach (var skill in skillOptions)
                 {
                     Console.WriteLine("[" + i++ + "]: " + skill.Key + " +" + skill.Value);
@@ -67,7 +68,8 @@ namespace CustomHeroCreator
                     break;
                 }
 
-                int option = int.Parse(input);
+                // user supplies a 1 indexed number
+                int option = int.Parse(input) - 1;
 
                 if (option >= SKILL_OPTIONS_PER_LVL_UP)
                 {
