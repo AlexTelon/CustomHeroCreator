@@ -45,6 +45,13 @@ namespace CustomHeroCreator
                 Console.WriteLine("========================");
             }
 
+            var averagePerGeneration = new List<double>();
+
+            foreach (var generation in generations)
+            {
+                var average = generation.Average(x => x.Fitness);
+                averagePerGeneration.Add(average);
+            }
 
             //Console.Clear();
 
