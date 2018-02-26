@@ -26,9 +26,15 @@ namespace CustomHeroCreator
 
             for (int i = 0; i < NrOfAgents; i++)
             {
+                AI ai = null;
+                if (useAI)
+                {
+                    ai = new AI();
+                }
+
                 Hero hero = new Hero
                 {
-                    HasAI = useAI
+                    AI = ai
                 };
 
                 // run trials on the hero
