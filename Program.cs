@@ -63,7 +63,7 @@ namespace CustomHeroCreator
             var generationSize = heroes.Count();
 
             // first lets remove the bottom half of the heroes from further consideration
-            var sortedHeroes = heroes.OrderBy(x => x.Fitness).ToList();
+            var sortedHeroes = heroes.OrderBy(x => x.Fitness, OrderByDirection.Descending).ToList();
 
             // the most elite of heroes
             var elite = sortedHeroes.Take(sortedHeroes.Count() / 2).ToList();
