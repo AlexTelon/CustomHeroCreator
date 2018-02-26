@@ -14,7 +14,6 @@ namespace CustomHeroCreator
 
             // see what options we have
 
-
             // randomize the choise (for now) on how we choose an option
             var rnd = new Random();
 

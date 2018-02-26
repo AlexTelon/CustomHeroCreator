@@ -39,6 +39,24 @@ namespace CustomHeroCreator
 
                 // run trials on the hero
                 RunTrials(hero);
+
+                heroes.Add(hero);
+            }
+
+            Console.Clear();
+
+            DisplayHeroTrialResults(heroes);
+        }
+
+        private static void DisplayHeroTrialResults(List<Hero> heroes)
+        {
+            int i = 1;
+            foreach (var hero in heroes)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Hero " + i++ + ":");
+                hero.PrintStats();
+                Console.WriteLine();
             }
         }
 
