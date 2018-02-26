@@ -7,7 +7,9 @@ namespace CustomHeroCreator
 {
     class Hero
     {
-        public readonly uint SKILL_OPTIONS_PER_LVL_UP = 3;
+        public static readonly uint SKILL_OPTIONS_PER_LVL_UP = 3;
+        public static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
+
 
         public string Name { get; set; }
 
@@ -54,10 +56,14 @@ namespace CustomHeroCreator
             while (!hasChoosen)
             {
                 var i = 1;
+
+                Console.WriteLine();
                 foreach (var skill in skillOptions)
                 {
-                    Console.WriteLine("[" + i++ + "]: " + skill.Key + " +" + skill.Value);
+                    Console.Write("[" + i++ + "]: " + skill.Key);
+                    PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
                 }
+                Console.WriteLine();
 
                 var input = Console.ReadLine();
 
@@ -131,26 +137,55 @@ namespace CustomHeroCreator
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("HitPoints: ");
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = StatToColor(StatTypes.Hp);
             Console.Write(Hp);
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" Strength: ");
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = StatToColor(StatTypes.Str);
             Console.Write(Str);
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" Agility: ");
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = StatToColor(StatTypes.Agi);
             Console.Write(Agi);
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" Intelligence: ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = StatToColor(StatTypes.Int);
             Console.Write(Int);
 
             Console.ForegroundColor = originalColor;
         }
+
+        public static ConsoleColor StatToColor(StatTypes type)
+        {
+            switch (type)
+            {
+                case StatTypes.Str:
+                    return ConsoleColor.Red;
+                case StatTypes.Agi:
+                    return ConsoleColor.Green;
+                case StatTypes.Int:
+                    return ConsoleColor.Cyan;
+                case StatTypes.Hp:
+                    return ConsoleColor.Magenta;
+                default:
+                    return DEFAULT_TEXT_COLOR;
+            }
+        }
+
+
+        public static void PrintWithColor(string message, ConsoleColor color)
+        {
+            var originalColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = color;
+            Console.Write(message);
+
+            Console.ForegroundColor = originalColor;
+        }
+
 
         public override string ToString()
         {
