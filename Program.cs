@@ -16,9 +16,7 @@ namespace CustomHeroCreator
         {
             Console.WriteLine("Welcome to Custom Hero Creator!");
 
-            Console.WriteLine("How many agents?");
-
-            int nrOfAgents = int.Parse(Console.ReadLine());
+            int nrOfAgents = 10;
 
             var generations = new List<List<Hero>>();
 
@@ -39,10 +37,13 @@ namespace CustomHeroCreator
 
 
                 //display results
-                Console.WriteLine("========================");
-                Console.WriteLine("Generation " + i + ": ");
-                DisplayHeroTrialResults(heroes);
-                Console.WriteLine("========================");
+                if (false)
+                {
+                    Console.WriteLine("========================");
+                    Console.WriteLine("Generation " + i + ": ");
+                    DisplayHeroTrialResults(heroes);
+                    Console.WriteLine("========================");
+                }
             }
 
             var averagePerGeneration = new List<double>();
@@ -54,7 +55,6 @@ namespace CustomHeroCreator
             }
 
             //Console.Clear();
-
         }
 
         /// <summary>

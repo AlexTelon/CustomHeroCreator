@@ -232,7 +232,7 @@ namespace CustomHeroCreator
 
         public override string ToString()
         {
-            return "Name: " + Name + " Level: " + Level + " Stats: " + Stats;
+            return "Name: " + Name + " Level: " + Level + " Fitness: " + Fitness + " Stats: " + Stats;
         }
 
 
