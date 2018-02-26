@@ -29,6 +29,11 @@ namespace CustomHeroCreator
             Str, Agi, Int, Hp
         };
 
+        /// <summary>
+        /// If this hero has an AI or if it is to be controlled by user
+        /// </summary>
+        public bool HasAI { get; set; } = false;
+
 
         /// <summary>
         /// Level up the user (and give the user the option to choose new skills
@@ -43,6 +48,7 @@ namespace CustomHeroCreator
 
             Level++;
         }
+
 
         private void ChooseNewSkill()
         {
@@ -65,7 +71,8 @@ namespace CustomHeroCreator
                 }
                 Console.WriteLine();
 
-                var input = Console.ReadLine();
+                // get input from user or from AI
+                string input = GetInput();
 
                 // abort
                 if (input == "q" || input == "Q")
@@ -108,6 +115,19 @@ namespace CustomHeroCreator
 
                 hasChoosen = true;
                 Console.WriteLine();
+            }
+        }
+
+
+        private string GetInput()
+        {
+            if (HasAI)
+            {
+                return "1";
+            } else
+            {
+                //controlled by user
+                return Console.ReadLine();
             }
         }
 
