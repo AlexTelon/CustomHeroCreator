@@ -41,11 +41,19 @@ namespace CustomHeroCreator
         /// </summary>
         public void LevelUp()
         {
-            Console.Clear();
-            Console.WriteLine("========================");
-            PrintStats();
+            if (!HasAI)
+            {
+                Console.Clear();
+                Console.WriteLine("========================");
+                PrintStats();
+            }
+
             ChooseNewSkill();
-            Console.WriteLine("========================");
+
+            if (!HasAI)
+            {
+                Console.WriteLine("========================");
+            }
 
             Level++;
         }
@@ -53,9 +61,6 @@ namespace CustomHeroCreator
 
         private void ChooseNewSkill()
         {
-            Console.WriteLine();
-            Console.WriteLine("Choose one of the following or press Q to abort");
-
             var skillOptions = GenerateRandomSkills();
 
             var hasChoosen = false;
@@ -64,13 +69,19 @@ namespace CustomHeroCreator
             {
                 var i = 1;
 
-                Console.WriteLine();
-                foreach (var skill in skillOptions)
+                if (!HasAI)
                 {
-                    Console.Write("[" + i++ + "]: " + skill.Key);
-                    PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
+                    Console.WriteLine();
+                    Console.WriteLine("Choose one of the following or press Q to abort");
+
+                    Console.WriteLine();
+                    foreach (var skill in skillOptions)
+                    {
+                        Console.Write("[" + i++ + "]: " + skill.Key);
+                        PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
 
                 // get input from user or from AI
                 string input = ChooseOption(skillOptions);
@@ -115,7 +126,12 @@ namespace CustomHeroCreator
                 }
 
                 hasChoosen = true;
-                Console.WriteLine();
+
+                if (!HasAI)
+                {
+                    Console.WriteLine();
+                }
+
             }
         }
 
@@ -196,7 +212,6 @@ namespace CustomHeroCreator
 
             Console.ForegroundColor = originalColor;
         }
-
 
         public override string ToString()
         {
