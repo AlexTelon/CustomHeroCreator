@@ -116,7 +116,7 @@ namespace CustomHeroCreator
             skills.Add(StatTypes.Int, rnd.Next(1, 5));
 
             //every now and again remove one of the standard stat options and add health instead
-            if (rnd.Next(1,5) == 4)
+            if (rnd.Next(1, 5) == 4)
             {
                 skills.Remove(StatTypes.Str);
                 skills.Add(StatTypes.Hp, rnd.Next(1, 10));
@@ -127,9 +127,29 @@ namespace CustomHeroCreator
 
         public void PrintStats()
         {
-            Console.WriteLine();
-            Console.WriteLine(this.ToString());
-            Console.WriteLine();
+            var originalColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("HitPoints: ");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write(Hp);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Strength: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(Str);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Agility: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(Agi);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Intelligence: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(Int);
+
+            Console.ForegroundColor = originalColor;
         }
 
         public override string ToString()
