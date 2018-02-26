@@ -108,7 +108,7 @@ namespace CustomHeroCreator
             {
                 if (rnd.NextDouble() > MUTATION_CHANCE)
                 {
-                    weights[i] += rnd.NextDouble() * MUTATION_AMPLITUDE;
+                    weights[i] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
                 }
             }
 
