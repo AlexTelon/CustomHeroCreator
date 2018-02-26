@@ -73,6 +73,7 @@ namespace CustomHeroCreator
         {
             PrintWithColor("Fitness: ", ConsoleColor.White);
             PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
+            Console.WriteLine();
         }
 
         private void ChooseNewSkill()
