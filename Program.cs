@@ -9,6 +9,9 @@ namespace CustomHeroCreator
     {
         private static readonly int MAX_NR_OF_TRIALS = 100;
         private static readonly int MAX_NR_OF_GENERATIONS = 100;
+        private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
+
+
         private static readonly double MUTATION_CHANCE = 0.2;
         private static readonly double MUTATION_AMPLITUDE = 0.1;
 
@@ -19,12 +22,10 @@ namespace CustomHeroCreator
             Console.WriteLine("Display results? (y/N)");
             var displayStuff = Console.ReadLine() == "y";
 
-            int nrOfAgents = 10;
-
             var generations = new List<List<Hero>>();
 
             List<Hero> heroes = new List<Hero>();
-            heroes = CreateNewGeneration(nrOfAgents);
+            heroes = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
             generations.Add(heroes);
 
 

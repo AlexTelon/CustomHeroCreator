@@ -36,7 +36,10 @@ namespace CustomHeroCreator
             get
             {
                 // start with a Fitness that clearly rewards Hp over the other attributes
-                return Hp * 10 + Str + Agi + Int;
+                var power = Hp * 10 + Str + Agi + Int;
+
+                // normalize the results so the Fitness is the average power increase per level
+                return power / Level;
             }
         }
 
