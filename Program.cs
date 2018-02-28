@@ -16,6 +16,9 @@ namespace CustomHeroCreator
         {
             Console.WriteLine("Welcome to Custom Hero Creator!");
 
+            Console.WriteLine("Display results? (y/N)");
+            var displayStuff = Console.ReadLine() == "y";
+
             int nrOfAgents = 10;
 
             var generations = new List<List<Hero>>();
@@ -37,7 +40,7 @@ namespace CustomHeroCreator
 
 
                 //display results
-                if (false)
+                if (displayStuff)
                 {
                     Console.WriteLine("========================");
                     Console.WriteLine("Generation " + i + ": ");
