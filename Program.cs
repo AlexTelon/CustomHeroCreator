@@ -1,4 +1,5 @@
-﻿using MoreLinq;
+﻿using CustomHeroCreator.CLI;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,8 @@ namespace CustomHeroCreator
                 var average = generation.Average(x => x.Fitness);
                 averagePerGeneration.Add(average);
             }
+
+            CommandLineTools.PrintTable(averagePerGeneration);
 
             //Console.Clear();
         }
