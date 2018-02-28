@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomHeroCreator.CLI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,8 +75,8 @@ namespace CustomHeroCreator
 
         internal void PrintFitness()
         {
-            PrintWithColor("Fitness: ", ConsoleColor.White);
-            PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
+            CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
+            CommandLineTools.PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
             Console.WriteLine();
         }
 
@@ -96,8 +97,8 @@ namespace CustomHeroCreator
                     Console.WriteLine();
                     foreach (var skill in skillOptions)
                     {
-                        Console.Write("[" + i++ + "]: " + skill.Key);
-                        PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
+                        CommandLineTools.PrintWithColor("[" + i++ + "]: " + skill.Key, ConsoleColor.White);
+                        CommandLineTools.PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
                     }
                     Console.WriteLine();
                 }
@@ -220,17 +221,6 @@ namespace CustomHeroCreator
                 default:
                     return DEFAULT_TEXT_COLOR;
             }
-        }
-
-
-        public static void PrintWithColor(string message, ConsoleColor color)
-        {
-            var originalColor = Console.ForegroundColor;
-
-            Console.ForegroundColor = color;
-            Console.Write(message);
-
-            Console.ForegroundColor = originalColor;
         }
 
         public override string ToString()

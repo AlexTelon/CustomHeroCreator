@@ -9,7 +9,7 @@ namespace CustomHeroCreator
     class Program
     {
         private static readonly int MAX_NR_OF_TRIALS = 100;
-        private static readonly int MAX_NR_OF_GENERATIONS = 100;
+        private static readonly int MAX_NR_OF_GENERATIONS = 40;
         private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
 
 
@@ -18,6 +18,8 @@ namespace CustomHeroCreator
 
         static void Main(string[] args)
         {
+            Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
+
             Console.WriteLine("Welcome to Custom Hero Creator!");
 
             Console.WriteLine("Display results? (y/N)");
