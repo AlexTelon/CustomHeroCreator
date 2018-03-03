@@ -18,14 +18,41 @@ namespace CustomHeroCreator
         public bool IsActive { get; internal set; } = true;
 
         // Some stats for the Hero
-        public string Stats => "HitPoints: " + Hp + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
+        public string Stats => "MaxHealth: " + MaxHealth + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
         public int Str { get; private set; } = 1;
         public int Agi { get; private set; } = 1;
         public int Int { get; private set; } = 1;
 
-        public int Hp { get; set; } = 100;
+        public double MaxHealth { get; set; } = 100;
 
-        public double Attack { get; set; } = 10;
+        public double CurrentHealth
+        {
+            get => _currentHealth;
+            private set
+            {
+                _currentHealth = value;
+
+                if (value <= 0)
+                {
+                    IsAlive = false;
+                    _currentHealth = 0;
+                }
+
+                if (value > MaxHealth)
+                {
+                    _currentHealth = MaxHealth;
+                }
+
+            }
+        }
+        private double _currentHealth = 100;
+
+        public bool IsAlive { get; private set; } = true;
+
+
+        public double AttackDmg { get; set; } = 10;
+        public double CritChance { get; set; } = 0.1;
+        public double CritMultiplier { get; set; } = 1.1;
 
         public double AttackSpeed
         {
@@ -39,24 +66,46 @@ namespace CustomHeroCreator
 
         public enum StatTypes
         {
-            Str, Agi, Int, Hp, Attack, AttackSpeed, Armor
+            Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, Armor
         };
+
+
+        public double GetHitDmg()
+        {
+            double dmg = AttackDmg;
+
+            var rnd = new Random();
+            if (rnd.NextDouble() > CritChance)
+            {
+                dmg *= CritMultiplier;
+            }
+            return dmg;
+        }
+
+        public void TakeHitDmg(double dmg)
+        {
+            var dmgTaken = (dmg - Armor);
+            // dmg is always at least 1
+            if (dmgTaken <= 0)
+            {
+                dmgTaken = 1;
+            }
+
+            this.CurrentHealth -= dmgTaken;
+        }
+
+
+        public void Attack(Hero enemy)
+        {
+            var dmg = GetHitDmg();
+            enemy.TakeHitDmg(dmg);
+        }
 
 
         /// <summary>
         /// How powerful is this hero?
         /// </summary>
-        public double Fitness
-        {
-            get
-            {
-                // start with a Fitness that clearly rewards Hp over the other attributes
-                var power = Hp * 10 + Str + Agi + Int;
-
-                // normalize the results so the Fitness is the average power increase per level
-                return power / Level;
-            }
-        }
+        public double Fitness { get; set; } = 0;
 
 
         /// <summary>
@@ -67,6 +116,14 @@ namespace CustomHeroCreator
         public AI AI { get; set; }
 
 
+        /// <summary>
+        /// Restores a hero back to prime condition
+        /// </summary>
+        public void Restore()
+        {
+            CurrentHealth = MaxHealth;
+            IsAlive = true;
+        }
 
         /// <summary>
         /// Level up the user (and give the user the option to choose new skills
@@ -164,8 +221,17 @@ namespace CustomHeroCreator
                     case StatTypes.Int:
                         Int += value;
                         break;
-                    case StatTypes.Hp:
-                        Hp += value;
+                    case StatTypes.MaxHealth:
+                        MaxHealth += value;
+                        break;
+                    case StatTypes.AttackDmg:
+                        AttackDmg += value;
+                        break;
+                    case StatTypes.AttackSpeed:
+                        AttackSpeed += value;
+                        break;
+                    case StatTypes.Armor:
+                        Armor += value;
                         break;
                     default:
                         break;
@@ -177,7 +243,6 @@ namespace CustomHeroCreator
                 {
                     Console.WriteLine();
                 }
-
             }
         }
 
@@ -196,7 +261,6 @@ namespace CustomHeroCreator
 
 
 
-
         internal void PrintFitness()
         {
             CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
@@ -208,26 +272,13 @@ namespace CustomHeroCreator
         {
             var originalColor = Console.ForegroundColor;
 
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("HitPoints: ");
-            Console.ForegroundColor = StatToColor(StatTypes.Hp);
-            Console.Write(Hp);
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Strength: ");
-            Console.ForegroundColor = StatToColor(StatTypes.Str);
-            Console.Write(Str);
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Agility: ");
-            Console.ForegroundColor = StatToColor(StatTypes.Agi);
-            Console.Write(Agi);
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Intelligence: ");
-            Console.ForegroundColor = StatToColor(StatTypes.Int);
-            Console.Write(Int);
-            Console.WriteLine();
+            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" " + Enum.GetName(typeof(StatTypes), stat) + ": ");
+                Console.ForegroundColor = StatToColor(stat);
+                Console.Write(GetStatValue(stat));
+            }
 
             Console.ForegroundColor = originalColor;
         }
@@ -242,16 +293,48 @@ namespace CustomHeroCreator
                     return ConsoleColor.Green;
                 case StatTypes.Int:
                     return ConsoleColor.Cyan;
-                case StatTypes.Hp:
+                case StatTypes.MaxHealth:
                     return ConsoleColor.Magenta;
                 default:
                     return DEFAULT_TEXT_COLOR;
             }
         }
 
+        public double GetStatValue(StatTypes type)
+        {
+            switch (type)
+            {
+                case StatTypes.Str:
+                    return Str;
+                case StatTypes.Agi:
+                    return Agi;
+                case StatTypes.Int:
+                    return Int;
+                case StatTypes.MaxHealth:
+                    return MaxHealth;
+                case StatTypes.AttackDmg:
+                    return AttackDmg;
+                case StatTypes.AttackSpeed:
+                    return AttackSpeed;
+                case StatTypes.Armor:
+                    return Armor;
+                default:
+                    return -1;
+            }
+        }
+
+
         public override string ToString()
         {
-            return "Name: " + Name + " Level: " + Level + " Fitness: " + Fitness + " Stats: " + Stats;
+            var result = "";
+
+            result += "Fitness: " + Fitness + " ";
+
+            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
+            {
+                result += Enum.GetName(typeof(StatTypes), stat) + ":" + GetStatValue(stat) + " ";
+            }
+            return result;
         }
     }
 }

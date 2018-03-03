@@ -26,7 +26,7 @@ namespace CustomHeroCreator.CLI
             foreach (var item in items)
             {
                 PrintWithColor(i++ + ":\t", ConsoleColor.White);
-                PrintWithColor("" + item, color);
+                PrintWithColor("" + item.ToString("#.##"), color);
 
                 if (showExtra)
                 {
