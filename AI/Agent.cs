@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CustomHeroCreator
+namespace CustomHeroCreator.AI
 {
-    class AI
+    class Agent
     {
         public List<double> Weights { get; set; } = new List<double>();
 
-        public AI()
+        public Agent()
         {
             InitRandomWeights();
         }

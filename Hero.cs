@@ -1,4 +1,5 @@
-﻿using CustomHeroCreator.CLI;
+﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.CLI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace CustomHeroCreator
 
         public enum StatTypes
         {
-            Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, Armor
+            Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, CritChance, CritMultiplier, Armor
         };
 
 
@@ -113,7 +114,7 @@ namespace CustomHeroCreator
         /// </summary>
         public bool HasAI => AI != null;
 
-        public AI AI { get; set; }
+        public Agent AI { get; set; }
 
 
         /// <summary>
@@ -210,32 +211,7 @@ namespace CustomHeroCreator
                 var type = skillOptions.Keys.ElementAt(option);
                 var value = skillOptions[type];
 
-                switch (type)
-                {
-                    case StatTypes.Str:
-                        Str += value;
-                        break;
-                    case StatTypes.Agi:
-                        Agi += value;
-                        break;
-                    case StatTypes.Int:
-                        Int += value;
-                        break;
-                    case StatTypes.MaxHealth:
-                        MaxHealth += value;
-                        break;
-                    case StatTypes.AttackDmg:
-                        AttackDmg += value;
-                        break;
-                    case StatTypes.AttackSpeed:
-                        AttackSpeed += value;
-                        break;
-                    case StatTypes.Armor:
-                        Armor += value;
-                        break;
-                    default:
-                        break;
-                }
+                SetStatValue(type, value);
 
                 hasChoosen = true;
 
@@ -300,6 +276,42 @@ namespace CustomHeroCreator
             }
         }
 
+        private void SetStatValue(StatTypes type, int value)
+        {
+            switch (type)
+            {
+                case StatTypes.Str:
+                    Str += value;
+                    break;
+                case StatTypes.Agi:
+                    Agi += value;
+                    break;
+                case StatTypes.Int:
+                    Int += value;
+                    break;
+                case StatTypes.MaxHealth:
+                    MaxHealth += value;
+                    break;
+                case StatTypes.AttackDmg:
+                    AttackDmg += value;
+                    break;
+                case StatTypes.AttackSpeed:
+                    AttackSpeed += value;
+                    break;
+                case StatTypes.CritChance:
+                    CritChance += value;
+                    break;
+                case StatTypes.CritMultiplier:
+                    CritMultiplier += value;
+                    break;
+                case StatTypes.Armor:
+                    Armor += value;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public double GetStatValue(StatTypes type)
         {
             switch (type)
@@ -316,6 +328,10 @@ namespace CustomHeroCreator
                     return AttackDmg;
                 case StatTypes.AttackSpeed:
                     return AttackSpeed;
+                case StatTypes.CritChance:
+                    return CritChance;
+                case StatTypes.CritMultiplier:
+                    return CritMultiplier;
                 case StatTypes.Armor:
                     return Armor;
                 default:

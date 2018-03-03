@@ -1,4 +1,5 @@
-﻿using CustomHeroCreator.CLI;
+﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.CLI;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
@@ -155,12 +156,12 @@ namespace CustomHeroCreator
             var child = new Hero();
 
             // really the AI is the one we are breeding
-            AI a = mother.AI;
-            AI b = father.AI;
+            Agent a = mother.AI;
+            Agent b = father.AI;
 
             // merge the two with a chance for mutation
             var rnd = new Random();
-            AI c = new AI();
+            Agent c = new Agent();
 
             var weights = new List<double>();
 
@@ -210,7 +211,7 @@ namespace CustomHeroCreator
 
             for (int i = 0; i < nrOfAgents; i++)
             {
-                AI ai = new AI();
+                Agent ai = new Agent();
 
                 Hero hero = new Hero
                 {
