@@ -42,8 +42,14 @@ namespace CustomHeroCreator
                 PrepareHeroes(generations[i]);
 
                 // Let the heroes fight to gauge their Fitness
-                RunTrials(generations[i]);
+                //RunTournamentTrial(generations[i]);
 
+                // Gauge the Fitness of each hero by fighting against "NPCs"
+                // This gives a fitness that is comparable across generations 
+                // since the NPCs are equally challanging for all
+                RunSinglePlayerTrials(generations[i]);
+
+                
                 //Select the most elite heroes
                 List<Hero> elites = SelectElites(generations[i]);
 
@@ -62,28 +68,88 @@ namespace CustomHeroCreator
             }
 
             var averagePerGeneration = new List<double>();
+            var bestInEachGenration = new List<Hero>();
+
 
             foreach (var generation in generations)
             {
                 var average = generation.Average(x => x.Fitness);
                 averagePerGeneration.Add(average);
+
+                bestInEachGenration.Add(generation.MaxBy(x => x.Fitness));
             }
 
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
-        }
+
+            var bestHero = bestInEachGenration.MaxBy(x => x.Fitness);
+            Console.WriteLine("Best Configuraion");
+            bestHero.PrintStats();
+            Console.WriteLine();
 
 
-        private static void RunTrials(List<Hero> heroes)
-        {
-            // run static trials for each hero
-            //foreach (Hero hero in heroes)
+            // in the end let the top performer from each generation all fight each other
+            //bestInEachGenration = new List<Hero>();
+            //foreach (var generation in generations)
             //{
-            //    RunTrial(hero);
+            //    var bestInClass = generation.MaxBy(x => x.Fitness);
+            //    bestInClass.Fitness = 0;
+            //    bestInEachGenration.Add(bestInClass);
             //}
 
+            //RunTournamentTrial(bestInEachGenration);
+
+
+
+        }
+
+        /// <summary>
+        /// Gauge the Fitness of each hero by letting them fight a series of "NPCs"
+        /// </summary>
+        /// <param name="list"></param>
+        private static void RunSinglePlayerTrials(List<Hero> heroes)
+        {
+            foreach (var hero in heroes)
+            {
+                RunSinglePlayerTrial(hero);
+            }
+        }
+
+        /// <summary>
+        /// Gauge the Fitness of a hero by letting it fight a series of "NPCs"
+        /// </summary>
+        /// <param name="list"></param>
+        private static void RunSinglePlayerTrial(Hero hero)
+        {
+            var enemy = new Hero();
+
+            // create an agent that is fully random (has no intelligent preferences for one stat over another)
+            var agent = new Agent();
+            for (int i = 0; i < agent.Weights.Count(); i++)
+            {
+                agent.Weights[i] = 1;
+            }
+            enemy.AI = agent;
+
+            while (hero.IsAlive)
+            {
+                //Make sure they are not dead before the fight
+                enemy.Restore();
+                hero.Restore();
+
+                // each iteration the enemy grows stronger
+                enemy.LevelUp();
+
+                Arena.Fight(hero, enemy);
+            }
+
+            // The fitness is how long our hero survived
+            hero.Fitness = enemy.Level;
+        }
+
+        private static void RunTournamentTrial(List<Hero> heroes)
+        {
             // Run tournament style trial
             // all vs all
-
             for (int i = 0; i < heroes.Count(); i++)
             {
                 var hero = heroes[i];
@@ -101,16 +167,6 @@ namespace CustomHeroCreator
                     enemy.Restore();
                 }
             }
-        }
-
-        /// <summary>
-        /// Let a hero run a series of trials against monsters to gauge its fitness
-        /// </summary>
-        /// <param name="hero"></param>
-        private static void RunMonsterTrial(Hero hero)
-        {
-            //gauge the fitness of the hero by way of combat
-
         }
 
         private static List<Hero> SelectElites(List<Hero> heroes)
