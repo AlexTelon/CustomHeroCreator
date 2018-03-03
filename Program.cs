@@ -61,9 +61,7 @@ namespace CustomHeroCreator
                 averagePerGeneration.Add(average);
             }
 
-            CommandLineTools.PrintTable(averagePerGeneration);
-
-            //Console.Clear();
+            CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
         }
 
         /// <summary>
