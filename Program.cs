@@ -37,12 +37,18 @@ namespace CustomHeroCreator
                 //Add new generation
                 generations.Add(newGeneration);
 
-                // Run trials on the new generation of heroes
+                //Let the AI choose a set of upgrades to each hero
+                PrepareHeroes(generations[i]);
+
+                // Let the heroes fight to gauge their Fitness
                 RunTrials(generations[i]);
+
+                //Select the most elite heroes
+                List<Hero> elites = SelectElites(generations[i]);
 
                 // The best heroes get to breed
                 // And are added to the next generation
-                newGeneration = Breed(generations[i]);
+                newGeneration = Breed(elites, generations[i].Count());
 
                 //display results
                 if (displayStuff)
@@ -65,30 +71,74 @@ namespace CustomHeroCreator
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
         }
 
-        /// <summary>
-        /// Take the fittest heroes and create a new generation out of them
-        /// </summary>
-        /// <param name="heroes"></param>
-        private static List<Hero> Breed(List<Hero> heroes)
+
+        private static void RunTrials(List<Hero> heroes)
         {
-            var rnd = new Random();
+            // run static trials for each hero
+            //foreach (Hero hero in heroes)
+            //{
+            //    RunTrial(hero);
+            //}
 
-            var newGeneration = new List<Hero>();
+            // Run tournament style trial
+            // all vs all
 
-            var generationSize = heroes.Count();
+            for (int i = 0; i < heroes.Count(); i++)
+            {
+                var hero = heroes[i];
+                for (int j = i + 1; j < heroes.Count(); j++)
+                {
+                    var enemy = heroes[j];
+                    Arena.Fight(hero, enemy);
+                    
+                    // The heroes Fitness is increased by how much health it has left at the end
+                    hero.Fitness += hero.CurrentHealth;
+                    enemy.Fitness += enemy.CurrentHealth;
 
+                    //Make sure they are not dead afterwards
+                    hero.Restore();
+                    enemy.Restore();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Let a hero run a series of trials against monsters to gauge its fitness
+        /// </summary>
+        /// <param name="hero"></param>
+        private static void RunMonsterTrial(Hero hero)
+        {
+            //gauge the fitness of the hero by way of combat
+
+        }
+
+        private static List<Hero> SelectElites(List<Hero> heroes)
+        {
             // first lets remove the bottom half of the heroes from further consideration
             var sortedHeroes = heroes.OrderBy(x => x.Fitness, OrderByDirection.Descending).ToList();
 
             // the most elite of heroes
             var elite = sortedHeroes.Take(sortedHeroes.Count() / 2).ToList();
-            var eliteSize = elite.Count();
+
+            return elite;
+        }
+
+        /// <summary>
+        /// Take the fittest heroes and create a new generation out of them
+        /// </summary>
+        /// <param name="heroes"></param>
+        private static List<Hero> Breed(List<Hero> elites, int sizeOfNewGeneration)
+        {
+            var rnd = new Random();
+            var newGeneration = new List<Hero>();
+
+            var eliteSize = elites.Count();
 
             // breed enough for a new generation
-            for (int i = 0; i < generationSize; i++)
+            for (int i = 0; i < sizeOfNewGeneration; i++)
             {
-                var mother = elite[rnd.Next(0, eliteSize)];
-                var father = elite[rnd.Next(0, eliteSize)];
+                var mother = elites[rnd.Next(0, eliteSize)];
+                var father = elites[rnd.Next(0, eliteSize)];
 
                 var child = Breed(mother, father);
                 newGeneration.Add(child);
@@ -96,6 +146,9 @@ namespace CustomHeroCreator
 
             return newGeneration;
         }
+
+
+
 
         private static Hero Breed(Hero mother, Hero father)
         {
@@ -133,14 +186,23 @@ namespace CustomHeroCreator
             return child;
         }
 
-        private static void RunTrials(List<Hero> heroes)
+        private static void PrepareHeroes(List<Hero> heroes)
         {
             foreach (var hero in heroes)
             {
                 // run trials on the hero
-                RunTrials(hero);
+                PrepareHero(hero);
             }
         }
+
+        private static void PrepareHero(Hero hero)
+        {
+            for (int i = 0; i < MAX_NR_OF_TRIALS; i++)
+            {
+                hero.LevelUp();
+            }
+        }
+
 
         private static List<Hero> CreateNewGeneration(int nrOfAgents)
         {
@@ -179,12 +241,8 @@ namespace CustomHeroCreator
             }
         }
 
-        private static void RunTrials(Hero hero)
-        {
-            for (int i = 0; i < MAX_NR_OF_TRIALS; i++)
-            {
-                hero.LevelUp();
-            }
-        }
+
+
+
     }
 }
