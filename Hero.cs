@@ -8,8 +8,8 @@ namespace CustomHeroCreator
 {
     class Hero
     {
-        public static readonly uint SKILL_OPTIONS_PER_LVL_UP = 3;
         public static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
+        private static int SkillOptionsPerLevelUp => Enum.GetNames(typeof(StatTypes)).Count();
 
 
         public string Name { get; set; }
@@ -25,16 +25,29 @@ namespace CustomHeroCreator
 
         public int Hp { get; set; } = 100;
 
+        public double Attack { get; set; } = 10;
+
+        public double AttackSpeed
+        {
+            get => _attacksPerSecond;
+            set => _attacksPerSecond = value;
+        }
+        private double _attacksPerSecond = 1;
+
+        public double Armor { get; set; }
+
+
         public enum StatTypes
         {
-            Str, Agi, Int, Hp
+            Str, Agi, Int, Hp, Attack, AttackSpeed, Armor
         };
 
 
         /// <summary>
         /// How powerful is this hero?
         /// </summary>
-        public double Fitness {
+        public double Fitness
+        {
             get
             {
                 // start with a Fitness that clearly rewards Hp over the other attributes
@@ -83,19 +96,14 @@ namespace CustomHeroCreator
 
             Random rnd = new Random();
 
-            skills.Add(StatTypes.Str, rnd.Next(1, 5));
-            skills.Add(StatTypes.Agi, rnd.Next(1, 5));
-            skills.Add(StatTypes.Int, rnd.Next(1, 5));
-
-            //every now and again remove one of the standard stat options and add health instead
-            if (rnd.Next(1, 5) == 4)
+            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
             {
-                skills.Remove(StatTypes.Str);
-                skills.Add(StatTypes.Hp, rnd.Next(1, 10));
+                skills.Add(stat, rnd.Next(1, 5));
             }
 
             return skills;
         }
+
 
 
         private void ChooseNewSkill()
@@ -134,7 +142,7 @@ namespace CustomHeroCreator
                 // user supplies a 1 indexed number
                 int option = int.Parse(input) - 1;
 
-                if (option >= SKILL_OPTIONS_PER_LVL_UP)
+                if (option >= SkillOptionsPerLevelUp)
                 {
                     // invalid option
                     Console.WriteLine();
