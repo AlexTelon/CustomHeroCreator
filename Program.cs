@@ -1,5 +1,6 @@
 ﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Fighters;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
@@ -120,15 +121,15 @@ namespace CustomHeroCreator
         /// <param name="list"></param>
         private static void RunSinglePlayerTrial(Hero hero)
         {
-            var enemy = new Hero();
+            var enemy = new DeterministicScrub();
 
             // create an agent that is fully random (has no intelligent preferences for one stat over another)
-            var agent = new Agent();
-            for (int i = 0; i < agent.Weights.Count(); i++)
-            {
-                agent.Weights[i] = 1;
-            }
-            enemy.AI = agent;
+            //var agent = new Agent();
+            //for (int i = 0; i < agent.Weights.Count(); i++)
+            //{
+            //    agent.Weights[i] = 1;
+            //}
+            //enemy.AI = agent;
 
             while (hero.IsAlive)
             {

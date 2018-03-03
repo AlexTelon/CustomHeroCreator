@@ -14,7 +14,7 @@ namespace CustomHeroCreator.AI
             InitRandomWeights();
         }
 
-        internal string ChooseOption(object hero, Dictionary<Hero.StatTypes, int> options)
+        internal string ChooseOption(object hero, Dictionary<Hero.StatTypes, double> options)
         {
             // get internal state of the hero, use that later
 

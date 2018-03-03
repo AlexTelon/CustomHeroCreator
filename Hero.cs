@@ -15,14 +15,14 @@ namespace CustomHeroCreator
 
         public string Name { get; set; }
 
-        public uint Level { get; private set; } = 1;
+        public uint Level { get; protected set; } = 1;
         public bool IsActive { get; internal set; } = true;
 
         // Some stats for the Hero
         public string Stats => "MaxHealth: " + MaxHealth + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
-        public int Str { get; private set; } = 1;
-        public int Agi { get; private set; } = 1;
-        public int Int { get; private set; } = 1;
+        public double Str { get; private set; } = 1;
+        public double Agi { get; private set; } = 1;
+        public double Int { get; private set; } = 1;
 
         public double MaxHealth { get; set; } = 100;
 
@@ -129,7 +129,7 @@ namespace CustomHeroCreator
         /// <summary>
         /// Level up the user (and give the user the option to choose new skills
         /// </summary>
-        public void LevelUp()
+        public virtual void LevelUp()
         {
             if (!HasAI)
             {
@@ -148,15 +148,47 @@ namespace CustomHeroCreator
             Level++;
         }
 
-        private Dictionary<StatTypes, int> GenerateRandomSkills()
+        internal virtual Dictionary<StatTypes, double> GenerateRandomSkills()
         {
-            var skills = new Dictionary<StatTypes, int>();
+            var skills = new Dictionary<StatTypes, double>();
 
             Random rnd = new Random();
 
             foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
             {
-                skills.Add(stat, rnd.Next(1, 5));
+                double value = 0;
+                switch (stat)
+                {
+                    case StatTypes.Str:
+                    case StatTypes.Agi:
+                    case StatTypes.Int:
+                        value = rnd.Next(1, 5);
+                        break;
+                    case StatTypes.MaxHealth:
+                        value = rnd.Next(1, 5);
+                        break;
+                    case StatTypes.AttackDmg:
+                        value = rnd.Next(1, 5);
+                        break;
+                    case StatTypes.AttackSpeed:
+                        value = rnd.Next(1, 5);
+                        break;
+                    case StatTypes.CritChance:
+                        // only allow for 1-5% increases
+                        value = rnd.Next(1, 5) * 0.01;
+                        break;
+                    case StatTypes.CritMultiplier:
+                        // only allow for 1-5% increases
+                        value = rnd.Next(1, 5) * 0.01;
+                        break;
+                    case StatTypes.Armor:
+                        value = rnd.Next(1, 5);
+                        break;
+                    default:
+                        break;
+                }
+
+                skills.Add(stat, value);
             }
 
             return skills;
@@ -222,7 +254,9 @@ namespace CustomHeroCreator
             }
         }
 
-        private string ChooseOption(Dictionary<StatTypes, int> options)
+      
+
+        private string ChooseOption(Dictionary<StatTypes, double> options)
         {
             if (HasAI)
             {
@@ -259,7 +293,7 @@ namespace CustomHeroCreator
             Console.ForegroundColor = originalColor;
         }
 
-        public static ConsoleColor StatToColor(StatTypes type)
+        protected static ConsoleColor StatToColor(StatTypes type)
         {
             switch (type)
             {
@@ -276,7 +310,7 @@ namespace CustomHeroCreator
             }
         }
 
-        private void SetStatValue(StatTypes type, int value)
+        protected void SetStatValue(StatTypes type, double value)
         {
             switch (type)
             {
@@ -312,7 +346,7 @@ namespace CustomHeroCreator
             }
         }
 
-        public double GetStatValue(StatTypes type)
+        protected double GetStatValue(StatTypes type)
         {
             switch (type)
             {

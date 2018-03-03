@@ -42,7 +42,7 @@ namespace CustomHeroCreator.CLI
         {
             var ratio = 1 - (max - value) / (max - min);
 
-            var MAX_NR_OF_BARS = 10;
+            var MAX_NR_OF_BARS = 20;
 
             var bars = (int)Math.Round(ratio * MAX_NR_OF_BARS);
 
