@@ -30,6 +30,7 @@ namespace CustomHeroCreator
             Str, Agi, Int, Hp
         };
 
+
         /// <summary>
         /// How powerful is this hero?
         /// </summary>
@@ -44,12 +45,15 @@ namespace CustomHeroCreator
             }
         }
 
+
         /// <summary>
         /// If this hero has an AI or if it is to be controlled by user
         /// </summary>
         public bool HasAI => AI != null;
 
         public AI AI { get; set; }
+
+
 
         /// <summary>
         /// Level up the user (and give the user the option to choose new skills
@@ -73,12 +77,26 @@ namespace CustomHeroCreator
             Level++;
         }
 
-        internal void PrintFitness()
+        private Dictionary<StatTypes, int> GenerateRandomSkills()
         {
-            CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
-            CommandLineTools.PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
-            Console.WriteLine();
+            var skills = new Dictionary<StatTypes, int>();
+
+            Random rnd = new Random();
+
+            skills.Add(StatTypes.Str, rnd.Next(1, 5));
+            skills.Add(StatTypes.Agi, rnd.Next(1, 5));
+            skills.Add(StatTypes.Int, rnd.Next(1, 5));
+
+            //every now and again remove one of the standard stat options and add health instead
+            if (rnd.Next(1, 5) == 4)
+            {
+                skills.Remove(StatTypes.Str);
+                skills.Add(StatTypes.Hp, rnd.Next(1, 10));
+            }
+
+            return skills;
         }
+
 
         private void ChooseNewSkill()
         {
@@ -155,27 +173,27 @@ namespace CustomHeroCreator
             }
         }
 
-
-
-
-        private Dictionary<StatTypes, int> GenerateRandomSkills()
+        private string ChooseOption(Dictionary<StatTypes, int> options)
         {
-            var skills = new Dictionary<StatTypes, int>();
-
-            Random rnd = new Random();
-
-            skills.Add(StatTypes.Str, rnd.Next(1, 5));
-            skills.Add(StatTypes.Agi, rnd.Next(1, 5));
-            skills.Add(StatTypes.Int, rnd.Next(1, 5));
-
-            //every now and again remove one of the standard stat options and add health instead
-            if (rnd.Next(1, 5) == 4)
+            if (HasAI)
             {
-                skills.Remove(StatTypes.Str);
-                skills.Add(StatTypes.Hp, rnd.Next(1, 10));
+                return AI.ChooseOption(this, options);
             }
+            else
+            {
+                //controlled by user
+                return Console.ReadLine();
+            }
+        }
 
-            return skills;
+
+
+
+        internal void PrintFitness()
+        {
+            CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
+            CommandLineTools.PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
+            Console.WriteLine();
         }
 
         public void PrintStats()
@@ -227,25 +245,5 @@ namespace CustomHeroCreator
         {
             return "Name: " + Name + " Level: " + Level + " Fitness: " + Fitness + " Stats: " + Stats;
         }
-
-
-        // AI stuff below
-
-        private string ChooseOption(Dictionary<StatTypes, int> options)
-        {
-            if (HasAI)
-            {
-                return AI.ChooseOption(this, options);
-            }
-            else
-            {
-                //controlled by user
-                return Console.ReadLine();
-            }
-        }
-
-
-
-
     }
 }
