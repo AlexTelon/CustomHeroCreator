@@ -16,6 +16,12 @@ namespace CustomHeroCreator.CLI
             var max = items.Max();
             var min = items.Min();
 
+            // print table header:
+            PrintWithColor("Row\tValue\tBar", ConsoleColor.Green);
+            Console.WriteLine();
+            PrintWithColor("===========================", ConsoleColor.Gray);
+            Console.WriteLine();
+
             int i = 1;
             foreach (var item in items)
             {
