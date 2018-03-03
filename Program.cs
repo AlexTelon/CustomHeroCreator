@@ -27,21 +27,22 @@ namespace CustomHeroCreator
 
             var generations = new List<List<Hero>>();
 
+            // Create the first generation
             List<Hero> heroes = new List<Hero>();
-            heroes = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
-            generations.Add(heroes);
+            var newGeneration = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
 
 
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
+                //Add new generation
+                generations.Add(newGeneration);
+
                 // Run trials on the new generation of heroes
                 RunTrials(generations[i]);
 
                 // The best heroes get to breed
                 // And are added to the next generation
-                var newGeneration = Breed(generations[i]);
-                generations.Add(newGeneration);
-
+                newGeneration = Breed(generations[i]);
 
                 //display results
                 if (displayStuff)
