@@ -217,18 +217,31 @@ namespace CustomHeroCreator
                     Console.WriteLine();
                 }
 
-                // get input from user or from AI
-                string input = ChooseOption(skillOptions);
 
-                // abort
-                if (input == "q" || input == "Q")
+                int option = -1;
+
+                // ask for input until we get correct input
+                while (true)
                 {
-                    IsActive = false;
-                    break;
-                }
+                    // get input from user or from AI
+                    string input = ChooseOption(skillOptions);
 
-                // user supplies a 1 indexed number
-                int option = int.Parse(input) - 1;
+
+                    // abort
+                    if (input == "q" || input == "Q")
+                    {
+                        IsActive = false;
+                        break;
+                    }
+
+                    if (int.TryParse(input, out int tmp))
+                    {
+                        // if we have correct input the exit the loop
+                        // user supplies a 1 indexed number so we take 1
+                        option = tmp - 1;
+                        break;
+                    }
+                }
 
                 if (option >= SkillOptionsPerLevelUp)
                 {
