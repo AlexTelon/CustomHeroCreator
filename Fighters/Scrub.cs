@@ -71,7 +71,7 @@ namespace CustomHeroCreator.Fighters
                 }
                 else
                 {
-                    SetStatValue(statType, 0.1);
+                    SetStatValue(statType, 1.5);
                 }
             }
 

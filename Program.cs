@@ -38,16 +38,15 @@ namespace CustomHeroCreator
                 //Add new generation
                 generations.Add(newGeneration);
 
-                //Let the AI choose a set of upgrades to each hero
-                var levels = 100;
+                // The heroes get to level up a few times before they run into their trials
+                var levels = 10;
                 LevelUpHeroes(generations[i], levels);
 
                 // Let the heroes fight to gauge their Fitness
                 //RunTournamentTrial(generations[i]);
 
-                // Gauge the Fitness of each hero by fighting against "NPCs"
-                // This gives a fitness that is comparable across generations 
-                // since the NPCs are equally challanging for all
+                // Run the game on the heroes
+                // fight against increasingly strong enemies, survive as long as you can!
                 RunSinglePlayerTrials(generations[i]);
 
                 
@@ -137,13 +136,13 @@ namespace CustomHeroCreator
                 enemy.Restore();
                 hero.Restore();
 
-                // each iteration the enemy grows stronger
                 enemy.LevelUp();
+                hero.LevelUp();
 
                 Arena.Fight(hero, enemy);
             }
 
-            // The fitness is how long our hero survived
+            // The fitness is how many rounds of enemies our hero survived
             hero.Fitness = enemy.Level;
         }
 

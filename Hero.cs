@@ -379,6 +379,8 @@ namespace CustomHeroCreator
             var result = "";
 
             result += "Fitness: " + Fitness + " ";
+            result += "Level: " + Level + " ";
+            result += "CurrentHp: " + CurrentHealth + " ";
 
             foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
             {
