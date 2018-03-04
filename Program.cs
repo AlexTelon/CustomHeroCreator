@@ -10,7 +10,6 @@ namespace CustomHeroCreator
 {
     class Program
     {
-        private static readonly int MAX_NR_OF_TRIALS = 100;
         private static readonly int MAX_NR_OF_GENERATIONS = 40;
         private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
 
@@ -40,7 +39,8 @@ namespace CustomHeroCreator
                 generations.Add(newGeneration);
 
                 //Let the AI choose a set of upgrades to each hero
-                PrepareHeroes(generations[i]);
+                var levels = 100;
+                LevelUpHeroes(generations[i], levels);
 
                 // Let the heroes fight to gauge their Fitness
                 //RunTournamentTrial(generations[i]);
@@ -244,18 +244,17 @@ namespace CustomHeroCreator
             return child;
         }
 
-        private static void PrepareHeroes(List<Hero> heroes)
+        private static void LevelUpHeroes(List<Hero> heroes, int lvl)
         {
             foreach (var hero in heroes)
             {
-                // run trials on the hero
-                PrepareHero(hero);
+                LevelUpHero(hero, lvl);
             }
         }
 
-        private static void PrepareHero(Hero hero)
+        private static void LevelUpHero(Hero hero, int lvl)
         {
-            for (int i = 0; i < MAX_NR_OF_TRIALS; i++)
+            for (int i = 0; i < lvl; i++)
             {
                 hero.LevelUp();
             }
