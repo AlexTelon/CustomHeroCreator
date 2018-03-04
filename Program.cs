@@ -5,6 +5,7 @@ using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator
 {
@@ -172,11 +173,11 @@ namespace CustomHeroCreator
                     Console.Clear();
                     Console.WriteLine("Round " + enemy.Level);
                     Console.Write("Enemy has grown stronger: ");
-                    enemy.PrintStats();
+                    enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine("Your stats:");
-                    hero.PrintStats();
+                    hero.PrintStats("\n");
                     Console.WriteLine();
                 }
 

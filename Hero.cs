@@ -132,19 +132,7 @@ namespace CustomHeroCreator
         /// </summary>
         public virtual void LevelUp()
         {
-            //if (!HasAI)
-            //{
-            //    Console.WriteLine("========================");
-            //    PrintStats();
-            //}
-
             ChooseNewSkill();
-
-            //if (!HasAI)
-            //{
-            //    Console.WriteLine("========================");
-            //}
-
             Level++;
         }
 
@@ -220,6 +208,7 @@ namespace CustomHeroCreator
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + skill.Key, ConsoleColor.White);
                         CommandLineTools.PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
+                        Console.WriteLine();
                     }
                     Console.WriteLine();
                 }
@@ -285,18 +274,53 @@ namespace CustomHeroCreator
 
         public void PrintStats()
         {
+            // include all stats
+            var listOfStats = Enum.GetValues(typeof(StatTypes)).OfType<StatTypes>().ToList();
+            PrintStats(listOfStats, " ");
+        }
+
+        public void PrintStats(string delimiter)
+        {
+            // include all stats
+            var listOfStats = Enum.GetValues(typeof(StatTypes)).OfType<StatTypes>().ToList();
+            PrintStats(listOfStats, delimiter);
+        }
+
+        public void PrintStats(List<StatTypes> typesToPrint, string delimiter = " ")
+        {
             var originalColor = Console.ForegroundColor;
 
-            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
+            foreach (StatTypes stat in typesToPrint)
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(" " + Enum.GetName(typeof(StatTypes), stat) + ": ");
+                Console.Write(delimiter + Enum.GetName(typeof(StatTypes), stat) + ": ");
                 Console.ForegroundColor = StatToColor(stat);
                 Console.Write(GetStatValue(stat));
             }
 
             Console.ForegroundColor = originalColor;
         }
+
+
+        /// <summary>
+        /// Alternative to PrintStats, you get all the info and can choose what to show and how
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetStatsAsStrings()
+        {
+            var result = new List<string>();
+
+            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
+            {
+                var statString = "";
+                statString += Enum.GetName(typeof(StatTypes), stat) + ": ";
+                statString += GetStatValue(stat);
+                result.Add(statString);
+            }
+
+            return result;
+        }
+
 
         protected static ConsoleColor StatToColor(StatTypes type)
         {
