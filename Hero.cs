@@ -207,7 +207,10 @@ namespace CustomHeroCreator
                     foreach (var skill in skillOptions)
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + skill.Key, ConsoleColor.White);
-                        CommandLineTools.PrintWithColor(" +" + skill.Value + "    ", StatToColor(skill.Key));
+
+                        CommandLineTools.PrintWithColor(" " + GetStatValue(skill.Key), ConsoleColor.Gray);
+
+                        CommandLineTools.PrintWithColor(" + " + skill.Value + "    ", StatToColor(skill.Key));
                         Console.WriteLine();
                     }
                     Console.WriteLine();
@@ -334,6 +337,16 @@ namespace CustomHeroCreator
                     return ConsoleColor.Cyan;
                 case StatTypes.MaxHealth:
                     return ConsoleColor.Magenta;
+                case StatTypes.AttackDmg:
+                    return ConsoleColor.DarkRed;
+                case StatTypes.AttackSpeed:
+                    return ConsoleColor.DarkGreen;
+                case StatTypes.CritChance:
+                    return ConsoleColor.Yellow;
+                case StatTypes.CritMultiplier:
+                    return ConsoleColor.DarkYellow;
+                case StatTypes.Armor:
+                    return ConsoleColor.Blue;
                 default:
                     return DEFAULT_TEXT_COLOR;
             }

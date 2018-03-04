@@ -175,10 +175,6 @@ namespace CustomHeroCreator
                     Console.Write("Enemy has grown stronger: ");
                     enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
                     Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine("Your stats:");
-                    hero.PrintStats("\n");
-                    Console.WriteLine();
                 }
 
                 Arena.Fight(hero, enemy);
@@ -297,6 +293,10 @@ namespace CustomHeroCreator
         {
             for (int i = 0; i < lvl; i++)
             {
+                if (hero.IsPlayer)
+                {
+                    Console.Clear();
+                }
                 hero.LevelUp();
             }
         }
