@@ -113,6 +113,7 @@ namespace CustomHeroCreator
         /// If this hero has an AI or if it is to be controlled by user
         /// </summary>
         public bool HasAI => AI != null;
+        public bool IsPlayer => !HasAI;
 
         public Agent AI { get; set; }
 
@@ -131,19 +132,18 @@ namespace CustomHeroCreator
         /// </summary>
         public virtual void LevelUp()
         {
-            if (!HasAI)
-            {
-                Console.Clear();
-                Console.WriteLine("========================");
-                PrintStats();
-            }
+            //if (!HasAI)
+            //{
+            //    Console.WriteLine("========================");
+            //    PrintStats();
+            //}
 
             ChooseNewSkill();
 
-            if (!HasAI)
-            {
-                Console.WriteLine("========================");
-            }
+            //if (!HasAI)
+            //{
+            //    Console.WriteLine("========================");
+            //}
 
             Level++;
         }
@@ -208,6 +208,11 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.Write("Current Level: ");
+                    CommandLineTools.PrintWithColor("" + Level, ConsoleColor.Green);
+                    Console.WriteLine();
                     Console.WriteLine("Choose one of the following or press Q to abort");
 
                     Console.WriteLine();

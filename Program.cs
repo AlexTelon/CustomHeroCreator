@@ -10,8 +10,11 @@ namespace CustomHeroCreator
 {
     class Program
     {
+
         private static readonly int MAX_NR_OF_GENERATIONS = 40;
+        private static readonly int HERO_STARTING_LEVEL = 10;
         private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
+
 
 
         private static readonly double MUTATION_CHANCE = 0.2;
@@ -23,8 +26,13 @@ namespace CustomHeroCreator
 
             Console.WriteLine("Welcome to Custom Hero Creator!");
 
-            Console.WriteLine("Display results? (y/N)");
-            var displayStuff = Console.ReadLine() == "y";
+            //Console.WriteLine("Display results? (y/N)");
+            //var displayStuff = Console.ReadLine() == "y";
+            var displayStuff = false;
+
+            Console.WriteLine("Add human player? (y/N)");
+            var HasHumanPlayer = Console.ReadLine() == "y";
+            //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
 
             var generations = new List<List<Hero>>();
 
@@ -32,15 +40,13 @@ namespace CustomHeroCreator
             List<Hero> heroes = new List<Hero>();
             var newGeneration = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
 
-
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
                 //Add new generation
                 generations.Add(newGeneration);
 
                 // The heroes get to level up a few times before they run into their trials
-                var levels = 10;
-                LevelUpHeroes(generations[i], levels);
+                LevelUpHeroes(generations[i], HERO_STARTING_LEVEL);
 
                 // Let the heroes fight to gauge their Fitness
                 //RunTournamentTrial(generations[i]);
@@ -49,7 +55,6 @@ namespace CustomHeroCreator
                 // fight against increasingly strong enemies, survive as long as you can!
                 RunSinglePlayerTrials(generations[i]);
 
-                
                 //Select the most elite heroes
                 List<Hero> elites = SelectElites(generations[i]);
 
@@ -66,7 +71,6 @@ namespace CustomHeroCreator
                     Console.WriteLine("========================");
                 }
             }
-
             var averagePerGeneration = new List<double>();
             var bestInEachGenration = new List<Hero>();
 
@@ -79,12 +83,36 @@ namespace CustomHeroCreator
                 bestInEachGenration.Add(generation.MaxBy(x => x.Fitness));
             }
 
+
+            // we have no found the best AI (refactor out the above parts so this is not the mother of all functions in the end!)
+
+            // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
+            if (HasHumanPlayer)
+            {
+                var player = new Hero();
+
+                // The heroes get to level up a few times before they run into their trials
+                LevelUpHero(player, HERO_STARTING_LEVEL);
+
+                // fight against increasingly strong enemies, survive as long as you can!
+                RunSinglePlayerTrial(player);
+
+
+                Console.WriteLine("Your result: ");
+                Console.WriteLine("Level: " + player.Level);
+                player.PrintStats();
+                Console.WriteLine();
+            }
+
+
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
 
             var bestHero = bestInEachGenration.MaxBy(x => x.Fitness);
             Console.WriteLine("Best Configuraion");
+            Console.WriteLine("Level: " + bestHero.Level);
             bestHero.PrintStats();
             Console.WriteLine();
+
 
 
             // in the end let the top performer from each generation all fight each other
@@ -138,6 +166,19 @@ namespace CustomHeroCreator
 
                 enemy.LevelUp();
                 hero.LevelUp();
+
+                if (hero.IsPlayer)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Round " + enemy.Level);
+                    Console.Write("Enemy has grown stronger: ");
+                    enemy.PrintStats();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine("Your stats:");
+                    hero.PrintStats();
+                    Console.WriteLine();
+                }
 
                 Arena.Fight(hero, enemy);
             }
