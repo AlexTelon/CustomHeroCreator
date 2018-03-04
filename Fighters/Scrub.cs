@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomHeroCreator.AI;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +12,8 @@ namespace CustomHeroCreator.Fighters
         /// </summary>
         public DeterministicScrub()
         {
-
+            // dummy AI
+            this.AI = new Agent();
         }
         ///// <summary>
         ///// A scrub gets weeker options

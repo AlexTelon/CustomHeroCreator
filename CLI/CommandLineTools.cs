@@ -38,7 +38,7 @@ namespace CustomHeroCreator.CLI
             }
         }
 
-        private static void PrintVerticalBar(double value, double min, double max, ConsoleColor color)
+        internal static void PrintVerticalBar(double value, double min, double max, ConsoleColor color)
         {
             var ratio = 1 - (max - value) / (max - min);
 

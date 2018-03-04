@@ -55,6 +55,7 @@ namespace CustomHeroCreator
         public double CritChance { get; set; } = 0.1;
         public double CritMultiplier { get; set; } = 1.1;
 
+
         public double AttackSpeed
         {
             get => _attacksPerSecond;
