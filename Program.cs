@@ -46,6 +46,9 @@ namespace CustomHeroCreator
             List<Hero> heroes = new List<Hero>();
             var newGeneration = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
 
+            // Create the arena in which the heroes fitness will be evaluated
+            Arena arena = new Arena();
+
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
                 //Add new generation
@@ -59,7 +62,7 @@ namespace CustomHeroCreator
 
                 // Run the game on the heroes
                 // fight against increasingly strong enemies, survive as long as you can!
-                RunSinglePlayerTrials(generations[i]);
+                RunSinglePlayerTrials(arena, generations[i]);
 
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);
@@ -108,7 +111,7 @@ namespace CustomHeroCreator
                 LevelUpHero(player, HERO_STARTING_LEVEL);
 
                 // fight against increasingly strong enemies, survive as long as you can!
-                RunSinglePlayerTrial(player);
+                RunSinglePlayerTrial(arena, player);
 
 
                 Console.WriteLine("Your result: ");
@@ -138,20 +141,17 @@ namespace CustomHeroCreator
             //}
 
             //RunTournamentTrial(bestInEachGenration);
-
-
-
         }
 
         /// <summary>
         /// Gauge the Fitness of each hero by letting them fight a series of "NPCs"
         /// </summary>
         /// <param name="list"></param>
-        private static void RunSinglePlayerTrials(List<Hero> heroes)
+        private static void RunSinglePlayerTrials(Arena arena, List<Hero> heroes)
         {
             foreach (var hero in heroes)
             {
-                RunSinglePlayerTrial(hero);
+                RunSinglePlayerTrial(arena, hero);
             }
         }
 
@@ -159,7 +159,7 @@ namespace CustomHeroCreator
         /// Gauge the Fitness of a hero by letting it fight a series of "NPCs"
         /// </summary>
         /// <param name="list"></param>
-        private static void RunSinglePlayerTrial(Hero hero)
+        private static void RunSinglePlayerTrial(Arena arena, Hero hero)
         {
             var enemy = new DeterministicScrub();
 
@@ -201,7 +201,7 @@ namespace CustomHeroCreator
             hero.Fitness = enemy.Level;
         }
 
-        private static void RunTournamentTrial(List<Hero> heroes)
+        private static void RunTournamentTrial(Arena arena, List<Hero> heroes)
         {
             // Run tournament style trial
             // all vs all
@@ -211,8 +211,8 @@ namespace CustomHeroCreator
                 for (int j = i + 1; j < heroes.Count(); j++)
                 {
                     var enemy = heroes[j];
-                    Arena.Fight(hero, enemy);
-                    
+                    arena.Fight(hero, enemy);
+
                     // The heroes Fitness is increased by how much health it has left at the end
                     hero.Fitness += hero.CurrentHealth;
                     enemy.Fitness += enemy.CurrentHealth;

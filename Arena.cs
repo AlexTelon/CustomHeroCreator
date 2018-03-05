@@ -8,8 +8,7 @@ namespace CustomHeroCreator
 {
     class Arena
     {
-
-        public static void Fight(Hero first, Hero second)
+        public void Fight(Hero first, Hero second)
         {
             var playerPresent = (first.IsPlayer || second.IsPlayer);
 
