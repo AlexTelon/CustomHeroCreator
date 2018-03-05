@@ -36,7 +36,7 @@ namespace CustomHeroCreator
 
         private static void PlayerFight(Hero player, Hero enemy)
         {
-            var sleep = 500;
+            var sleep = 100;
 
             Console.WriteLine("Enemy stats: ");
             enemy.PrintStats();

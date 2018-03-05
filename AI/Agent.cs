@@ -45,10 +45,22 @@ namespace CustomHeroCreator.AI
         internal void InitRandomWeights()
         {
             var rnd = new Random();
+
             // Init AI weights
             for (int i = 0; i < Enum.GetNames(typeof(Hero.StatTypes)).Count(); i++)
             {
-                Weights.Add(rnd.NextDouble());
+                // cheating by making sure that the weight is scaled according to the type of value that it is
+                // here crit chance and crit multiplier are multiplicative things are increased by much smaller margins 
+                // and hence need to be compensated for in some way when each weight is just a scalar.
+                // This is probable fixed by making each weight a n-polynomial where the AI gets to experiment with the degree and the weights.
+                if (i == 2 || i == 3)
+                {
+                    Weights.Add(rnd.NextDouble() * 10);
+                }
+                else
+                {
+                    Weights.Add(rnd.NextDouble() * 1);
+                }
             }
         }
 
