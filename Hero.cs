@@ -68,9 +68,9 @@ namespace CustomHeroCreator
 
         public enum StatTypes
         {
-            Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, CritChance, CritMultiplier, Armor
+          MaxHealth, AttackDmg, CritChance, CritMultiplier, Armor
         };
-
+        //Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, CritChance, CritMultiplier, Armor
 
         public double GetHitDmg()
         {
@@ -148,27 +148,27 @@ namespace CustomHeroCreator
                 double value = 0;
                 switch (stat)
                 {
-                    case StatTypes.Str:
-                    case StatTypes.Agi:
-                    case StatTypes.Int:
-                        value = rnd.Next(1, 5);
-                        break;
+                    //case StatTypes.Str:
+                    //case StatTypes.Agi:
+                    //case StatTypes.Int:
+                    //    value = rnd.Next(1, 5);
+                    //    break;
                     case StatTypes.MaxHealth:
                         value = rnd.Next(1, 5);
                         break;
                     case StatTypes.AttackDmg:
                         value = rnd.Next(1, 5);
                         break;
-                    case StatTypes.AttackSpeed:
-                        value = rnd.Next(1, 5);
-                        break;
+                    //case StatTypes.AttackSpeed:
+                    //    value = rnd.Next(1, 5);
+                    //    break;
                     case StatTypes.CritChance:
                         // only allow for 1-5% increases
-                        value = rnd.Next(1, 5) * 0.01;
+                        value = rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.CritMultiplier:
                         // only allow for 1-5% increases
-                        value = rnd.Next(1, 5) * 0.01;
+                        value = rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.Armor:
                         value = rnd.Next(1, 5);
@@ -343,18 +343,18 @@ namespace CustomHeroCreator
         {
             switch (type)
             {
-                case StatTypes.Str:
-                    return ConsoleColor.Red;
-                case StatTypes.Agi:
-                    return ConsoleColor.Green;
-                case StatTypes.Int:
-                    return ConsoleColor.Cyan;
+                //case StatTypes.Str:
+                //    return ConsoleColor.Red;
+                //case StatTypes.Agi:
+                //    return ConsoleColor.Green;
+                //case StatTypes.Int:
+                    //return ConsoleColor.Cyan;
                 case StatTypes.MaxHealth:
                     return ConsoleColor.Magenta;
                 case StatTypes.AttackDmg:
                     return ConsoleColor.DarkRed;
-                case StatTypes.AttackSpeed:
-                    return ConsoleColor.DarkGreen;
+                //case StatTypes.AttackSpeed:
+                //    return ConsoleColor.DarkGreen;
                 case StatTypes.CritChance:
                     return ConsoleColor.Yellow;
                 case StatTypes.CritMultiplier:
@@ -370,24 +370,24 @@ namespace CustomHeroCreator
         {
             switch (type)
             {
-                case StatTypes.Str:
-                    Str += value;
-                    break;
-                case StatTypes.Agi:
-                    Agi += value;
-                    break;
-                case StatTypes.Int:
-                    Int += value;
-                    break;
+                //case StatTypes.Str:
+                //    Str += value;
+                //    break;
+                //case StatTypes.Agi:
+                //    Agi += value;
+                //    break;
+                //case StatTypes.Int:
+                //    Int += value;
+                //    break;
                 case StatTypes.MaxHealth:
                     MaxHealth += value;
                     break;
                 case StatTypes.AttackDmg:
                     AttackDmg += value;
                     break;
-                case StatTypes.AttackSpeed:
-                    AttackSpeed += value;
-                    break;
+                //case StatTypes.AttackSpeed:
+                //    AttackSpeed += value;
+                //    break;
                 case StatTypes.CritChance:
                     CritChance += value;
                     break;
@@ -406,18 +406,18 @@ namespace CustomHeroCreator
         {
             switch (type)
             {
-                case StatTypes.Str:
-                    return Str;
-                case StatTypes.Agi:
-                    return Agi;
-                case StatTypes.Int:
-                    return Int;
+                //case StatTypes.Str:
+                //    return Str;
+                //case StatTypes.Agi:
+                //    return Agi;
+                //case StatTypes.Int:
+                //    return Int;
                 case StatTypes.MaxHealth:
                     return MaxHealth;
                 case StatTypes.AttackDmg:
                     return AttackDmg;
-                case StatTypes.AttackSpeed:
-                    return AttackSpeed;
+                //case StatTypes.AttackSpeed:
+                //    return AttackSpeed;
                 case StatTypes.CritChance:
                     return CritChance;
                 case StatTypes.CritMultiplier:
