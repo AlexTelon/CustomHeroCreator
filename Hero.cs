@@ -77,7 +77,7 @@ namespace CustomHeroCreator
             double dmg = AttackDmg;
 
             var rnd = new Random();
-            if (rnd.NextDouble() > CritChance)
+            if (rnd.NextDouble() < CritChance)
             {
                 dmg *= CritMultiplier;
             }
