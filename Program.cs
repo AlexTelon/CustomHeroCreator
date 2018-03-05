@@ -274,7 +274,7 @@ namespace CustomHeroCreator
             var rnd = new Random();
             Agent c = new Agent();
 
-            var weights = new List<double>();
+            var weights = new List<Weight>();
 
             // create a child that is a perfect mix of the parents
             for (int i = 0; i < a.Weights.Count(); i++)
@@ -288,7 +288,12 @@ namespace CustomHeroCreator
             {
                 if (rnd.NextDouble() > MUTATION_CHANCE)
                 {
-                    weights[i] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
+                    var constSize = weights[i].Constants.Count();
+
+                    // give random constant a modification 
+                    // TODO (this never adds new constants, maybe it should?)
+                    // TODO give Weight class breed and mutation functionality, this is ugly
+                    weights[i].Constants[rnd.Next(0, constSize - 1 )] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
                 }
             }
 
