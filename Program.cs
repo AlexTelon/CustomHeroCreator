@@ -61,12 +61,19 @@ namespace CustomHeroCreator
                 // fight against increasingly strong enemies, survive as long as you can!
                 RunSinglePlayerTrials(generations[i]);
 
+#if (DEBUG)
+                Console.WriteLine("Generation: " + i);
+                CommandLineTools.PrintTable(newGeneration.Select(x => x.Fitness).ToList(), ConsoleColor.Cyan, true);
+                Console.WriteLine();
+#endif
+
                 //Select the most elite heroes
                 List<Hero> elites = SelectElites(generations[i]);
 
                 // The best heroes get to breed
                 // And are added to the next generation
                 newGeneration = Breed(elites, generations[i].Count());
+
 
                 //display results
                 if (displayStuff)
