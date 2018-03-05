@@ -58,19 +58,21 @@ namespace CustomHeroCreator
 
 
                 Console.Write("Your: ");
-                CommandLineTools.PrintWithColor("" + player.CurrentHealth.ToString("#.#") + "\t\t", ConsoleColor.DarkGreen);
+                CommandLineTools.PrintWithColor("" + player.CurrentHealth.ToString("#.#") + "\t", ConsoleColor.DarkGreen);
                 CommandLineTools.PrintVerticalBar(player.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
+                Console.Write("\t");
                 if (playerDmgTaken != 0)
                 {
-                    CommandLineTools.PrintWithColor("\t\t-" + playerDmgTaken.ToString("#.#"), ConsoleColor.Red);
+                    CommandLineTools.PrintWithColor("-" + playerDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
-                Console.Write("\t\t\tEnemy: ");
-                CommandLineTools.PrintWithColor("" + enemy.CurrentHealth.ToString("#.#") + "\t\t", ConsoleColor.DarkGreen);
+                Console.Write("\tEnemy: ");
+                CommandLineTools.PrintWithColor("" + enemy.CurrentHealth.ToString("#.#") + "\t", ConsoleColor.DarkGreen);
                 CommandLineTools.PrintVerticalBar(enemy.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
+                Console.Write("\t");
                 if (enemyDmgTaken != 0)
                 {
-                    CommandLineTools.PrintWithColor("\t\t-" + enemyDmgTaken.ToString("#.#"), ConsoleColor.Red);
+                    CommandLineTools.PrintWithColor("-" + enemyDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
                 Console.WriteLine();

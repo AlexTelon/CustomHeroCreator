@@ -53,6 +53,16 @@ namespace CustomHeroCreator.CLI
             {
                 builder.Append("=");
             }
+
+            // add whitespace padding so all bars are the same "width"
+            // It makes spacing text out behind bars easier
+            var padding = MAX_NR_OF_BARS - bars;
+            for (int i = 0; i < padding; i++)
+            {
+                builder.Append(" ");
+            }
+
+
             PrintWithColor(builder.ToString(), color);
         }
 

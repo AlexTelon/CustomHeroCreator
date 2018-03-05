@@ -265,7 +265,7 @@ namespace CustomHeroCreator
             }
         }
 
-      
+
 
         private string ChooseOption(Dictionary<StatTypes, double> options)
         {
