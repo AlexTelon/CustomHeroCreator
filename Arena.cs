@@ -62,7 +62,7 @@ namespace CustomHeroCreator
                 CommandLineTools.PrintVerticalBar(player.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
                 if (playerDmgTaken != 0)
                 {
-                    CommandLineTools.PrintWithColor(" -" + playerDmgTaken.ToString("#.#"), ConsoleColor.Red);
+                    CommandLineTools.PrintWithColor("\t\t-" + playerDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
                 Console.Write("\t\t\tEnemy: ");
@@ -70,7 +70,7 @@ namespace CustomHeroCreator
                 CommandLineTools.PrintVerticalBar(enemy.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
                 if (enemyDmgTaken != 0)
                 {
-                    CommandLineTools.PrintWithColor(" -" + enemyDmgTaken.ToString("#.#"), ConsoleColor.Red);
+                    CommandLineTools.PrintWithColor("\t\t-" + enemyDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
                 Console.WriteLine();

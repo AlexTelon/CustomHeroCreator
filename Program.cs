@@ -1,4 +1,7 @@
-﻿using CustomHeroCreator.AI;
+﻿//#define DEBUG
+#undef DEBUG
+
+using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Fighters;
 using MoreLinq;
@@ -6,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static CustomHeroCreator.Hero;
+
 
 namespace CustomHeroCreator
 {
@@ -16,6 +20,7 @@ namespace CustomHeroCreator
         private static readonly int HERO_STARTING_LEVEL = 10;
         private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
 
+        private static readonly int MAX_LEVEL = 500;
 
 
         private static readonly double MUTATION_CHANCE = 0.2;
@@ -159,7 +164,8 @@ namespace CustomHeroCreator
             //}
             //enemy.AI = agent;
 
-            while (hero.IsAlive)
+            var level = 1;
+            while (hero.IsAlive && level < MAX_LEVEL)
             {
                 //Make sure they are not dead before the fight
                 enemy.Restore();
@@ -171,13 +177,17 @@ namespace CustomHeroCreator
                 if (hero.IsPlayer)
                 {
                     Console.Clear();
-                    Console.WriteLine("Round " + enemy.Level);
+                    Console.WriteLine("Level " + level);
                     Console.Write("Enemy has grown stronger: ");
                     enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
                     Console.WriteLine();
                 }
 
-                Arena.Fight(hero, enemy);
+                arena.Fight(hero, enemy);
+#if (DEBUG)
+                Console.Write("\rLevel " + level);
+#endif
+                level++;
             }
 
             // The fitness is how many rounds of enemies our hero survived
