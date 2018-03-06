@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CustomHeroCreator.Logging;
 using static CustomHeroCreator.Hero;
-
+using CustomHeroCreator.Helpers;
 
 namespace CustomHeroCreator
 {
@@ -197,14 +197,15 @@ namespace CustomHeroCreator
             // create a child that is a perfect mix of the parents
             for (int i = 0; i < a.Weights.Count(); i++)
             {
-                weights.Add(rnd.Next(0, 1) == 0 ? a.Weights[i] : b.Weights[i]);
+                var choose = RandomHelper.RandomBool(rnd);
+                weights.Add(choose ? a.Weights[i] : b.Weights[i]);
             }
 
 
             // now add some random mutations
             for (int i = 0; i < weights.Count(); i++)
             {
-                if (rnd.NextDouble() > MUTATION_CHANCE)
+                if (rnd.NextDouble() < MUTATION_CHANCE)
                 {
                     var constSize = weights[i].Constants.Count();
 
