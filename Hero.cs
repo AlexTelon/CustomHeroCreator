@@ -60,6 +60,8 @@ namespace CustomHeroCreator
 
         public double Armor { get; set; }
 
+        private Random rnd = new Random();
+
 
         public enum StatTypes
         {
@@ -71,7 +73,6 @@ namespace CustomHeroCreator
         {
             double dmg = AttackDmg;
 
-            var rnd = new Random();
             if (rnd.NextDouble() < CritChance)
             {
                 dmg *= CritMultiplier;
