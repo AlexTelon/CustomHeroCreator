@@ -12,6 +12,8 @@ using CustomHeroCreator.Logging;
 using static CustomHeroCreator.Hero;
 using CustomHeroCreator.Helpers;
 
+using System.Diagnostics;
+
 namespace CustomHeroCreator
 {
     class Program
@@ -26,6 +28,8 @@ namespace CustomHeroCreator
 
         static void Main(string[] args)
         {
+    
+
             Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
 
             Console.WriteLine("Welcome to Custom Hero Creator!");
@@ -37,6 +41,9 @@ namespace CustomHeroCreator
             Console.WriteLine("Add human player? (y/N)");
             var HasHumanPlayer = Console.ReadLine() == "y";
             //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             var generations = new List<List<Hero>>();
 
@@ -143,6 +150,13 @@ namespace CustomHeroCreator
             //}
 
             //RunTournamentTrial(bestInEachGenration);
+
+            sw.Stop();
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.Write("Execution time: ");
+            CommandLineTools.PrintWithColor("" + sw.Elapsed, ConsoleColor.Red);
         }
 
         private static List<Hero> SelectElites(List<Hero> heroes)
