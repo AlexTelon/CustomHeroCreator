@@ -51,6 +51,8 @@ namespace CustomHeroCreator
             List<Hero> heroes = new List<Hero>();
             var newGeneration = CreateNewGeneration(NR_OF_HEROES_IN_EACH_GENERATION);
 
+            var rnd = new Random();
+
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
             Trials trials = new Trials();
@@ -114,7 +116,7 @@ namespace CustomHeroCreator
             // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
             if (HasHumanPlayer)
             {
-                var player = new Hero();
+                var player = new Hero(rnd);
 
                 // The heroes get to level up a few times before they run into their trials
                 Trials.LevelUpHero(player, HERO_STARTING_LEVEL);
@@ -196,14 +198,14 @@ namespace CustomHeroCreator
 
         private static Hero Breed(Hero mother, Hero father)
         {
-            var child = new Hero();
+            var rnd = new Random();
+            var child = new Hero(rnd);
 
             // really the AI is the one we are breeding
             Agent a = mother.AI;
             Agent b = father.AI;
 
             // merge the two with a chance for mutation
-            var rnd = new Random();
             Agent c = new Agent();
 
             var weights = new List<Weight>();
@@ -239,13 +241,14 @@ namespace CustomHeroCreator
 
         private static List<Hero> CreateNewGeneration(int nrOfAgents)
         {
+            var rnd = new Random();
             var heroes = new List<Hero>();
 
             for (int i = 0; i < nrOfAgents; i++)
             {
                 Agent ai = new Agent();
 
-                Hero hero = new Hero
+                Hero hero = new Hero(rnd)
                 {
                     AI = ai
                 };

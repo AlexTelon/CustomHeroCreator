@@ -10,7 +10,7 @@ namespace CustomHeroCreator.Fighters
         /// <summary>
         /// Create a scrub that always stronger in the same deterministic manner when it levels up
         /// </summary>
-        public DeterministicScrub()
+        public DeterministicScrub() : base(new Random())
         {
             // dummy AI
             this.AI = new Agent();
@@ -64,7 +64,7 @@ namespace CustomHeroCreator.Fighters
         /// </summary>
         public override void LevelUp()
         {
-            foreach (StatTypes statType in Enum.GetValues(typeof(StatTypes)))
+            foreach (StatTypes statType in ALL_STAT_TYPES)
             {
                 if (statType == StatTypes.CritChance || statType == StatTypes.CritMultiplier)
                 {

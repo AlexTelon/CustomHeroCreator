@@ -12,6 +12,9 @@ namespace CustomHeroCreator
         private static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
         private static int SkillOptionsPerLevelUp => Enum.GetNames(typeof(StatTypes)).Count();
 
+        protected static readonly Array ALL_STAT_TYPES = Enum.GetValues(typeof(StatTypes));
+
+
         public uint Level { get; protected set; } = 1;
         public bool IsActive { get; internal set; } = true;
 
@@ -60,8 +63,12 @@ namespace CustomHeroCreator
 
         public double Armor { get; set; }
 
-        private Random rnd = new Random();
+        private Random _rnd;
 
+        public Hero(Random rnd)
+        {
+            this._rnd = rnd;
+        }
 
         public enum StatTypes
         {
@@ -73,7 +80,7 @@ namespace CustomHeroCreator
         {
             double dmg = AttackDmg;
 
-            if (rnd.NextDouble() < CritChance)
+            if (_rnd.NextDouble() < CritChance)
             {
                 dmg *= CritMultiplier;
             }
@@ -135,10 +142,7 @@ namespace CustomHeroCreator
         internal virtual Dictionary<StatTypes, double> GenerateRandomSkills()
         {
             var skills = new Dictionary<StatTypes, double>();
-
-            Random rnd = new Random();
-
-            foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
+            foreach (StatTypes stat in ALL_STAT_TYPES)
             {
                 double value = 0;
                 switch (stat)
@@ -149,24 +153,24 @@ namespace CustomHeroCreator
                     //    value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.MaxHealth:
-                        value = rnd.Next(1, 5);
+                        value = _rnd.Next(1, 5);
                         break;
                     case StatTypes.AttackDmg:
-                        value = rnd.Next(1, 5);
+                        value = _rnd.Next(1, 5);
                         break;
                     //case StatTypes.AttackSpeed:
                     //    value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.CritChance:
                         // only allow for 1-5% increases
-                        value = rnd.Next(1, 20) * 0.01;
+                        value = _rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.CritMultiplier:
                         // only allow for 1-5% increases
-                        value = rnd.Next(1, 20) * 0.01;
+                        value = _rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.Armor:
-                        value = rnd.Next(1, 5);
+                        value = _rnd.Next(1, 5);
                         break;
                     default:
                         break;
