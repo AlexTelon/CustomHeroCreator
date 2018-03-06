@@ -14,11 +14,7 @@ namespace CustomHeroCreator.AI
         /// The constants the polynomial, constants not added here are considered 0
         /// So the number of constants determine the degree of the polynomial
         /// </summary>
-        public List<double> Constants
-        {
-            get;
-            set;
-        } = new List<double>();
+        public List<double> Constants { get; set; } = new List<double>();
 
 
         /// <summary>
@@ -30,9 +26,11 @@ namespace CustomHeroCreator.AI
         internal double GetScore(double x)
         {
             double result = 0;
+            var power = 0;
             foreach (var constant in Constants)
             {
-                result += constant * x;
+                result += constant * Math.Pow(x, power);
+                power++;
             }
 
             return result;

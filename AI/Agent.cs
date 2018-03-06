@@ -56,8 +56,8 @@ namespace CustomHeroCreator.AI
             {
                 var weight = new Weight();
 
-                // constant or linear by giving weight 1 or 2 constants
-                for (int x = 0; x < rnd.Next(1, 2); x++)
+                // Remember, rnd.Next is exlusive on the upper end.
+                for (int x = 0; x < rnd.Next(1, 3); x++)
                 {
                     weight.Constants.Add(rnd.NextDouble());
                 }
