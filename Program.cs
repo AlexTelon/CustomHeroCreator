@@ -22,10 +22,11 @@ namespace CustomHeroCreator
 
         private static readonly int MAX_NR_OF_GENERATIONS = 40;
         private static readonly int HERO_STARTING_LEVEL = 10;
-        private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
+        private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 100;
 
-        private static readonly double MUTATION_CHANCE = 0.2;
-        private static readonly double MUTATION_AMPLITUDE = 0.1;
+        private static readonly double MUTATION_CHANCE = 0.01;
+        private static readonly double MUTATION_AMPLITUDE = 0.01;
+
 
         static void Main(string[] args)
         {
@@ -58,7 +59,7 @@ namespace CustomHeroCreator
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
             Trials trials = new Trials();
-            trials.MaxLevel = 500;
+            trials.MaxLevel = 1000;
 
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {

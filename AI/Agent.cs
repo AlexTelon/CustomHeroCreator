@@ -55,11 +55,24 @@ namespace CustomHeroCreator.AI
             {
                 var weight = new Weight();
 
-                // Remember, rnd.Next is exlusive on the upper end.
-                for (int x = 0; x < rnd.Next(1, 3); x++)
+                if (i == 2 || i == 3)
                 {
-                    weight.Constants.Add(rnd.NextDouble());
+                    // Remember, rnd.Next is exlusive on the upper end.
+                    for (int x = 0; x < rnd.Next(1, 3); x++)
+                    {
+                        weight.Constants.Add(rnd.NextDouble() * 10);
+                    }
                 }
+                else
+                {
+
+                    // Remember, rnd.Next is exlusive on the upper end.
+                    for (int x = 0; x < rnd.Next(1, 3); x++)
+                    {
+                        weight.Constants.Add(rnd.NextDouble());
+                    }
+                }
+
 
                 Weights.Add(weight);
 
