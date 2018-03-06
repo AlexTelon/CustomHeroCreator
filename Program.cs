@@ -21,9 +21,6 @@ namespace CustomHeroCreator
         private static readonly int HERO_STARTING_LEVEL = 10;
         private static readonly int NR_OF_HEROES_IN_EACH_GENERATION = 10;
 
-        private static readonly int MAX_LEVEL = 500;
-
-
         private static readonly double MUTATION_CHANCE = 0.2;
         private static readonly double MUTATION_AMPLITUDE = 0.1;
 
@@ -49,6 +46,8 @@ namespace CustomHeroCreator
 
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
+            Trials trials = new Trials();
+            trials.MaxLevel = 500;
 
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
@@ -56,14 +55,14 @@ namespace CustomHeroCreator
                 generations.Add(newGeneration);
 
                 // The heroes get to level up a few times before they run into their trials
-                LevelUpHeroes(generations[i], HERO_STARTING_LEVEL);
+                Trials.LevelUpHeroes(generations[i], HERO_STARTING_LEVEL);
 
                 // Let the heroes fight to gauge their Fitness
                 //RunTournamentTrial(generations[i]);
 
                 // Run the game on the heroes
                 // fight against increasingly strong enemies, survive as long as you can!
-                RunSinglePlayerTrials(arena, generations[i]);
+                trials.RunSinglePlayerTrials(arena, generations[i]);
 
                 Logger.Instance.Log(generations[i]);
 
@@ -111,10 +110,10 @@ namespace CustomHeroCreator
                 var player = new Hero();
 
                 // The heroes get to level up a few times before they run into their trials
-                LevelUpHero(player, HERO_STARTING_LEVEL);
+                Trials.LevelUpHero(player, HERO_STARTING_LEVEL);
 
                 // fight against increasingly strong enemies, survive as long as you can!
-                RunSinglePlayerTrial(arena, player);
+                trials.RunSinglePlayerTrial(arena, player);
 
 
                 Console.WriteLine("Your result: ");
@@ -144,87 +143,6 @@ namespace CustomHeroCreator
             //}
 
             //RunTournamentTrial(bestInEachGenration);
-        }
-
-        /// <summary>
-        /// Gauge the Fitness of each hero by letting them fight a series of "NPCs"
-        /// </summary>
-        /// <param name="list"></param>
-        private static void RunSinglePlayerTrials(Arena arena, List<Hero> heroes)
-        {
-            foreach (var hero in heroes)
-            {
-                RunSinglePlayerTrial(arena, hero);
-            }
-        }
-
-        /// <summary>
-        /// Gauge the Fitness of a hero by letting it fight a series of "NPCs"
-        /// </summary>
-        /// <param name="list"></param>
-        private static void RunSinglePlayerTrial(Arena arena, Hero hero)
-        {
-            var enemy = new DeterministicScrub();
-
-            // create an agent that is fully random (has no intelligent preferences for one stat over another)
-            //var agent = new Agent();
-            //for (int i = 0; i < agent.Weights.Count(); i++)
-            //{
-            //    agent.Weights[i] = 1;
-            //}
-            //enemy.AI = agent;
-
-            var level = 1;
-            while (hero.IsAlive && level < MAX_LEVEL)
-            {
-                //Make sure they are not dead before the fight
-                enemy.Restore();
-                hero.Restore();
-
-                enemy.LevelUp();
-                hero.LevelUp();
-
-                if (hero.IsPlayer)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Level " + level);
-                    Console.Write("Enemy has grown stronger: ");
-                    enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
-                    Console.WriteLine();
-                }
-
-                arena.Fight(hero, enemy);
-#if (DEBUG)
-                Console.Write("\rLevel " + level);
-#endif
-                level++;
-            }
-
-            // The fitness is how many rounds of enemies our hero survived
-            hero.Fitness = enemy.Level;
-        }
-
-        private static void RunTournamentTrial(Arena arena, List<Hero> heroes)
-        {
-            // Run tournament style trial
-            // all vs all
-            for (int i = 0; i < heroes.Count(); i++)
-            {
-                var hero = heroes[i];
-                for (int j = i + 1; j < heroes.Count(); j++)
-                {
-                    var enemy = heroes[j];
-                    arena.Fight(hero, enemy);
-
-                    // The heroes Fitness is increased by how much health it has left at the end
-                    hero.Fitness += hero.CurrentHealth;
-                    enemy.Fitness += enemy.CurrentHealth;
-
-                    //Make sure they are not dead afterwards
-                    hero.Restore();
-                    enemy.Restore();
-                }
-            }
         }
 
         private static List<Hero> SelectElites(List<Hero> heroes)
@@ -261,9 +179,6 @@ namespace CustomHeroCreator
 
             return newGeneration;
         }
-
-
-
 
         private static Hero Breed(Hero mother, Hero father)
         {
@@ -304,26 +219,6 @@ namespace CustomHeroCreator
             child.AI = c;
 
             return child;
-        }
-
-        private static void LevelUpHeroes(List<Hero> heroes, int lvl)
-        {
-            foreach (var hero in heroes)
-            {
-                LevelUpHero(hero, lvl);
-            }
-        }
-
-        private static void LevelUpHero(Hero hero, int lvl)
-        {
-            for (int i = 0; i < lvl; i++)
-            {
-                if (hero.IsPlayer)
-                {
-                    Console.Clear();
-                }
-                hero.LevelUp();
-            }
         }
 
 
