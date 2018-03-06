@@ -9,17 +9,14 @@ namespace CustomHeroCreator
 {
     class Hero
     {
-        public static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
+        private static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
         private static int SkillOptionsPerLevelUp => Enum.GetNames(typeof(StatTypes)).Count();
-
-
-        public string Name { get; set; }
 
         public uint Level { get; protected set; } = 1;
         public bool IsActive { get; internal set; } = true;
 
         // Some stats for the Hero
-        public string Stats => "MaxHealth: " + MaxHealth + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
+        //public string Stats => "MaxHealth: " + MaxHealth + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
         public double Str { get; private set; } = 1;
         public double Agi { get; private set; } = 1;
         public double Int { get; private set; } = 1;
@@ -35,7 +32,6 @@ namespace CustomHeroCreator
 
                 if (value <= 0)
                 {
-                    IsAlive = false;
                     _currentHealth = 0;
                 }
 
@@ -48,8 +44,7 @@ namespace CustomHeroCreator
         }
         private double _currentHealth = 100;
 
-        public bool IsAlive { get; private set; } = true;
-
+        public bool IsAlive => CurrentHealth > 0;
 
         public double AttackDmg { get; set; } = 10;
         public double CritChance { get; set; } = 0.1;
@@ -125,7 +120,6 @@ namespace CustomHeroCreator
         public void Restore()
         {
             CurrentHealth = MaxHealth;
-            IsAlive = true;
         }
 
         /// <summary>
@@ -417,7 +411,7 @@ namespace CustomHeroCreator
                 case StatTypes.AttackDmg:
                     return AttackDmg;
                 //case StatTypes.AttackSpeed:
-                //    return AttackSpeed;
+                //    return AttackSpeed
                 case StatTypes.CritChance:
                     return CritChance;
                 case StatTypes.CritMultiplier:

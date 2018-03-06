@@ -20,11 +20,6 @@ namespace CustomHeroCreator.AI
             set;
         } = new List<double>();
 
-        /// <summary>
-        /// The AI can use this to "save" what degree it wants to use
-        /// </summary>
-        public int Degree { get; set; }
-
 
         /// <summary>
         /// Supply x to the polynomial
