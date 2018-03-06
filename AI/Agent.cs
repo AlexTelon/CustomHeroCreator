@@ -1,7 +1,9 @@
-﻿using System;
+﻿using CustomHeroCreator.CLI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator.AI
 {
@@ -80,9 +82,20 @@ namespace CustomHeroCreator.AI
         {
             var originalBackground = Console.BackgroundColor;
 
+            CommandLineTools.PrintWithColor("Weights:", ConsoleColor.White);
+            Console.WriteLine();
+
             Console.BackgroundColor = ConsoleColor.DarkRed;
 
-            Console.WriteLine(String.Join(" ", Weights.Select(x => x.ToString())));
+            var strings = new List<string>();
+            var i = 0;
+            foreach (var weight in Weights)
+            {
+                var statName = Enum.GetName(typeof(StatTypes), i);
+                strings.Add(statName + ": " + weight.ToString());
+                i++;
+            }
+            Console.WriteLine(String.Join("\n", strings));
 
             Console.BackgroundColor = originalBackground;
         }

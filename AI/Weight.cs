@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CustomHeroCreator.AI
 {
@@ -42,12 +41,12 @@ namespace CustomHeroCreator.AI
         /// <returns></returns>
         public override string ToString()
         {
-            var result = "";
+            var strings = new List<string>();
             foreach (var constant in Constants)
             {
-                result += "" + constant;
+                strings.Add(constant.ToString("0.00"));
             }
-            return result;
+            return String.Join(", ", strings);
         }
 
     }

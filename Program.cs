@@ -13,6 +13,7 @@ using static CustomHeroCreator.Hero;
 using CustomHeroCreator.Helpers;
 
 using System.Diagnostics;
+using System.Threading;
 
 namespace CustomHeroCreator
 {
@@ -28,7 +29,8 @@ namespace CustomHeroCreator
 
         static void Main(string[] args)
         {
-    
+            // Always use . instead of , as a comma.
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
             Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
 
@@ -138,6 +140,10 @@ namespace CustomHeroCreator
             Console.WriteLine("Best Configuraion");
             Console.WriteLine("Level: " + bestHero.Level);
             bestHero.PrintStats();
+
+            Console.WriteLine();
+            bestHero.AI.PrintWeights();
+
             Console.WriteLine();
 
 
