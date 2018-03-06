@@ -8,6 +8,7 @@ using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CustomHeroCreator.Logging;
 using static CustomHeroCreator.Hero;
 
 
@@ -63,6 +64,8 @@ namespace CustomHeroCreator
                 // Run the game on the heroes
                 // fight against increasingly strong enemies, survive as long as you can!
                 RunSinglePlayerTrials(arena, generations[i]);
+
+                Logger.Instance.Log(generations[i]);
 
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);

@@ -440,7 +440,7 @@ namespace CustomHeroCreator
 
             foreach (StatTypes stat in Enum.GetValues(typeof(StatTypes)))
             {
-                result += Enum.GetName(typeof(StatTypes), stat) + ":" + GetStatValue(stat) + " ";
+                result += Enum.GetName(typeof(StatTypes), stat) + ": " + GetStatValue(stat) + " ";
             }
             return result;
         }
