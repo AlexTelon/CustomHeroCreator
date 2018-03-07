@@ -16,6 +16,15 @@ namespace CustomHeroCreator.AI
             InitRandomWeights();
         }
 
+        internal double GetScore(StatTypes type, double value)
+        {
+            var weight = Weights[(int)type];
+
+            // calculate the "score" (the y-value) of the function with the given input
+            var score = weight.GetScore(value);
+            return score;
+        }
+
         internal string ChooseOption(object hero, Dictionary<Hero.StatTypes, double> options)
         {
             // get internal state of the hero, use that later
@@ -29,11 +38,8 @@ namespace CustomHeroCreator.AI
             int i = 0;
             foreach (var option in options)
             {
-                //get the corresponding weight function
-                var weight = Weights[(int)option.Key];
-
                 // calculate the "score" (the y-value) of the function with the given input
-                var score = weight.GetScore(option.Value);
+                var score = GetScore(option.Key, option.Value);
 
                 scores.Add(score);
                 i++;
