@@ -59,7 +59,7 @@ namespace CustomHeroCreator
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
             Trials trials = new Trials();
-            trials.MaxLevel = 1000;
+            trials.MaxLevel = 10000;
 
             CommandLineTools.PrintTableHeader();
             var averagePerGeneration = new List<double>();
@@ -93,6 +93,11 @@ namespace CustomHeroCreator
                 var best = generations[i].MaxBy(x => x.Fitness);
                 bestInEachGenration.Add(best);
 
+                // If we have an AI that can beat the max level we are done
+                if (best.Fitness >= trials.MaxLevel)
+                {
+                    break;
+                }
 
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);
@@ -174,6 +179,7 @@ namespace CustomHeroCreator
             Console.Write("Execution time: ");
             CommandLineTools.PrintWithColor("" + sw.Elapsed, ConsoleColor.Red);
         }
+
 
         private static List<Hero> SelectElites(List<Hero> heroes)
         {
