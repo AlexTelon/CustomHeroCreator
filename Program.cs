@@ -61,6 +61,11 @@ namespace CustomHeroCreator
             Trials trials = new Trials();
             trials.MaxLevel = 1000;
 
+            CommandLineTools.PrintTableHeader();
+            var averagePerGeneration = new List<double>();
+            var bestInEachGenration = new List<Hero>();
+
+
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
                 //Add new generation
@@ -76,7 +81,18 @@ namespace CustomHeroCreator
                 // fight against increasingly strong enemies, survive as long as you can!
                 trials.RunSinglePlayerTrials(arena, generations[i]);
 
+                //Stat stuff
                 Logger.Instance.Log(generations[i]);
+
+                var average = generations[i].Average(x => x.Fitness);
+                averagePerGeneration.Add(average);
+
+                CommandLineTools.PrintVerticalBar(average, 0, trials.MaxLevel, ConsoleColor.Red);
+                Console.WriteLine();
+
+                var best = generations[i].MaxBy(x => x.Fitness);
+                bestInEachGenration.Add(best);
+
 
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);
@@ -101,17 +117,8 @@ namespace CustomHeroCreator
                     Console.WriteLine("========================");
                 }
             }
-            var averagePerGeneration = new List<double>();
-            var bestInEachGenration = new List<Hero>();
 
 
-            foreach (var generation in generations)
-            {
-                var average = generation.Average(x => x.Fitness);
-                averagePerGeneration.Add(average);
-
-                bestInEachGenration.Add(generation.MaxBy(x => x.Fitness));
-            }
 
 
             // we have no found the best AI (refactor out the above parts so this is not the mother of all functions in the end!)
@@ -235,7 +242,7 @@ namespace CustomHeroCreator
                     // give random constant a modification 
                     // TODO (this never adds new constants, maybe it should?)
                     // TODO give Weight class breed and mutation functionality, this is ugly
-                    weights[i].Constants[rnd.Next(0, constSize - 1 )] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
+                    weights[i].Constants[rnd.Next(0, constSize - 1)] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
                 }
             }
 

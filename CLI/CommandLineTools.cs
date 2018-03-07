@@ -7,6 +7,15 @@ namespace CustomHeroCreator.CLI
 {
     public static class CommandLineTools
     {
+
+        internal static void PrintTableHeader()
+        {
+            PrintWithColor("Row\tValue\tBar", ConsoleColor.Green);
+            Console.WriteLine();
+            PrintWithColor("===========================", ConsoleColor.Gray);
+            Console.WriteLine();
+        }
+
         /// <summary>
         /// Prints a list of doubles as a table to the command line
         /// </summary>
@@ -17,10 +26,7 @@ namespace CustomHeroCreator.CLI
             var min = items.Min();
 
             // print table header:
-            PrintWithColor("Row\tValue\tBar", ConsoleColor.Green);
-            Console.WriteLine();
-            PrintWithColor("===========================", ConsoleColor.Gray);
-            Console.WriteLine();
+            PrintTableHeader();
 
             int i = 1;
             foreach (var item in items)
