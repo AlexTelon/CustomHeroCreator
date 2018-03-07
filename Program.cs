@@ -14,6 +14,7 @@ using CustomHeroCreator.Helpers;
 
 using System.Diagnostics;
 using System.Threading;
+using CustomHeroCreator.Generators;
 
 namespace CustomHeroCreator
 {
@@ -65,6 +66,7 @@ namespace CustomHeroCreator
             var averagePerGeneration = new List<double>();
             var bestInEachGenration = new List<Hero>();
 
+            Hero bestHero = new Hero(rnd);
 
             for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
             {
@@ -90,11 +92,11 @@ namespace CustomHeroCreator
                 CommandLineTools.PrintVerticalBar(average, 0, trials.MaxLevel, ConsoleColor.Red);
                 Console.WriteLine();
 
-                var best = generations[i].MaxBy(x => x.Fitness);
-                bestInEachGenration.Add(best);
+                bestHero = generations[i].MaxBy(x => x.Fitness);
+                bestInEachGenration.Add(bestHero);
 
                 // If we have an AI that can beat the max level we are done
-                if (best.Fitness >= trials.MaxLevel)
+                if (bestHero.Fitness >= trials.MaxLevel)
                 {
                     break;
                 }
@@ -124,6 +126,18 @@ namespace CustomHeroCreator
             }
 
 
+            // we have now trained an AI to know how strong each stat is
+
+            var skillTreeGenerator = new SkillTreeGenerator(rnd);
+            skillTreeGenerator.ChoicesPerLevel = 3;
+            skillTreeGenerator.MeanStrengthOfOptions = 3;
+            skillTreeGenerator.Agent = bestHero.AI;
+
+
+            var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
+
+
+
 
 
             // we have no found the best AI (refactor out the above parts so this is not the mother of all functions in the end!)
@@ -149,7 +163,6 @@ namespace CustomHeroCreator
 
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
 
-            var bestHero = bestInEachGenration.MaxBy(x => x.Fitness);
             Console.WriteLine("Best Configuraion");
             Console.WriteLine("Level: " + bestHero.Level);
             bestHero.PrintStats();
