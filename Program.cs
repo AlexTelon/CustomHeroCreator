@@ -61,6 +61,8 @@ namespace CustomHeroCreator
 
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
 
+
+
             // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
             if (HasHumanPlayer)
             {
@@ -102,12 +104,20 @@ namespace CustomHeroCreator
 
             //RunTournamentTrial(bestInEachGenration);
 
-            sw.Stop();
 
+            sw.Stop();
             Console.WriteLine();
             Console.WriteLine();
             Console.Write("Execution time: ");
             CommandLineTools.PrintWithColor("" + sw.Elapsed, ConsoleColor.Red);
+
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("Printing Skill Tree");
+
+            treeRootNode.Print(3);
+
         }
     }
 }
