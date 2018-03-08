@@ -1,5 +1,7 @@
 ﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Generators;
+using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +74,7 @@ namespace CustomHeroCreator
 
         public enum StatTypes
         {
-          MaxHealth, AttackDmg, CritChance, CritMultiplier, Armor
+            MaxHealth, AttackDmg, CritChance, CritMultiplier, Armor
         };
         //Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, CritChance, CritMultiplier, Armor
 
@@ -121,6 +123,7 @@ namespace CustomHeroCreator
 
         public Agent AI { get; set; }
 
+        public SkillTreeGenerator SkillTreeGenerator { get; internal set; }
 
         /// <summary>
         /// Restores a hero back to prime condition
@@ -186,6 +189,108 @@ namespace CustomHeroCreator
 
         private void ChooseNewSkill()
         {
+            if (SkillTreeGenerator == null)
+            {
+                // this part has to be rewritten so the random skill generator also generates a skill tree of nodes
+                // that way we can unify everything. But for now the old stuff is left on its own in this method
+                ChooseNewRandomSkill();
+            }
+            else
+            {
+                var currentOption = SkillTreeGenerator.GenerateSkillOption();
+                ChoooseNewSkillFromTree(currentOption);
+            }
+
+        }
+
+        private void ChoooseNewSkillFromTree(StatNode statNode)
+        {
+            var hasChoosen = false;
+
+            while (!hasChoosen)
+            {
+                var i = 1;
+
+                if (!HasAI)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.Write("Current Level: ");
+                    CommandLineTools.PrintWithColor("" + Level, ConsoleColor.Green);
+                    Console.WriteLine();
+                    Console.WriteLine("You:");
+                    this.PrintStats();
+                    Console.WriteLine();
+                    Console.WriteLine("Choose one of the following or press Q to abort");
+
+                    Console.WriteLine();
+                    foreach (var node in statNode.Children)
+                    {
+                        CommandLineTools.PrintWithColor("[" + i++ + "]: " + node.Stat, ConsoleColor.White);
+
+                        CommandLineTools.PrintWithColor(" " + GetStatValue(node.Stat).ToString("0.00"), ConsoleColor.Gray);
+
+                        CommandLineTools.PrintWithColor(" + " + node.Value.ToString("0.00") + "    ", StatToColor(node.Stat));
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+
+                int option = -1;
+
+                // ask for input until we get correct input
+                while (true)
+                {
+                    // get input from user or from AI
+                    string input = ChooseOption(statNode);
+
+
+                    // abort
+                    if (input == "q" || input == "Q")
+                    {
+                        IsActive = false;
+                        break;
+                    }
+
+                    if (int.TryParse(input, out int tmp))
+                    {
+                        // if we have correct input the exit the loop
+                        // user supplies a 1 indexed number so we take 1
+                        option = tmp - 1;
+                        break;
+                    }
+                }
+
+                if (option >= statNode.Children.Count())
+                {
+                    // invalid option
+                    Console.WriteLine();
+                    Console.WriteLine("Please choose a valid option");
+                    continue;
+                }
+
+                //We have choosen an option, lets select it by letting it become the new current node!
+                statNode = statNode.Children[option];
+
+                var type = statNode.Stat;
+                var value = statNode.Value;
+
+                SetStatValue(type, value);
+
+                hasChoosen = true;
+
+                if (!HasAI)
+                {
+                    Console.WriteLine();
+                }
+            }
+
+        }
+
+
+        private void ChooseNewRandomSkill()
+        {
             var skillOptions = GenerateRandomSkills();
 
             var hasChoosen = false;
@@ -225,7 +330,6 @@ namespace CustomHeroCreator
                     // get input from user or from AI
                     string input = ChooseOption(skillOptions);
 
-
                     // abort
                     if (input == "q" || input == "Q")
                     {
@@ -264,13 +368,26 @@ namespace CustomHeroCreator
             }
         }
 
-
-
         private string ChooseOption(Dictionary<StatTypes, double> options)
         {
             if (HasAI)
             {
                 return AI.ChooseOption(this, options);
+            }
+            else
+            {
+                //controlled by user
+                return Console.ReadLine();
+            }
+        }
+
+
+        private string ChooseOption(StatNode node)
+        {
+            if (HasAI)
+            {
+                throw new NotImplementedException();
+                //return AI.ChooseOption(this, node);
             }
             else
             {
@@ -311,7 +428,7 @@ namespace CustomHeroCreator
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(delimiter + Enum.GetName(typeof(StatTypes), stat) + ": ");
                 Console.ForegroundColor = StatToColor(stat);
-                Console.Write(GetStatValue(stat));
+                Console.Write(GetStatValue(stat).ToString("0.00"));
             }
 
             Console.ForegroundColor = originalColor;
@@ -347,7 +464,7 @@ namespace CustomHeroCreator
                 //case StatTypes.Agi:
                 //    return ConsoleColor.Green;
                 //case StatTypes.Int:
-                    //return ConsoleColor.Cyan;
+                //return ConsoleColor.Cyan;
                 case StatTypes.MaxHealth:
                     return ConsoleColor.Magenta;
                 case StatTypes.AttackDmg:

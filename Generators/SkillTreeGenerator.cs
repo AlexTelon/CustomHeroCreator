@@ -73,6 +73,21 @@ namespace CustomHeroCreator.Generators
             _rnd = rnd;
         }
 
+        public StatNode GenerateSkillOption()
+        {
+            var RootNode = new StatNode();
+            RootNode.Stat = Hero.StatTypes.MaxHealth;
+            RootNode.Value = 0;
+
+            for (int i = 0; i < ChoicesPerLevel; i++)
+            {
+                RootNode.Children.Add(GenerateSubTree(depth: 0));
+            }
+
+            return RootNode;
+        }
+
+
         /// <summary>
         /// Generates a skill tree built with the stat types available in this object
         /// </summary>

@@ -62,11 +62,12 @@ namespace CustomHeroCreator
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
 
 
-
             // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
             if (HasHumanPlayer)
             {
                 var player = new Hero(rnd);
+
+                player.SkillTreeGenerator = skillTreeGenerator;
 
                 // The heroes get to level up a few times before they run into their trials
                 Trials.LevelUpHero(player, evo.HeroStartingLevel);
