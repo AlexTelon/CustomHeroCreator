@@ -197,7 +197,7 @@ namespace CustomHeroCreator
             }
             else
             {
-                var currentOption = SkillTreeGenerator.GenerateSkillOption();
+                var currentOption = SkillTreeGenerator.GenerateUniqueSkillOptions();
                 ChoooseNewSkillFromTree(currentOption);
             }
 

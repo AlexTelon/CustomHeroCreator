@@ -82,7 +82,11 @@ namespace CustomHeroCreator.Generators
             _rnd = rnd;
         }
 
-        public StatNode GenerateSkillOption()
+        /// <summary>
+        /// Slow! But only used for players now so that is fine
+        /// </summary>
+        /// <returns></returns>
+        public StatNode GenerateUniqueSkillOptions()
         {
             var RootNode = new StatNode();
             RootNode.Stat = Hero.StatTypes.MaxHealth;
@@ -90,7 +94,14 @@ namespace CustomHeroCreator.Generators
 
             for (int i = 0; i < ChoicesPerLevel; i++)
             {
-                RootNode.Children.Add(GenerateSubTree(depth: 0));
+                var child = GetRandomStat();
+                // make sure the child is not of a type that is already added
+                while (RootNode.Children.Select(x => x.Stat).Contains(child.Stat))
+                {
+                    child = GetRandomStat();
+                }
+
+                RootNode.Children.Add(child);
             }
 
             return RootNode;
