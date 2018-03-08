@@ -57,6 +57,8 @@ namespace CustomHeroCreator
             var skillTreeGenerator = new SkillTreeGenerator(rnd);
             skillTreeGenerator.ChoicesPerLevel = 3;
             skillTreeGenerator.MeanStrengthOfOptions = 3;
+            skillTreeGenerator.MaxStrengthOptionDiff = 0.4;
+
             skillTreeGenerator.Agent = evo.BestHero.AI;
 
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);

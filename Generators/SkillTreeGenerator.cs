@@ -21,6 +21,12 @@ namespace CustomHeroCreator.Generators
         public double MeanStrengthOfOptions { get; set; }
 
         /// <summary>
+        /// How far from the mean the strength of an individual option is allowed to be. Range [0..1]
+        /// </summary>
+        public double MaxStrengthOptionDiff { get; internal set; }
+
+
+        /// <summary>
         /// The agent that makes the choices on how to generate new stats
         /// </summary>
         public Agent Agent {
@@ -55,13 +61,16 @@ namespace CustomHeroCreator.Generators
                 k = Agent.Weights[(int)node.Stat].Constants[1]; // power of 1
             }
 
+            // calculate a "mean" that might lie some maximum distance away from the true mean
+            var randomShift = (_rnd.NextDouble() * 2 * MaxStrengthOptionDiff) - MaxStrengthOptionDiff;
+            // shift is now between -maxDiff and + maxDiff
+
+            var mean = MeanStrengthOfOptions * (1 + randomShift);
+
+
             // mean = constantFactor + k * value
             // value = (mean - constantFactor) / k
-
-            
-
-
-            node.Value = (MeanStrengthOfOptions - constantFactor) / k;
+            node.Value = (mean - constantFactor) / k;
 
             return node;
         }
