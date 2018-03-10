@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.CLI;
+using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,6 @@ namespace CustomHeroCreator.AI
         {
             // get internal state of the hero, use that later
 
-
             // see what options we have
 
             // the score each option gets
@@ -40,6 +40,29 @@ namespace CustomHeroCreator.AI
             {
                 // calculate the "score" (the y-value) of the function with the given input
                 var score = GetScore(option.Key, option.Value);
+
+                scores.Add(score);
+                i++;
+            }
+
+            var maxScore = scores.Max();
+            var maxIndex = scores.IndexOf(maxScore);
+
+            // +1 since we are 1 indexed
+            return "" + (maxIndex + 1);
+        }
+
+
+        internal string ChooseOption(Hero hero, StatNode node)
+        {
+            // the score each option gets
+            var scores = new List<double>();
+
+            int i = 0;
+            foreach (var option in node.Children)
+            {
+                // calculate the "score" (the y-value) of the function with the given input
+                var score = GetScore(option.Stat, option.Value);
 
                 scores.Add(score);
                 i++;
@@ -118,5 +141,6 @@ namespace CustomHeroCreator.AI
 
             Console.BackgroundColor = originalBackground;
         }
+
     }
 }

@@ -3,6 +3,7 @@
 
 using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Generators;
 using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Logging;
 using MoreLinq;
@@ -15,23 +16,28 @@ namespace CustomHeroCreator
 {
     class Evolution
     {
-        private static readonly int MAX_NR_OF_GENERATIONS = 40;
+        public int MaxGenerations { get; set; } = 100;
         public int HeroStartingLevel { get; set; } = 10;
         public int NrOfHeroesInEachGeneration { get; set; } = 100;
 
         private static readonly double MUTATION_CHANCE = 0.01;
         private static readonly double MUTATION_AMPLITUDE = 0.01;
 
+        public bool AllwaysRunAllGenerations { get; set; } = false;
+
         public List<List<Hero>> Generations { get; private set; } = new List<List<Hero>>();
+
+        public SkillTreeGenerator SkillTreeGenerator { get; set; }
 
         public Hero BestHero;
 
         private Random _rnd;
-        
 
-        public Evolution(Random rnd)
+
+        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator)
         {
             _rnd = rnd;
+            SkillTreeGenerator = skillTreeGenerator;
             BestHero = new Hero(_rnd);
         }
 
@@ -43,7 +49,7 @@ namespace CustomHeroCreator
             var averagePerGeneration = new List<double>();
             var bestInEachGenration = new List<Hero>();
 
-            for (int i = 0; i < MAX_NR_OF_GENERATIONS; i++)
+            for (int i = 0; i < MaxGenerations; i++)
             {
                 //Add new generation
                 Generations.Add(newGeneration);
@@ -68,10 +74,14 @@ namespace CustomHeroCreator
                 bestInEachGenration.Add(BestHero);
 
                 //If we have an AI that can beat the max level we are done
-                if (BestHero.Fitness >= trials.MaxLevel)
+                if (!AllwaysRunAllGenerations)
                 {
-                    break;
+                    if (BestHero.Fitness >= trials.MaxLevel)
+                    {
+                        break;
+                    }
                 }
+
 
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);
@@ -143,6 +153,7 @@ namespace CustomHeroCreator
         {
             var rnd = new Random();
             var child = new Hero(rnd);
+            child.SkillTreeGenerator = SkillTreeGenerator;
 
             // really the AI is the one we are breeding
             Agent a = mother.AI;

@@ -1,4 +1,7 @@
-﻿using CustomHeroCreator.AI;
+﻿#define DEBUG
+#undef DEBUG
+
+using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Fighters;
 using MoreLinq;
@@ -30,10 +33,6 @@ namespace CustomHeroCreator
             //var displayStuff = Console.ReadLine() == "y";
             //var displayStuff = false;
 
-            Console.WriteLine("Add human player? (y/N)");
-            var HasHumanPlayer = Console.ReadLine() == "y";
-            //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
-
             Stopwatch sw = new Stopwatch();
             sw.Start();
             var rnd = new Random();
@@ -43,14 +42,21 @@ namespace CustomHeroCreator
 
             // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
             Trials trials = new Trials();
-            trials.MaxLevel = 10000;
+            trials.MaxLevel = 5000;
 
-            var evo = new Evolution(rnd);
+            var evo = new Evolution(rnd, skillTreeGenerator: null);
             evo.NrOfHeroesInEachGeneration = 100;
+            evo.MaxGenerations = 20;
             evo.HeroStartingLevel = 10;
+            evo.AllwaysRunAllGenerations = true;
 
             evo.RunEvolution(trials, arena);
 
+            Console.WriteLine("The value of the different skills:");
+            evo.BestHero.AI.PrintWeights();
+            Console.WriteLine();
+
+            Console.ReadKey();
 
             // we have now trained an AI to know how strong each stat is
 
@@ -63,6 +69,28 @@ namespace CustomHeroCreator
 
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
 
+#if DEBUG
+            // Start second evolutionary algo to evaluate the SkillTreeGenerator that has been created
+            evo = new Evolution(rnd, skillTreeGenerator: skillTreeGenerator);
+            evo.NrOfHeroesInEachGeneration = 100;
+            evo.MaxGenerations = 20;
+            evo.HeroStartingLevel = 10;
+            evo.AllwaysRunAllGenerations = true;
+
+
+            evo.RunEvolution(trials, arena);
+
+            Console.WriteLine("The value of the different skills:");
+            evo.BestHero.AI.PrintWeights();
+            Console.WriteLine();
+
+            Console.ReadKey();
+#endif
+
+
+            Console.WriteLine("Add human player? (y/N)");
+            var HasHumanPlayer = Console.ReadLine() == "y";
+            //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
 
             // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
             if (HasHumanPlayer)
@@ -83,7 +111,6 @@ namespace CustomHeroCreator
                 player.PrintStats();
                 Console.WriteLine();
             }
-
 
 
             Console.WriteLine("Best Configuraion");

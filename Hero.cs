@@ -386,8 +386,7 @@ namespace CustomHeroCreator
         {
             if (HasAI)
             {
-                throw new NotImplementedException();
-                //return AI.ChooseOption(this, node);
+                return AI.ChooseOption(this, node);
             }
             else
             {
