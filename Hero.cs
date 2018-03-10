@@ -142,65 +142,67 @@ namespace CustomHeroCreator
             Level++;
         }
 
-        internal virtual Dictionary<StatTypes, double> GenerateRandomSkills()
+        internal virtual StatNode GenerateRandomSkills()
         {
-            var skills = new Dictionary<StatTypes, double>();
+            var rootNode = new StatNode();
+
+            //var skills = new Dictionary<StatTypes, double>();
             foreach (StatTypes stat in ALL_STAT_TYPES)
             {
-                double value = 0;
+                var child = new StatNode();
+                child.Stat = stat;
                 switch (stat)
                 {
                     //case StatTypes.Str:
                     //case StatTypes.Agi:
                     //case StatTypes.Int:
-                    //    value = rnd.Next(1, 5);
+                    //    child.Value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.MaxHealth:
-                        value = _rnd.Next(1, 5);
+                        child.Value = _rnd.Next(1, 5);
                         break;
                     case StatTypes.AttackDmg:
-                        value = _rnd.Next(1, 5);
+                        child.Value = _rnd.Next(1, 5);
                         break;
                     //case StatTypes.AttackSpeed:
-                    //    value = rnd.Next(1, 5);
+                    //    child.Value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.CritChance:
                         // only allow for 1-5% increases
-                        value = _rnd.Next(1, 20) * 0.01;
+                        child.Value = _rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.CritMultiplier:
                         // only allow for 1-5% increases
-                        value = _rnd.Next(1, 20) * 0.01;
+                        child.Value = _rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.Armor:
-                        value = _rnd.Next(1, 5);
+                        child.Value = _rnd.Next(1, 5);
                         break;
                     default:
                         break;
                 }
-
-                skills.Add(stat, value);
+                rootNode.Children.Add(child);
             }
 
-            return skills;
+            return rootNode;
         }
 
 
 
         private void ChooseNewSkill()
         {
+            StatNode options;
+
             if (SkillTreeGenerator == null)
             {
-                // this part has to be rewritten so the random skill generator also generates a skill tree of nodes
-                // that way we can unify everything. But for now the old stuff is left on its own in this method
-                ChooseNewRandomSkill();
+                options = GenerateRandomSkills();
             }
             else
             {
-                var currentOption = SkillTreeGenerator.GenerateUniqueSkillOptions();
-                ChoooseNewSkillFromTree(currentOption);
+                options = SkillTreeGenerator.GenerateUniqueSkillOptions();
             }
 
+            ChoooseNewSkillFromTree(options);
         }
 
         private void ChoooseNewSkillFromTree(StatNode statNode)
@@ -287,100 +289,6 @@ namespace CustomHeroCreator
             }
 
         }
-
-
-        private void ChooseNewRandomSkill()
-        {
-            var skillOptions = GenerateRandomSkills();
-
-            var hasChoosen = false;
-
-            while (!hasChoosen)
-            {
-                var i = 1;
-
-                if (!HasAI)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.Write("Current Level: ");
-                    CommandLineTools.PrintWithColor("" + Level, ConsoleColor.Green);
-                    Console.WriteLine();
-                    Console.WriteLine("Choose one of the following or press Q to abort");
-
-                    Console.WriteLine();
-                    foreach (var skill in skillOptions)
-                    {
-                        CommandLineTools.PrintWithColor("[" + i++ + "]: " + skill.Key, ConsoleColor.White);
-
-                        CommandLineTools.PrintWithColor(" " + GetStatValue(skill.Key), ConsoleColor.Gray);
-
-                        CommandLineTools.PrintWithColor(" + " + skill.Value + "    ", StatToColor(skill.Key));
-                        Console.WriteLine();
-                    }
-                    Console.WriteLine();
-                }
-
-
-                int option = -1;
-
-                // ask for input until we get correct input
-                while (true)
-                {
-                    // get input from user or from AI
-                    string input = ChooseOption(skillOptions);
-
-                    // abort
-                    if (input == "q" || input == "Q")
-                    {
-                        IsActive = false;
-                        break;
-                    }
-
-                    if (int.TryParse(input, out int tmp))
-                    {
-                        // if we have correct input the exit the loop
-                        // user supplies a 1 indexed number so we take 1
-                        option = tmp - 1;
-                        break;
-                    }
-                }
-
-                if (option >= SkillOptionsPerLevelUp)
-                {
-                    // invalid option
-                    Console.WriteLine();
-                    Console.WriteLine("Please choose a valid option");
-                    continue;
-                }
-
-                var type = skillOptions.Keys.ElementAt(option);
-                var value = skillOptions[type];
-
-                SetStatValue(type, value);
-
-                hasChoosen = true;
-
-                if (!HasAI)
-                {
-                    Console.WriteLine();
-                }
-            }
-        }
-
-        private string ChooseOption(Dictionary<StatTypes, double> options)
-        {
-            if (HasAI)
-            {
-                return AI.ChooseOption(this, options);
-            }
-            else
-            {
-                //controlled by user
-                return Console.ReadLine();
-            }
-        }
-
 
         private string ChooseOption(StatNode node)
         {
