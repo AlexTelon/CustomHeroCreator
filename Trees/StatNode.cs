@@ -7,7 +7,7 @@ using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator.Trees
 {
-    class StatNode
+    public class StatNode
     {
         public StatTypes Stat { get; set; }
 

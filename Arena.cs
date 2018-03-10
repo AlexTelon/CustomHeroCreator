@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace CustomHeroCreator
 {
-    class Arena
+    public class Arena
     {
         public void Fight(Hero first, Hero second)
         {

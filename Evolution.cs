@@ -14,7 +14,7 @@ using System.Text;
 
 namespace CustomHeroCreator
 {
-    class Evolution
+    public class Evolution
     {
         public int MaxGenerations { get; set; } = 100;
         public int HeroStartingLevel { get; set; } = 10;
@@ -41,7 +41,7 @@ namespace CustomHeroCreator
             BestHero = new Hero(_rnd);
         }
 
-        internal void RunEvolution(Trials trials, Arena arena)
+        public void RunEvolution(Trials trials, Arena arena)
         {
             var newGeneration = this.CreateNewGeneration();
 

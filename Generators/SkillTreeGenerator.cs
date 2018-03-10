@@ -10,7 +10,7 @@ using static CustomHeroCreator.Hero;
 namespace CustomHeroCreator.Generators
 {
     // Will generate a skill tree with the given stats
-    class SkillTreeGenerator
+    public class SkillTreeGenerator
     {
         protected static readonly Array ALL_STAT_TYPES = Enum.GetValues(typeof(StatTypes));
         protected static readonly int ALL_STAT_TYPES_COUNT = Enum.GetNames(typeof(StatTypes)).Count();

@@ -9,7 +9,7 @@ using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator.AI
 {
-    class Agent
+    public class Agent
     {
         protected List<Weight> Weights { get; set; } = new List<Weight>();
 

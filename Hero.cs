@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CustomHeroCreator
 {
-    class Hero
+    public class Hero
     {
         private static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
         private static int SkillOptionsPerLevelUp => Enum.GetNames(typeof(StatTypes)).Count();

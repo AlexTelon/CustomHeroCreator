@@ -10,9 +10,9 @@ using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator
 {
-    class Trials
+    public class Trials
     {
-        public int MaxLevel { get; internal set; } = 500;
+        public int MaxLevel { get; set; } = 500;
 
         /// <summary>
         /// Gauge the Fitness of each hero by letting them fight a series of "NPCs"

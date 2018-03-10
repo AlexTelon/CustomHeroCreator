@@ -7,7 +7,7 @@ namespace CustomHeroCreator.AI
     /// A weight determines the likelyhood that an option/action is choosen/done
     /// However since we dont want simple scalar weights only but the possiblity for any polynomial (and maybe other functions) weight functions a Weight class is provided
     /// </summary>
-    class Weight
+    public class Weight
     {
         /// <summary>
         /// The constants the polynomial, constants not added here are considered 0
