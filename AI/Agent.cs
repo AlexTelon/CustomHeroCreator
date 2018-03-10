@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.CLI;
+using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,13 @@ namespace CustomHeroCreator.AI
 {
     class Agent
     {
-        public List<Weight> Weights { get; set; } = new List<Weight>();
+        protected List<Weight> Weights { get; set; } = new List<Weight>();
 
-        public Agent()
+        private Random _rnd;
+
+        public Agent(Random rnd)
         {
+            _rnd = rnd;
             InitRandomWeights();
         }
 
@@ -52,8 +56,6 @@ namespace CustomHeroCreator.AI
 
         internal void InitRandomWeights()
         {
-            var rnd = new Random();
-
             // Init AI weights
             for (int i = 0; i < Enum.GetNames(typeof(Hero.StatTypes)).Count(); i++)
             {
@@ -62,18 +64,18 @@ namespace CustomHeroCreator.AI
                 if (i == 2 || i == 3)
                 {
                     // Remember, rnd.Next is exlusive on the upper end.
-                    for (int x = 0; x < rnd.Next(1, 3); x++)
+                    for (int x = 0; x < _rnd.Next(1, 3); x++)
                     {
-                        weight.Constants.Add(rnd.NextDouble() * 10);
+                        weight.Constants.Add(_rnd.NextDouble() * 10);
                     }
                 }
                 else
                 {
 
                     // Remember, rnd.Next is exlusive on the upper end.
-                    for (int x = 0; x < rnd.Next(1, 3); x++)
+                    for (int x = 0; x < _rnd.Next(1, 3); x++)
                     {
-                        weight.Constants.Add(rnd.NextDouble());
+                        weight.Constants.Add(_rnd.NextDouble());
                     }
                 }
 
@@ -117,5 +119,38 @@ namespace CustomHeroCreator.AI
             Console.BackgroundColor = originalBackground;
         }
 
+
+        internal Agent BreedWith(Agent partner, double mutationRate, double mutationChange)
+        {
+            var child = new Agent(_rnd);
+
+            var weights = new List<Weight>();
+
+            // create a child that is a perfect mix of the parents
+            for (int i = 0; i < this.Weights.Count(); i++)
+            {
+                var choose = RandomHelper.RandomBool(_rnd);
+                weights.Add(choose ? this.Weights[i] : partner.Weights[i]);
+            }
+
+
+            // now add some random mutations
+            for (int i = 0; i < weights.Count(); i++)
+            {
+                if (_rnd.NextDouble() < mutationRate)
+                {
+                    var constSize = weights[i].Constants.Count();
+
+                    // give random constant a modification 
+                    // TODO (this never adds new constants, maybe it should?)
+                    // TODO give Weight class breed and mutation functionality, this is ugly
+                    weights[i].Constants[_rnd.Next(0, constSize - 1)] += (_rnd.NextDouble() * mutationChange) - mutationChange / 2;
+                }
+            }
+
+            child.Weights = weights;
+
+            return child;
+        }
     }
 }

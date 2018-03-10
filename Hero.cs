@@ -187,7 +187,21 @@ namespace CustomHeroCreator
             return rootNode;
         }
 
+        internal Hero BreedWith(Hero partner, double mutationRate, double mutationChange)
+        {
+            var child = new Hero(_rnd);
+            child.SkillTreeGenerator = SkillTreeGenerator;
 
+            // really the AI is the one we are breeding
+            Agent a = this.AI;
+            Agent b = partner.AI;
+
+            // merge the two with a chance for mutation
+            Agent c = a.BreedWith(b, mutationRate, mutationChange);
+            child.AI = c;
+
+            return child;
+        }
 
         private void ChooseNewSkill()
         {

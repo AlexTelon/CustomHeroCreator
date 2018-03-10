@@ -34,9 +34,6 @@ namespace CustomHeroCreator.Generators
             set
             {
                 _agent = value;
-
-                // WE ASSUME THE WEIGHTS are at most a linear thing
-                Debug.Assert(_agent.Weights[0].Constants.Count() <= 2);
             }
         }
 
@@ -45,35 +42,63 @@ namespace CustomHeroCreator.Generators
 
         public StatTypes GetRandomStatType() => (StatTypes)_rnd.Next(0, ALL_STAT_TYPES_COUNT);
 
-        protected StatNode GetRandomStat()
-        {
-            //var template = StatTemplates[_rnd.Next(0, StatTemplates.Count())];
+        //protected StatNode GetRandomStat()
+        //{
+        //    //var template = StatTemplates[_rnd.Next(0, StatTemplates.Count())];
 
+        //    var node = new StatNode
+        //    {
+        //        Stat = GetRandomStatType(),
+        //    };
+
+        //    double constantFactor = Agent.Weights[(int)node.Stat].Constants[0]; // power of 0
+        //    double k = 1;
+        //    if (Agent.Weights[(int)node.Stat].Constants.Count() >= 2)
+        //    {
+        //        k = Agent.Weights[(int)node.Stat].Constants[1]; // power of 1
+        //    }
+
+        //    // calculate a "mean" that might lie some maximum distance away from the true mean
+        //    var randomShift = (_rnd.NextDouble() * 2 * MaxStrengthOptionDiff) - MaxStrengthOptionDiff;
+        //    // shift is now between -maxDiff and + maxDiff
+
+        //    var mean = MeanStrengthOfOptions * (1 + randomShift);
+
+
+        //    // mean = constantFactor + k * value
+        //    // value = (mean - constantFactor) / k
+        //    node.Value = (mean - constantFactor) / k;
+
+        //    return node;
+        //}
+
+        protected StatNode GetBalancedStat()
+        {
             var node = new StatNode
             {
-                Stat = GetRandomStatType(),
+                Stat = GetRandomStatType()
             };
 
-            double constantFactor = Agent.Weights[(int)node.Stat].Constants[0]; // power of 0
-            double k = 1;
-            if (Agent.Weights[(int)node.Stat].Constants.Count() >= 2)
-            {
-                k = Agent.Weights[(int)node.Stat].Constants[1]; // power of 1
-            }
+            // how "strong" is 1 unit of the given stat
+            // Higher stat weights means stronger stats
+            var statWeight = Agent.GetScore(node.Stat, 1);
+
+            // a high statWeight means that less of the stat should be offered to be balanced
+            var normalizedMeanForGivenStat = MeanStrengthOfOptions / statWeight;
+
+            // the above can be done once for each stat and saved in a table
+
 
             // calculate a "mean" that might lie some maximum distance away from the true mean
             var randomShift = (_rnd.NextDouble() * 2 * MaxStrengthOptionDiff) - MaxStrengthOptionDiff;
             // shift is now between -maxDiff and + maxDiff
 
-            var mean = MeanStrengthOfOptions * (1 + randomShift);
-
-
-            // mean = constantFactor + k * value
-            // value = (mean - constantFactor) / k
-            node.Value = (mean - constantFactor) / k;
+            node.Value = normalizedMeanForGivenStat * (1 + randomShift);
 
             return node;
         }
+
+
 
         private Random _rnd;
 
@@ -94,11 +119,11 @@ namespace CustomHeroCreator.Generators
 
             for (int i = 0; i < ChoicesPerLevel; i++)
             {
-                var child = GetRandomStat();
+                var child = GetBalancedStat();
                 // make sure the child is not of a type that is already added
                 while (RootNode.Children.Select(x => x.Stat).Contains(child.Stat))
                 {
-                    child = GetRandomStat();
+                    child = GetBalancedStat();
                 }
 
                 RootNode.Children.Add(child);
@@ -128,7 +153,7 @@ namespace CustomHeroCreator.Generators
 
         private StatNode GenerateSubTree(int depth)
         {
-            var node = GetRandomStat();
+            var node = GetBalancedStat();
 
             if (depth == 0)
             {

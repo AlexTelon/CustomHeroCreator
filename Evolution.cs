@@ -142,56 +142,12 @@ namespace CustomHeroCreator
                 var mother = elites[rnd.Next(0, eliteSize)];
                 var father = elites[rnd.Next(0, eliteSize)];
 
-                var child = Breed(mother, father);
+                var child = mother.BreedWith(father, MUTATION_CHANCE, MUTATION_AMPLITUDE);
                 newGeneration.Add(child);
             }
 
             return newGeneration;
         }
-
-        internal Hero Breed(Hero mother, Hero father)
-        {
-            var rnd = new Random();
-            var child = new Hero(rnd);
-            child.SkillTreeGenerator = SkillTreeGenerator;
-
-            // really the AI is the one we are breeding
-            Agent a = mother.AI;
-            Agent b = father.AI;
-
-            // merge the two with a chance for mutation
-            Agent c = new Agent();
-
-            var weights = new List<Weight>();
-
-            // create a child that is a perfect mix of the parents
-            for (int i = 0; i < a.Weights.Count(); i++)
-            {
-                var choose = RandomHelper.RandomBool(rnd);
-                weights.Add(choose ? a.Weights[i] : b.Weights[i]);
-            }
-
-
-            // now add some random mutations
-            for (int i = 0; i < weights.Count(); i++)
-            {
-                if (rnd.NextDouble() < MUTATION_CHANCE)
-                {
-                    var constSize = weights[i].Constants.Count();
-
-                    // give random constant a modification 
-                    // TODO (this never adds new constants, maybe it should?)
-                    // TODO give Weight class breed and mutation functionality, this is ugly
-                    weights[i].Constants[rnd.Next(0, constSize - 1)] += (rnd.NextDouble() * MUTATION_AMPLITUDE) - MUTATION_AMPLITUDE / 2;
-                }
-            }
-
-            c.Weights = weights;
-            child.AI = c;
-
-            return child;
-        }
-
 
         internal List<Hero> CreateNewGeneration()
         {
@@ -200,7 +156,7 @@ namespace CustomHeroCreator
 
             for (int i = 0; i < NrOfHeroesInEachGeneration; i++)
             {
-                Agent ai = new Agent();
+                Agent ai = new Agent(rnd);
 
                 Hero hero = new Hero(rnd)
                 {

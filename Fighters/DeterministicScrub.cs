@@ -13,7 +13,7 @@ namespace CustomHeroCreator.Fighters
         public DeterministicScrub() : base(new Random())
         {
             // dummy AI
-            this.AI = new Agent();
+            this.AI = new Agent(new Random());
         }
         ///// <summary>
         ///// A scrub gets weeker options
