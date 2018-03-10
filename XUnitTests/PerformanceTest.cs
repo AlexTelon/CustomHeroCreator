@@ -61,6 +61,29 @@ namespace XUnitTests
             Assert.False(sw.ElapsedMilliseconds > 250);
         }
 
+        [Fact]
+        public void FastAgentLevelUpPerformanceTest()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var rnd = new Random();
+
+            var hero = new Hero(rnd);
+            var agent = new FastAgent(rnd);
+
+            hero.AI = agent;
+
+            for (int i = 0; i < 100000; i++)
+            {
+                hero.LevelUp();
+            }
+
+            sw.Stop();
+
+            Assert.False(sw.ElapsedMilliseconds > 250);
+        }
+
+
 
         [Fact]
         public void FightPerformanceTest()

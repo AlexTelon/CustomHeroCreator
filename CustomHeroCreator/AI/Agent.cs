@@ -13,7 +13,7 @@ namespace CustomHeroCreator.AI
     {
         protected List<Weight> Weights { get; set; } = new List<Weight>();
 
-        private Random _rnd;
+        protected Random _rnd;
 
         public Agent(Random rnd)
         {
@@ -21,7 +21,7 @@ namespace CustomHeroCreator.AI
             InitRandomWeights();
         }
 
-        internal double GetScore(StatTypes type, double value)
+        internal virtual double GetScore(StatTypes type, double value)
         {
             var weight = Weights[(int)type];
 
@@ -30,7 +30,7 @@ namespace CustomHeroCreator.AI
             return score;
         }
 
-        internal string ChooseOption(Hero hero, StatNode node)
+        internal virtual int ChooseOption(Hero hero, StatNode node)
         {
             // get internal state of the hero, use that later
 
@@ -50,11 +50,10 @@ namespace CustomHeroCreator.AI
             var maxScore = scores.Max();
             var maxIndex = scores.IndexOf(maxScore);
 
-            // +1 since we are 1 indexed
-            return "" + (maxIndex + 1);
+            return maxIndex;
         }
 
-        internal void InitRandomWeights()
+        private void InitRandomWeights()
         {
             // Init AI weights
             for (int i = 0; i < Enum.GetNames(typeof(Hero.StatTypes)).Count(); i++)
@@ -120,7 +119,7 @@ namespace CustomHeroCreator.AI
         }
 
 
-        internal Agent BreedWith(Agent partner, double mutationRate, double mutationChange)
+        internal virtual Agent BreedWith(Agent partner, double mutationRate, double mutationChange)
         {
             var child = new Agent(_rnd);
 

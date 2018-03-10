@@ -251,32 +251,7 @@ namespace CustomHeroCreator
                     }
                     Console.WriteLine();
                 }
-
-
-                int option = -1;
-
-                // ask for input until we get correct input
-                while (true)
-                {
-                    // get input from user or from AI
-                    string input = ChooseOption(statNode);
-
-
-                    // abort
-                    if (input == "q" || input == "Q")
-                    {
-                        IsActive = false;
-                        break;
-                    }
-
-                    if (int.TryParse(input, out int tmp))
-                    {
-                        // if we have correct input the exit the loop
-                        // user supplies a 1 indexed number so we take 1
-                        option = tmp - 1;
-                        break;
-                    }
-                }
+                int option = ChooseOption(statNode);
 
                 if (option >= statNode.Children.Count())
                 {
@@ -304,7 +279,7 @@ namespace CustomHeroCreator
 
         }
 
-        private string ChooseOption(StatNode node)
+        private int ChooseOption(StatNode node)
         {
             if (HasAI)
             {
@@ -312,8 +287,30 @@ namespace CustomHeroCreator
             }
             else
             {
+                int option = -1;
+                // ask for input until we get correct input
+                while (true)
+                {
+                    string input = Console.ReadLine();
+
+                    // abort
+                    if (input == "q" || input == "Q")
+                    {
+                        IsActive = false;
+                        break;
+                    }
+
+                    if (int.TryParse(input, out int tmp))
+                    {
+                        // if we have correct input the exit the loop
+                        // user supplies a 1 indexed number so we take 1
+                        option = tmp - 1;
+                        break;
+                    }
+                }
+
                 //controlled by user
-                return Console.ReadLine();
+                return option;
             }
         }
 
