@@ -11,10 +11,14 @@ namespace CustomHeroCreator.AI
     /// <summary>
     /// A fast agent
     /// </summary>
-    public class FastAgent : Agent
+    public class FastAgent : IAgent
     {
-        public FastAgent(Random rnd) : base(rnd)
+        private Random _rnd;
+
+        public FastAgent(Random rnd)
         {
+            _rnd = rnd;
+
             var nrOfStats = Enum.GetNames(typeof(StatTypes)).Count();
 
             for (int i = 0; i < nrOfStats; i++)
@@ -35,17 +39,21 @@ namespace CustomHeroCreator.AI
         /// </summary>
         protected List<double> weights = new List<double>();
 
-        internal FastAgent BreedWith(FastAgent partner, double mutationRate, double mutationChange)
+        public IAgent BreedWith(IAgent partner, double mutationRate, double mutationChange)
         {
             var child = new FastAgent(_rnd);
 
             var weights = new List<double>();
 
-            // create a child that is a perfect mix of the parents
-            for (int i = 0; i < this.Weights.Count(); i++)
+            if (partner is Agent)
             {
-                var choose = RandomHelper.RandomBool(_rnd);
-                weights.Add(choose ? this.weights[i] : partner.weights[i]);
+                FastAgent other = partner as FastAgent;
+                // create a child that is a perfect mix of the parents
+                for (int i = 0; i < this.weights.Count(); i++)
+                {
+                    var choose = RandomHelper.RandomBool(_rnd);
+                    weights.Add(choose ? this.weights[i] : other.weights[i]);
+                }
             }
 
             // now add some random mutations
@@ -63,7 +71,7 @@ namespace CustomHeroCreator.AI
             return child;
         }
 
-        public new int ChooseOption(Hero hero, StatNode node)
+        public int ChooseOption(Hero hero, StatNode node)
         {
             int maxIndex = -1;
             double maxValue = double.MinValue;
@@ -80,6 +88,11 @@ namespace CustomHeroCreator.AI
             return maxIndex;
         }
 
-        public new double GetScore(Hero.StatTypes type, double value) => weights[(int)type] * value;
+        public double GetScore(Hero.StatTypes type, double value) => weights[(int)type] * value;
+
+        public void PrintInternalDebugInfo()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
