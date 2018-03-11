@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static CustomHeroCreator.AI.AgentFactory;
 
 namespace CustomHeroCreator
 {
@@ -33,6 +34,8 @@ namespace CustomHeroCreator
 
         private Random _rnd;
 
+        public AgentType AgentType { get; set; }
+
 
         public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator)
         {
@@ -43,7 +46,7 @@ namespace CustomHeroCreator
 
         public void RunEvolution(Trials trials, Arena arena)
         {
-            var newGeneration = this.CreateNewGeneration();
+            var newGeneration = this.CreateNewGeneration(AgentType);
 
             CommandLineTools.PrintTableHeader();
             var averagePerGeneration = new List<double>();
@@ -82,7 +85,6 @@ namespace CustomHeroCreator
                     }
                 }
 
-
 #if (DEBUG)
                 Console.WriteLine("Generation: " + i);
                 CommandLineTools.PrintTable(newGeneration.Select(x => x.Fitness).ToList(), ConsoleColor.Cyan, true);
@@ -95,16 +97,6 @@ namespace CustomHeroCreator
                 // The best heroes get to breed
                 // And are added to the next generation
                 newGeneration = Breed(elites, Generations[i].Count());
-
-
-                ////display results
-                //if (displayStuff)
-                //{
-                //    Console.WriteLine("========================");
-                //    Console.WriteLine("Generation " + i + ": ");
-                //    DisplayHeroTrialResults(heroes);
-                //    Console.WriteLine("========================");
-                //}
             }
 
             Console.Clear();
@@ -149,14 +141,14 @@ namespace CustomHeroCreator
             return newGeneration;
         }
 
-        internal List<Hero> CreateNewGeneration()
+        internal List<Hero> CreateNewGeneration(AgentType agentType)
         {
             var rnd = new Random();
             var heroes = new List<Hero>();
 
             for (int i = 0; i < NrOfHeroesInEachGeneration; i++)
             {
-                Agent ai = new Agent(rnd);
+                IAgent ai = AgentFactory.Create(agentType, _rnd);
 
                 Hero hero = new Hero(rnd)
                 {

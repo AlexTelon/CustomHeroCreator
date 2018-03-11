@@ -93,7 +93,24 @@ namespace CustomHeroCreator.AI
 
         public void PrintInternalDebugInfo()
         {
-            throw new NotImplementedException();
+            var originalBackground = Console.BackgroundColor;
+
+            CommandLineTools.PrintWithColor("Weights:", ConsoleColor.White);
+            Console.WriteLine();
+
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+
+            var strings = new List<string>();
+            var i = 0;
+            foreach (var weight in weights)
+            {
+                var statName = Enum.GetName(typeof(StatTypes), i);
+                strings.Add(statName + ": " + weight.ToString("0.00"));
+                i++;
+            }
+            Console.WriteLine(String.Join("\n", strings));
+
+            Console.BackgroundColor = originalBackground;
         }
     }
 }

@@ -50,6 +50,9 @@ namespace CustomHeroCreator
             evo.HeroStartingLevel = 10;
             evo.AllwaysRunAllGenerations = true;
 
+            evo.AgentType = AgentFactory.AgentType.FastAgent;
+
+
             evo.RunEvolution(trials, arena);
 
             Console.WriteLine("The value of the different skills:");
