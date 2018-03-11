@@ -244,9 +244,9 @@ namespace CustomHeroCreator
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + node.Stat, ConsoleColor.White);
 
-                        CommandLineTools.PrintWithColor(" " + GetStatValue(node.Stat).ToString("0.00"), ConsoleColor.Gray);
+                        CommandLineTools.PrintWithColor(" " + GetStatValue(node.Stat).ToString("0.#"), ConsoleColor.Gray);
 
-                        CommandLineTools.PrintWithColor(" + " + node.Value.ToString("0.00") + "    ", StatToColor(node.Stat));
+                        CommandLineTools.PrintWithColor(" + " + node.Value.ToString("0.#") + "    ", StatToColor(node.Stat));
                         Console.WriteLine();
                     }
                     Console.WriteLine();

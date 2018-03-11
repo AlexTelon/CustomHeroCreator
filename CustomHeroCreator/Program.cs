@@ -48,7 +48,7 @@ namespace CustomHeroCreator
             evo.NrOfHeroesInEachGeneration = 100;
             evo.MaxGenerations = 20;
             evo.HeroStartingLevel = 10;
-            evo.AllwaysRunAllGenerations = true;
+            evo.AllwaysRunAllGenerations = false;
 
             evo.AgentType = AgentFactory.AgentType.FastAgent;
 
@@ -67,6 +67,7 @@ namespace CustomHeroCreator
             skillTreeGenerator.ChoicesPerLevel = 3;
             skillTreeGenerator.MeanStrengthOfOptions = 3;
             skillTreeGenerator.MaxStrengthOptionDiff = 0;
+            skillTreeGenerator.RoundStatValues = true;
 
             skillTreeGenerator.Agent = evo.BestHero.AI;
 

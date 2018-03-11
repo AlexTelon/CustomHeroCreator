@@ -37,6 +37,8 @@ namespace CustomHeroCreator.Generators
             }
         }
 
+        public bool RoundStatValues { get; internal set; }
+
         private IAgent _agent;
 
 
@@ -94,6 +96,21 @@ namespace CustomHeroCreator.Generators
             // shift is now between -maxDiff and + maxDiff
 
             node.Value = normalizedMeanForGivenStat * (1 + randomShift);
+
+            if (RoundStatValues)
+            {
+                if (node.Value < 1)
+                {
+                    // for small values we do not want to round to nearest integer
+                    var tmp = node.Value;
+                    tmp *= 100;
+                    tmp = Math.Round(tmp);
+                    node.Value = tmp / 100;
+                } else
+                {
+                    node.Value = Math.Round(node.Value);
+                }
+            }
 
             return node;
         }
