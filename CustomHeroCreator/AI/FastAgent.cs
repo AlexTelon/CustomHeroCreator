@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CustomHeroCreator.CLI;
 using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Trees;
 using static CustomHeroCreator.Hero;
@@ -45,7 +46,7 @@ namespace CustomHeroCreator.AI
 
             var weights = new List<double>();
 
-            if (partner is Agent)
+            if (partner is FastAgent)
             {
                 FastAgent other = partner as FastAgent;
                 // create a child that is a perfect mix of the parents
@@ -77,7 +78,7 @@ namespace CustomHeroCreator.AI
             double maxValue = double.MinValue;
             for (int i = 0; i < node.Children.Count; i++)
             {
-                var score = GetScore(node.Children[0].Stat, node.Children[0].Value);
+                var score = GetScore(node.Children[i].Stat, node.Children[i].Value);
                 if ((maxIndex < 0) || (score > maxValue))
                 {
                     maxValue = score;
