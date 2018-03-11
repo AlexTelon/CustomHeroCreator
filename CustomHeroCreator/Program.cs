@@ -53,7 +53,7 @@ namespace CustomHeroCreator
             evo.RunEvolution(trials, arena);
 
             Console.WriteLine("The value of the different skills:");
-            evo.BestHero.AI.PrintWeights();
+            evo.BestHero.AI.PrintInternalDebugInfo();
             Console.WriteLine();
 
             Console.ReadKey();
@@ -118,7 +118,7 @@ namespace CustomHeroCreator
             evo.BestHero.PrintStats();
 
             Console.WriteLine();
-            evo.BestHero.AI.PrintWeights();
+            evo.BestHero.AI.PrintInternalDebugInfo();
 
             Console.WriteLine();
 

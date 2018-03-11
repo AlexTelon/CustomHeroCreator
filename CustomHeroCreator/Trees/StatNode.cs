@@ -9,11 +9,11 @@ namespace CustomHeroCreator.Trees
 {
     public class StatNode
     {
+        public List<StatNode> Children { get; set; } = new List<StatNode>();
+
         public StatTypes Stat { get; set; }
 
         public double Value { get; set; }
-
-        public List<StatNode> Children { get; set; } = new List<StatNode>();
 
         internal void Print(int depth)
         {

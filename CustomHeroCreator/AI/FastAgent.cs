@@ -63,7 +63,7 @@ namespace CustomHeroCreator.AI
             return child;
         }
 
-        internal override int ChooseOption(Hero hero, StatNode node)
+        public new int ChooseOption(Hero hero, StatNode node)
         {
             int maxIndex = -1;
             double maxValue = double.MinValue;
@@ -80,6 +80,6 @@ namespace CustomHeroCreator.AI
             return maxIndex;
         }
 
-        internal override double GetScore(Hero.StatTypes type, double value) => weights[(int)type] * value;
+        public new double GetScore(Hero.StatTypes type, double value) => weights[(int)type] * value;
     }
 }

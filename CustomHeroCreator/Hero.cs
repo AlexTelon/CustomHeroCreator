@@ -121,7 +121,7 @@ namespace CustomHeroCreator
         public bool HasAI => AI != null;
         public bool IsPlayer => !HasAI;
 
-        public Agent AI { get; set; }
+        public IAgent AI { get; set; }
 
         public SkillTreeGenerator SkillTreeGenerator { get; internal set; }
 
@@ -193,11 +193,11 @@ namespace CustomHeroCreator
             child.SkillTreeGenerator = SkillTreeGenerator;
 
             // really the AI is the one we are breeding
-            Agent a = this.AI;
-            Agent b = partner.AI;
+            IAgent a = this.AI;
+            IAgent b = partner.AI;
 
             // merge the two with a chance for mutation
-            Agent c = a.BreedWith(b, mutationRate, mutationChange);
+            IAgent c = a.BreedWith(b, mutationRate, mutationChange);
             child.AI = c;
 
             return child;

@@ -29,7 +29,7 @@ namespace CustomHeroCreator.Generators
         /// <summary>
         /// The agent that makes the choices on how to generate new stats
         /// </summary>
-        public Agent Agent {
+        public IAgent Agent {
             get => _agent;
             set
             {
@@ -37,7 +37,7 @@ namespace CustomHeroCreator.Generators
             }
         }
 
-        private Agent _agent;
+        private IAgent _agent;
 
 
         public StatTypes GetRandomStatType() => (StatTypes)_rnd.Next(0, ALL_STAT_TYPES_COUNT);

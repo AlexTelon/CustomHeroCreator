@@ -9,7 +9,7 @@ using static CustomHeroCreator.Hero;
 
 namespace CustomHeroCreator.AI
 {
-    public class Agent
+    public class Agent : IAgent
     {
         protected List<Weight> Weights { get; set; } = new List<Weight>();
 
@@ -21,7 +21,7 @@ namespace CustomHeroCreator.AI
             InitRandomWeights();
         }
 
-        internal virtual double GetScore(StatTypes type, double value)
+        public double GetScore(StatTypes type, double value)
         {
             var weight = Weights[(int)type];
 
@@ -30,7 +30,7 @@ namespace CustomHeroCreator.AI
             return score;
         }
 
-        internal virtual int ChooseOption(Hero hero, StatNode node)
+        public int ChooseOption(Hero hero, StatNode node)
         {
             // get internal state of the hero, use that later
 
@@ -96,7 +96,7 @@ namespace CustomHeroCreator.AI
             }
         }
 
-        internal void PrintWeights()
+        public void PrintInternalDebugInfo()
         {
             var originalBackground = Console.BackgroundColor;
 
@@ -119,17 +119,21 @@ namespace CustomHeroCreator.AI
         }
 
 
-        internal virtual Agent BreedWith(Agent partner, double mutationRate, double mutationChange)
+        public IAgent BreedWith(IAgent partner, double mutationRate, double mutationChange)
         {
             var child = new Agent(_rnd);
 
             var weights = new List<Weight>();
 
-            // create a child that is a perfect mix of the parents
-            for (int i = 0; i < this.Weights.Count(); i++)
+            if (partner is Agent)
             {
-                var choose = RandomHelper.RandomBool(_rnd);
-                weights.Add(choose ? this.Weights[i] : partner.Weights[i]);
+                Agent other = partner as Agent;
+                // create a child that is a perfect mix of the parents
+                for (int i = 0; i < this.Weights.Count(); i++)
+                {
+                    var choose = RandomHelper.RandomBool(_rnd);
+                    weights.Add(choose ? this.Weights[i] : other.Weights[i]);
+                }
             }
 
 
