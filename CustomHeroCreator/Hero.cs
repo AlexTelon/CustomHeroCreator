@@ -263,7 +263,13 @@ namespace CustomHeroCreator
                 }
 
                 //We have choosen an option, lets select it by letting it become the new current node!
-                statNode = statNode.Children[option];
+                if (!HasAI)
+                {
+                    statNode = statNode.Children.OrderBy(x => x.Stat).ToList()[option];
+                } else
+                {
+                    statNode = statNode.Children[option];
+                }
 
                 var type = statNode.Stat;
                 var value = statNode.Value;
