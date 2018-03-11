@@ -5,6 +5,7 @@ using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoreLinq;
 using System.Text;
 
 namespace CustomHeroCreator
@@ -240,7 +241,7 @@ namespace CustomHeroCreator
                     Console.WriteLine("Choose one of the following or press Q to abort");
 
                     Console.WriteLine();
-                    foreach (var node in statNode.Children)
+                    foreach (var node in statNode.Children.OrderBy(x => (int)x.Stat))
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + node.Stat, ConsoleColor.White);
 
