@@ -84,51 +84,26 @@ namespace CustomHeroCreator
 
             Console.ReadKey();
 #endif
+            var player = new Hero(rnd);
+            player.SkillTreeGenerator = skillTreeGenerator;
+
+            var game = new Game(rnd, player);
+            game.StartingLevel = evo.HeroStartingLevel;
 
 #if DEBUG
-            Console.WriteLine("Add human player? (y/N)");
-            var HasHumanPlayer = Console.ReadLine() == "y";
-            //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
+            Console.WriteLine("Play the game?");
+            var play = Console.ReadLine() == "y";
 #else
-            var HasHumanPlayer = true;
-            Console.WriteLine("Welcome to Custom Hero Creator!");
-            Console.WriteLine("You will begin by selecting a hero!");
-            Console.ReadLine();
-            Console.Clear();
-
-            Console.WriteLine("You have choosen a X hero!");
-            Console.WriteLine("...");
-            Console.ReadLine();
-            Console.Clear();
-
-            Console.WriteLine("You prepare yourself for the comming battles!");
-            Console.WriteLine("...");
-            Console.ReadLine();
-            Console.Clear();
-
-            Console.WriteLine("Good luck!");
-            Console.WriteLine("...");
-            Console.ReadLine();
+            var play = true;
+            game.PlayerIntro();
 #endif
-            // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
-            if (HasHumanPlayer)
+            if (play)
             {
-                var player = new Hero(rnd);
 
-                player.SkillTreeGenerator = skillTreeGenerator;
-
-                // The heroes get to level up a few times before they run into their trials
-                Trials.LevelUpHero(player, evo.HeroStartingLevel);
-
-                // fight against increasingly strong enemies, survive as long as you can!
-                trials.RunSinglePlayerTrial(arena, player);
-
-
-                Console.WriteLine("Your result: ");
-                Console.WriteLine("Level: " + player.Level);
-                player.PrintStats();
-                Console.WriteLine();
+                game.Start();
             }
+
+
 
 #if DEBUG
             Console.WriteLine("Best Configuraion");
