@@ -1,7 +1,4 @@
-﻿//#define DEBUG
-#undef DEBUG
-
-using CustomHeroCreator.Fighters;
+﻿using CustomHeroCreator.Fighters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,9 +59,6 @@ namespace CustomHeroCreator
                 }
 
                 arena.Fight(hero, enemy);
-#if (DEBUG)
-                Console.Write("\rLevel " + level);
-#endif
                 level++;
             }
 

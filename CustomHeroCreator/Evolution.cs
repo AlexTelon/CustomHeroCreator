@@ -1,7 +1,4 @@
-﻿//#define DEBUG
-#undef DEBUG
-
-using CustomHeroCreator.AI;
+﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Generators;
 using CustomHeroCreator.Helpers;
@@ -47,8 +44,9 @@ namespace CustomHeroCreator
         public void RunEvolution(Trials trials, Arena arena)
         {
             var newGeneration = this.CreateNewGeneration(AgentType);
-
+#if DEBUG
             CommandLineTools.PrintTableHeader();
+#endif
             var averagePerGeneration = new List<double>();
             var bestInEachGenration = new List<Hero>();
 
@@ -64,15 +62,15 @@ namespace CustomHeroCreator
                 // fight against increasingly strong enemies, survive as long as you can!
                 trials.RunSinglePlayerTrials(arena, Generations[i]);
 
+#if DEBUG
                 //Stat stuff
                 Logger.Instance.Log(Generations[i]);
-
                 var average = Generations[i].Average(x => x.Fitness);
                 averagePerGeneration.Add(average);
 
                 CommandLineTools.PrintVerticalBar(average, 0, trials.MaxLevel, ConsoleColor.Red);
                 Console.WriteLine();
-
+#endif
                 BestHero = Generations[i].MaxBy(x => x.Fitness);
                 bestInEachGenration.Add(BestHero);
 
@@ -85,11 +83,11 @@ namespace CustomHeroCreator
                     }
                 }
 
-#if (DEBUG)
-                Console.WriteLine("Generation: " + i);
-                CommandLineTools.PrintTable(newGeneration.Select(x => x.Fitness).ToList(), ConsoleColor.Cyan, true);
-                Console.WriteLine();
-#endif
+//#if (DEBUG)
+//                Console.WriteLine("Generation: " + i);
+//                CommandLineTools.PrintTable(newGeneration.Select(x => x.Fitness).ToList(), ConsoleColor.Cyan, true);
+//                Console.WriteLine();
+//#endif
 
                 //Select the most elite heroes
                 List<Hero> elites = SelectElites(Generations[i]);
@@ -99,10 +97,13 @@ namespace CustomHeroCreator
                 newGeneration = Breed(elites, Generations[i].Count());
             }
 
+#if DEBUG
+
             Console.Clear();
             Console.WriteLine();
-            CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
 
+            CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
+#endif
         }
 
 

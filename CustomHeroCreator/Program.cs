@@ -1,7 +1,4 @@
-﻿#define DEBUG
-#undef DEBUG
-
-using CustomHeroCreator.AI;
+﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Fighters;
 using MoreLinq;
@@ -54,13 +51,13 @@ namespace CustomHeroCreator
 
 
             evo.RunEvolution(trials, arena);
-
+#if DEBUG
             Console.WriteLine("The value of the different skills:");
             evo.BestHero.AI.PrintInternalDebugInfo();
             Console.WriteLine();
 
             Console.ReadKey();
-
+#endif
             // we have now trained an AI to know how strong each stat is
 
             var skillTreeGenerator = new SkillTreeGenerator(rnd);
@@ -73,7 +70,7 @@ namespace CustomHeroCreator
 
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
 
-#if DEBUG
+#if FALSE
             // Start second evolutionary algo to evaluate the SkillTreeGenerator that has been created
             evo = new Evolution(rnd, skillTreeGenerator: skillTreeGenerator);
             evo.NrOfHeroesInEachGeneration = 100;
@@ -85,7 +82,7 @@ namespace CustomHeroCreator
             evo.RunEvolution(trials, arena);
 
             Console.WriteLine("The value of the different skills:");
-            evo.BestHero.AI.PrintWeights();
+            evo.BestHero.AI.PrintInternalDebugInfo();
             Console.WriteLine();
 
             Console.ReadKey();
@@ -116,7 +113,7 @@ namespace CustomHeroCreator
                 Console.WriteLine();
             }
 
-
+#if DEBUG
             Console.WriteLine("Best Configuraion");
             Console.WriteLine("Level: " + evo.BestHero.Level);
             evo.BestHero.PrintStats();
@@ -151,7 +148,7 @@ namespace CustomHeroCreator
             Console.WriteLine("Printing Skill Tree");
 
             treeRootNode.Print(3);
-
+#endif
         }
     }
 }
