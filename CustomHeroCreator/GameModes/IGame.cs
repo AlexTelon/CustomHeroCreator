@@ -9,5 +9,7 @@ namespace CustomHeroCreator.GameModes
         void Init();
 
         void Start();
+
+        void End();
     }
 }

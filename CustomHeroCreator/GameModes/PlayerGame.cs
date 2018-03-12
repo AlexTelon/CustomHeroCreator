@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.Generators;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,15 +14,17 @@ namespace CustomHeroCreator.GameModes
         public int StartingLevel { get; internal set; } = 10;
 
         // Create the arena in which the Player will fight
-        Arena Arena = new Arena();
+        private Arena Arena { get; set; } = new Arena();
 
         // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
-        Trials Trials = new Trials();
+        private Trials Trials { get; set; } = new Trials();
 
-        public PlayerGame(Random rnd, Hero player)
+        private Evolution Evo { get; set; }
+
+        public PlayerGame()
         {
-            _rnd = rnd;
-            Player = player;
+            _rnd = new Random();
+            Player = new Hero(_rnd);
 
             Trials.MaxLevel = 100;
         }
@@ -30,6 +34,42 @@ namespace CustomHeroCreator.GameModes
         /// Introduce the player to the game
         /// </summary>
         public void Init()
+        {
+            // Create the arena in which the heroes fitness will be evaluated
+            Arena arena = new Arena();
+
+            // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
+            Trials trials = new Trials();
+            trials.MaxLevel = 5000;
+
+            Evo = new Evolution(_rnd, skillTreeGenerator: null);
+            Evo.NrOfHeroesInEachGeneration = 100;
+            Evo.MaxGenerations = 20;
+            Evo.HeroStartingLevel = 10;
+            Evo.AllwaysRunAllGenerations = false;
+
+            Evo.AgentType = AgentFactory.AgentType.FastAgent;
+
+            Evo.RunEvolution(trials, arena);
+
+            // we have now trained an AI to know how strong each stat is
+            // Now a skill tree generator can be created
+            var skillTreeGenerator = new SkillTreeGenerator(_rnd);
+            skillTreeGenerator.ChoicesPerLevel = 3;
+            skillTreeGenerator.MeanStrengthOfOptions = 3;
+            skillTreeGenerator.MaxStrengthOptionDiff = 0;
+            skillTreeGenerator.RoundStatValues = true;
+
+            skillTreeGenerator.Agent = Evo.BestHero.AI;
+
+            // we have no created a good skill tree generator
+            // lets give one to the player
+            Player.SkillTreeGenerator = skillTreeGenerator;
+
+            ShowPlayerIntro();
+        }
+
+        private void ShowPlayerIntro()
         {
             Console.WriteLine("Welcome to Custom Hero Creator!");
             Console.WriteLine("You will begin by selecting a hero!");
@@ -50,7 +90,6 @@ namespace CustomHeroCreator.GameModes
             Console.WriteLine("...");
             Console.ReadLine();
         }
-
 
         public void Start()
         {
@@ -87,6 +126,11 @@ namespace CustomHeroCreator.GameModes
             Console.WriteLine("Level: " + Player.Level);
             Player.PrintStats();
             Console.WriteLine();
+        }
+
+        public void End()
+        {
+
         }
     }
 }
