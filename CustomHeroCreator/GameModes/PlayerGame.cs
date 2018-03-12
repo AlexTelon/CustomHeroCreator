@@ -4,12 +4,12 @@ using System.Text;
 
 namespace CustomHeroCreator.GameModes
 {
-    class Game
+    class PlayerGame : IGame
     {
         private Random _rnd;
 
         public Hero Player { get; set; }
-        public int StartingLevel { get; internal set; }
+        public int StartingLevel { get; internal set; } = 10;
 
         // Create the arena in which the Player will fight
         Arena Arena = new Arena();
@@ -17,7 +17,7 @@ namespace CustomHeroCreator.GameModes
         // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
         Trials Trials = new Trials();
 
-        public Game(Random rnd, Hero player)
+        public PlayerGame(Random rnd, Hero player)
         {
             _rnd = rnd;
             Player = player;
@@ -29,7 +29,7 @@ namespace CustomHeroCreator.GameModes
         /// <summary>
         /// Introduce the player to the game
         /// </summary>
-        public void PlayerIntro()
+        public void Init()
         {
             Console.WriteLine("Welcome to Custom Hero Creator!");
             Console.WriteLine("You will begin by selecting a hero!");

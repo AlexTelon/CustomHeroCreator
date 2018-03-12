@@ -88,15 +88,14 @@ namespace CustomHeroCreator
             var player = new Hero(rnd);
             player.SkillTreeGenerator = skillTreeGenerator;
 
-            var game = new Game(rnd, player);
-            game.StartingLevel = evo.HeroStartingLevel;
+            IGame game = new PlayerGame(rnd, player);
 
 #if DEBUG
             Console.WriteLine("Play the game?");
             var play = Console.ReadLine() == "y";
 #else
             var play = true;
-            game.PlayerIntro();
+            game.Init();
 #endif
             if (play)
             {
