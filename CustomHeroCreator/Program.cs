@@ -24,14 +24,11 @@ namespace CustomHeroCreator
 
             Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
 
-            Console.WriteLine("Welcome to Custom Hero Creator!");
-
-            //Console.WriteLine("Display results? (y/N)");
-            //var displayStuff = Console.ReadLine() == "y";
-            //var displayStuff = false;
-
+#if DEBUG
             Stopwatch sw = new Stopwatch();
             sw.Start();
+#endif
+
             var rnd = new Random();
 
             // Create the arena in which the heroes fitness will be evaluated
@@ -88,11 +85,31 @@ namespace CustomHeroCreator
             Console.ReadKey();
 #endif
 
-
+#if DEBUG
             Console.WriteLine("Add human player? (y/N)");
             var HasHumanPlayer = Console.ReadLine() == "y";
             //displayStuff = AddHumanPlayer; // if we have a player, show stuff!
+#else
+            var HasHumanPlayer = true;
+            Console.WriteLine("Welcome to Custom Hero Creator!");
+            Console.WriteLine("You will begin by selecting a hero!");
+            Console.ReadLine();
+            Console.Clear();
 
+            Console.WriteLine("You have choosen a X hero!");
+            Console.WriteLine("...");
+            Console.ReadLine();
+            Console.Clear();
+
+            Console.WriteLine("You prepare yourself for the comming battles!");
+            Console.WriteLine("...");
+            Console.ReadLine();
+            Console.Clear();
+
+            Console.WriteLine("Good luck!");
+            Console.WriteLine("...");
+            Console.ReadLine();
+#endif
             // Introduce a player and let it fight against the same NPCs, then compare its result against the AI generations
             if (HasHumanPlayer)
             {
