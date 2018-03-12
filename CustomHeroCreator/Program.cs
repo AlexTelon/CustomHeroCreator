@@ -12,6 +12,7 @@ using CustomHeroCreator.Helpers;
 using System.Diagnostics;
 using System.Threading;
 using CustomHeroCreator.Generators;
+using CustomHeroCreator.GameModes;
 
 namespace CustomHeroCreator
 {

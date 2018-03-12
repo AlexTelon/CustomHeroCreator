@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CustomHeroCreator
+namespace CustomHeroCreator.GameModes
 {
     class Game
     {
