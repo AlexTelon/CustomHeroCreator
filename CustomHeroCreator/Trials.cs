@@ -11,6 +11,7 @@ namespace CustomHeroCreator
     public class Trials
     {
         public int MaxLevel { get; set; } = 500;
+        public double Difficulty { get; internal set; } = 1;
 
         private IConsole ConsoleWrapper { get; }
 
@@ -38,6 +39,7 @@ namespace CustomHeroCreator
         public void RunSinglePlayerTrial(Arena arena, Hero hero)
         {
             var enemy = new DeterministicScrub();
+            enemy.StatGain *= Difficulty;
 
             // create an agent that is fully random (has no intelligent preferences for one stat over another)
             //var agent = new Agent();

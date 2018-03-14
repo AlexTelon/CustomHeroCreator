@@ -8,6 +8,7 @@ namespace CustomHeroCreator.Fighters
 {
     class DeterministicScrub : Hero
     {
+        public double StatGain { get; set; } = 1.5;
 
         /// <summary>
         /// Create a scrub that always stronger in the same deterministic manner when it levels up
@@ -75,7 +76,7 @@ namespace CustomHeroCreator.Fighters
                 }
                 else
                 {
-                    SetStatValue(statType, 1.5);
+                    SetStatValue(statType, StatGain);
                 }
             }
 

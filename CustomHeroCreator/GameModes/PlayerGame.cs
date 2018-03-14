@@ -14,6 +14,12 @@ namespace CustomHeroCreator.GameModes
         public Hero Player { get; set; }
         public int StartingLevel { get; internal set; } = 10;
 
+        public double Difficulty
+        {
+            get => Trials.Difficulty;
+            set => Trials.Difficulty = value;
+        }
+
         // Create the arena in which the Player will fight
         private Arena Arena { get; set; } = new Arena();
 
@@ -29,9 +35,10 @@ namespace CustomHeroCreator.GameModes
             _rnd = new Random();
             PlayerConsole = console;
 
-            Player = new Hero(_rnd, PlayerConsole);
             Trials = new Trials(PlayerConsole);
             Trials.MaxLevel = 100;
+
+            Player = new Hero(_rnd, PlayerConsole);
         }
 
 
