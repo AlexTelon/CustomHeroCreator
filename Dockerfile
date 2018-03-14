@@ -1,15 +1,26 @@
-FROM microsoft/dotnet:2.0.0-sdk AS build-env
+FROM microsoft/dotnet:2.0.0-sdk AS build
 
 WORKDIR /app
+#RUN dotnet restore
 
-COPY CustomHeroCreator .
+COPY . .
+WORKDIR /app/CustomHeroCreator
+RUN dotnet build
 
-RUN dotnet restore
+FROM build AS testrunner
+WORKDIR /app/XUnitTests
+#ENTRYPOINT ["dotnet", "test", "XUnitTests.csproj ", "--logger:trx"]
+ENTRYPOINT ["dotnet", "test", "--logger:trx"]
 
-# RUN dotnet publish -c Release -r win10-x64 -o out
+FROM build AS test
+WORKDIR /app/XUnitTests
+RUN dotnet test
+
+FROM build AS publish
+WORKDIR /app/CustomHeroCreator
 RUN dotnet publish -c Release -r linux-x64 -o out
 
-FROM microsoft/dotnet:2-runtime-jessie
+FROM microsoft/dotnet:2-runtime-jessie AS runtime
 WORKDIR /app
-COPY --from=build-env /app/out ./
+COPY --from=publish /app/CustomHeroCreator/out ./
 ENTRYPOINT ["./CustomHeroCreator"]
