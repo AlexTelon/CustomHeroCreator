@@ -22,9 +22,11 @@ namespace CustomHeroCreator
         {
             // Always use . instead of , as a comma.
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
 
 #if DEBUG
+            // Running SetWindowsSize below in a linux docker containter gives a plattform not supported exception
+            Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
+
             var game = new AIGame();
 #else
             var game = new PlayerGame();
