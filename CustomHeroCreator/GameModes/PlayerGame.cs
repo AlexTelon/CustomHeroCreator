@@ -18,7 +18,7 @@ namespace CustomHeroCreator.GameModes
         private Arena Arena { get; set; } = new Arena();
 
         // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
-        private Trials Trials { get; set; } = new Trials();
+        private Trials Trials { get; set; }
 
         private Evolution Evo { get; set; }
 
@@ -27,9 +27,10 @@ namespace CustomHeroCreator.GameModes
         public PlayerGame(IConsole console)
         {
             _rnd = new Random();
-            Player = new Hero(_rnd);
             PlayerConsole = console;
 
+            Player = new Hero(_rnd, PlayerConsole);
+            Trials = new Trials(PlayerConsole);
             Trials.MaxLevel = 100;
         }
 
@@ -42,11 +43,13 @@ namespace CustomHeroCreator.GameModes
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
 
+            var autoResponseConsole = new AutoResponseConsole();
+
             // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
-            Trials trials = new Trials();
+            Trials trials = new Trials(autoResponseConsole);
             trials.MaxLevel = 5000;
 
-            Evo = new Evolution(_rnd, skillTreeGenerator: null);
+            Evo = new Evolution(_rnd, skillTreeGenerator: null, console: autoResponseConsole);
             Evo.NrOfHeroesInEachGeneration = 100;
             Evo.MaxGenerations = 20;
             Evo.HeroStartingLevel = 10;
@@ -98,7 +101,7 @@ namespace CustomHeroCreator.GameModes
         public void Start()
         {
             // The heroes get to level up a few times before they run into their trials
-            Trials.LevelUpHero(Player, StartingLevel);
+            Trials.LevelUpHero(Player, StartingLevel, PlayerConsole);
 
             // fight against increasingly strong enemies, survive as long as you can!
             Trials.RunSinglePlayerTrial(Arena, Player);

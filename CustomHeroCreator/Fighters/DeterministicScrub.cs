@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.CLI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +8,11 @@ namespace CustomHeroCreator.Fighters
 {
     class DeterministicScrub : Hero
     {
+
         /// <summary>
         /// Create a scrub that always stronger in the same deterministic manner when it levels up
         /// </summary>
-        public DeterministicScrub() : base(new Random())
+        public DeterministicScrub() : base(new Random(), new AutoResponseConsole())
         {
             // dummy AI
             this.AI = new Agent(new Random());

@@ -68,9 +68,12 @@ namespace CustomHeroCreator
 
         private Random _rnd;
 
-        public Hero(Random rnd)
+        public IConsole ConsoleWrapper { get; private set; }
+
+        public Hero(Random rnd, IConsole console)
         {
             this._rnd = rnd;
+            ConsoleWrapper = console;
         }
 
         public enum StatTypes
@@ -190,7 +193,7 @@ namespace CustomHeroCreator
 
         internal Hero BreedWith(Hero partner, double mutationRate, double mutationChange)
         {
-            var child = new Hero(_rnd);
+            var child = new Hero(_rnd, ConsoleWrapper);
             child.SkillTreeGenerator = SkillTreeGenerator;
 
             // really the AI is the one we are breeding
@@ -230,17 +233,17 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.Write("Current Level: ");
+                    ConsoleWrapper.WriteLine();
+                    ConsoleWrapper.WriteLine();
+                    ConsoleWrapper.Write("Current Level: ");
                     CommandLineTools.PrintWithColor("" + Level, ConsoleColor.Green);
-                    Console.WriteLine();
-                    Console.WriteLine("You:");
+                    ConsoleWrapper.WriteLine();
+                    ConsoleWrapper.WriteLine("You:");
                     this.PrintStats();
-                    Console.WriteLine();
-                    Console.WriteLine("Choose one of the following or press Q to abort");
+                    ConsoleWrapper.WriteLine();
+                    ConsoleWrapper.WriteLine("Choose one of the following or press Q to abort");
 
-                    Console.WriteLine();
+                    ConsoleWrapper.WriteLine();
                     foreach (var node in statNode.Children.OrderBy(x => (int)x.Stat))
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + node.Stat, ConsoleColor.White);
@@ -248,17 +251,17 @@ namespace CustomHeroCreator
                         CommandLineTools.PrintWithColor(" " + GetStatValue(node.Stat).ToString("0.#"), ConsoleColor.Gray);
 
                         CommandLineTools.PrintWithColor(" + " + node.Value.ToString("0.#") + "    ", StatToColor(node.Stat));
-                        Console.WriteLine();
+                        ConsoleWrapper.WriteLine();
                     }
-                    Console.WriteLine();
+                    ConsoleWrapper.WriteLine();
                 }
                 int option = ChooseOption(statNode);
 
                 if (option >= statNode.Children.Count())
                 {
                     // invalid option
-                    Console.WriteLine();
-                    Console.WriteLine("Please choose a valid option");
+                    ConsoleWrapper.WriteLine();
+                    ConsoleWrapper.WriteLine("Please choose a valid option");
                     continue;
                 }
 
@@ -280,7 +283,7 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
-                    Console.WriteLine();
+                    ConsoleWrapper.WriteLine();
                 }
             }
 
@@ -298,7 +301,7 @@ namespace CustomHeroCreator
                 // ask for input until we get correct input
                 while (true)
                 {
-                    string input = Console.ReadLine();
+                    string input = ConsoleWrapper.ReadLine();
 
                     // abort
                     if (input == "q" || input == "Q")
@@ -327,7 +330,7 @@ namespace CustomHeroCreator
         {
             CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
             CommandLineTools.PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
-            Console.WriteLine();
+            ConsoleWrapper.WriteLine();
         }
 
         public void PrintStats()
@@ -346,17 +349,11 @@ namespace CustomHeroCreator
 
         public void PrintStats(List<StatTypes> typesToPrint, string delimiter = " ")
         {
-            var originalColor = Console.ForegroundColor;
-
             foreach (StatTypes stat in typesToPrint)
             {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(delimiter + Enum.GetName(typeof(StatTypes), stat) + ": ");
-                Console.ForegroundColor = StatToColor(stat);
-                Console.Write(GetStatValue(stat).ToString("0.00"));
+                CommandLineTools.PrintWithColor(delimiter + Enum.GetName(typeof(StatTypes), stat) + ": ", ConsoleColor.White);
+                CommandLineTools.PrintWithColor(GetStatValue(stat).ToString("0.00"), StatToColor(stat));
             }
-
-            Console.ForegroundColor = originalColor;
         }
 
 

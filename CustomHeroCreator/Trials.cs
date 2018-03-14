@@ -1,4 +1,5 @@
-﻿using CustomHeroCreator.Fighters;
+﻿using CustomHeroCreator.CLI;
+using CustomHeroCreator.Fighters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace CustomHeroCreator
     public class Trials
     {
         public int MaxLevel { get; set; } = 500;
+
+        private IConsole ConsoleWrapper { get; }
+
+        public Trials(IConsole console)
+        {
+            ConsoleWrapper = console;
+        }
 
         /// <summary>
         /// Gauge the Fitness of each hero by letting them fight a series of "NPCs"
@@ -51,11 +59,11 @@ namespace CustomHeroCreator
 
                 if (hero.IsPlayer)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Level " + level);
-                    Console.Write("Enemy has grown stronger: ");
+                    ConsoleWrapper.Clear();
+                    ConsoleWrapper.WriteLine("Level " + level);
+                    ConsoleWrapper.Write("Enemy has grown stronger: ");
                     enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
-                    Console.WriteLine();
+                    ConsoleWrapper.WriteLine();
                 }
 
                 arena.Fight(hero, enemy);
@@ -90,21 +98,21 @@ namespace CustomHeroCreator
         }
 
 
-        public static void LevelUpHeroes(List<Hero> heroes, int lvl)
+        public static void LevelUpHeroes(List<Hero> heroes, int lvl, IConsole console)
         {
             foreach (var hero in heroes)
             {
-                LevelUpHero(hero, lvl);
+                LevelUpHero(hero, lvl, console);
             }
         }
 
-        public static void LevelUpHero(Hero hero, int lvl)
+        public static void LevelUpHero(Hero hero, int lvl, IConsole console)
         {
             for (int i = 0; i < lvl; i++)
             {
                 if (hero.IsPlayer)
                 {
-                    Console.Clear();
+                    console.Clear();
                 }
                 hero.LevelUp();
             }

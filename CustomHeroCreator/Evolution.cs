@@ -26,6 +26,7 @@ namespace CustomHeroCreator
         public List<List<Hero>> Generations { get; private set; } = new List<List<Hero>>();
 
         public SkillTreeGenerator SkillTreeGenerator { get; set; }
+        public IConsole ConsoleWrapper { get; private set; }
 
         public Hero BestHero;
 
@@ -34,11 +35,13 @@ namespace CustomHeroCreator
         public AgentType AgentType { get; set; }
 
 
-        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator)
+        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator, IConsole console)
         {
             _rnd = rnd;
             SkillTreeGenerator = skillTreeGenerator;
-            BestHero = new Hero(_rnd);
+            ConsoleWrapper = console;
+
+            BestHero = new Hero(_rnd, ConsoleWrapper);
         }
 
         public void RunEvolution(Trials trials, Arena arena)
@@ -56,7 +59,7 @@ namespace CustomHeroCreator
                 Generations.Add(newGeneration);
 
                 // The heroes get to level up a few times before they run into their trials
-                Trials.LevelUpHeroes(Generations[i], HeroStartingLevel);
+                Trials.LevelUpHeroes(Generations[i], HeroStartingLevel, ConsoleWrapper);
 
                 // Run the game on the heroes
                 // fight against increasingly strong enemies, survive as long as you can!
@@ -69,7 +72,7 @@ namespace CustomHeroCreator
                 averagePerGeneration.Add(average);
 
                 CommandLineTools.PrintVerticalBar(average, 0, trials.MaxLevel, ConsoleColor.Red);
-                Console.WriteLine();
+                ConsoleWrapper.WriteLine();
 #endif
                 BestHero = Generations[i].MaxBy(x => x.Fitness);
                 bestInEachGenration.Add(BestHero);
@@ -99,8 +102,8 @@ namespace CustomHeroCreator
 
 #if DEBUG
 
-            Console.Clear();
-            Console.WriteLine();
+            ConsoleWrapper.Clear();
+            ConsoleWrapper.WriteLine();
 
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
 #endif
@@ -151,7 +154,7 @@ namespace CustomHeroCreator
             {
                 IAgent ai = AgentFactory.Create(agentType, _rnd);
 
-                Hero hero = new Hero(rnd)
+                Hero hero = new Hero(rnd, ConsoleWrapper)
                 {
                     AI = ai
                 };

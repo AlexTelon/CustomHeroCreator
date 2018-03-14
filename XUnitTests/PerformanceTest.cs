@@ -10,6 +10,7 @@ namespace XUnitTests
 {
     public class PerformanceTest
     {
+        public IConsole ConsoleWrapper = new AutoResponseConsole();
         //[Fact]
         //public void Test1()
         //{
@@ -46,7 +47,7 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd);
+            var hero = new Hero(rnd, ConsoleWrapper);
             var agent = new Agent(rnd);
 
             hero.AI = agent;
@@ -68,7 +69,7 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd);
+            var hero = new Hero(rnd, ConsoleWrapper);
             var agent = new FastAgent(rnd);
 
             hero.AI = agent;
@@ -92,10 +93,10 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd);
+            var hero = new Hero(rnd, ConsoleWrapper);
             hero.AI = new Agent(rnd);
 
-            var enemy = new Hero(rnd);
+            var enemy = new Hero(rnd, ConsoleWrapper);
             enemy.AI = new Agent(rnd);
 
             var arena = new Arena();
