@@ -18,7 +18,7 @@ Download the source code and in the repo run:
 
 once that has run (takes some time the first time) run:
 
-`docker run customhero`
+`docker run -it customhero`
 
 
 ## Build with dotnet build tools
