@@ -1,5 +1,6 @@
 ﻿using CustomHeroCreator.CLI;
 using CustomHeroCreator.Fighters;
+using CustomHeroCreator.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,8 @@ namespace CustomHeroCreator
         public int MaxLevel { get; set; } = 500;
         public double Difficulty { get; internal set; } = 1;
 
-        private IConsole ConsoleWrapper { get; }
-
-        public Trials(IConsole console)
+        public Trials()
         {
-            ConsoleWrapper = console;
         }
 
         /// <summary>
@@ -38,6 +36,8 @@ namespace CustomHeroCreator
         /// <param name="list"></param>
         public void RunSinglePlayerTrial(Arena arena, Hero hero)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
+
             var enemy = new DeterministicScrub();
             enemy.StatGain *= Difficulty;
 
@@ -61,11 +61,11 @@ namespace CustomHeroCreator
 
                 if (hero.IsPlayer)
                 {
-                    ConsoleWrapper.Clear();
-                    ConsoleWrapper.WriteLine("Level " + level);
-                    ConsoleWrapper.Write("Enemy has grown stronger: ");
+                    console.Clear();
+                    console.WriteLine("Level " + level);
+                    console.Write("Enemy has grown stronger: ");
                     enemy.PrintStats(new List<StatTypes>() { StatTypes.MaxHealth, StatTypes.AttackDmg, StatTypes.Armor }, " ");
-                    ConsoleWrapper.WriteLine();
+                    console.WriteLine();
                 }
 
                 arena.Fight(hero, enemy);
@@ -100,21 +100,21 @@ namespace CustomHeroCreator
         }
 
 
-        public static void LevelUpHeroes(List<Hero> heroes, int lvl, IConsole console)
+        public static void LevelUpHeroes(List<Hero> heroes, int lvl)
         {
             foreach (var hero in heroes)
             {
-                LevelUpHero(hero, lvl, console);
+                LevelUpHero(hero, lvl);
             }
         }
 
-        public static void LevelUpHero(Hero hero, int lvl, IConsole console)
+        public static void LevelUpHero(Hero hero, int lvl)
         {
             for (int i = 0; i < lvl; i++)
             {
                 if (hero.IsPlayer)
                 {
-                    console.Clear();
+                    DataHub.Instance.ConsoleWrapper.Clear();
                 }
                 hero.LevelUp();
             }

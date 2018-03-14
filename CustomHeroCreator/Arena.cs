@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.CLI;
+using CustomHeroCreator.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,11 +36,12 @@ namespace CustomHeroCreator
 
         private static void PlayerFight(Hero player, Hero enemy)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
             var sleep = 100;
 
-            Console.WriteLine("Enemy stats: ");
+            console.WriteLine("Enemy stats: ");
             enemy.PrintStats();
-            Console.WriteLine();
+            console.WriteLine();
 
             var playerPreviousHealth = player.CurrentHealth;
             var enemyPreviousHealth = enemy.CurrentHealth;
@@ -56,25 +58,25 @@ namespace CustomHeroCreator
                 var enemyDmgTaken = enemyPreviousHealth - enemy.CurrentHealth;
 
 
-                Console.Write("Your: ");
+                console.Write("Your: ");
                 CommandLineTools.PrintWithColor("" + player.CurrentHealth.ToString("#.#") + "\t", ConsoleColor.DarkGreen);
                 CommandLineTools.PrintVerticalBar(player.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
-                Console.Write("\t");
+                console.Write("\t");
                 if (playerDmgTaken != 0)
                 {
                     CommandLineTools.PrintWithColor("-" + playerDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
-                Console.Write("\tEnemy: ");
+                console.Write("\tEnemy: ");
                 CommandLineTools.PrintWithColor("" + enemy.CurrentHealth.ToString("#.#") + "\t", ConsoleColor.DarkGreen);
                 CommandLineTools.PrintVerticalBar(enemy.CurrentHealth, 0, MaxHealth, ConsoleColor.Green);
-                Console.Write("\t");
+                console.Write("\t");
                 if (enemyDmgTaken != 0)
                 {
                     CommandLineTools.PrintWithColor("-" + enemyDmgTaken.ToString("#.#"), ConsoleColor.Red);
                 }
 
-                Console.WriteLine();
+                console.WriteLine();
 
                 playerPreviousHealth = player.CurrentHealth;
                 enemyPreviousHealth = enemy.CurrentHealth;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 using System.Text;
+using CustomHeroCreator.Repository;
 
 namespace CustomHeroCreator
 {
@@ -68,12 +69,9 @@ namespace CustomHeroCreator
 
         private Random _rnd;
 
-        public IConsole ConsoleWrapper { get; private set; }
-
-        public Hero(Random rnd, IConsole console)
+        public Hero(Random rnd)
         {
             this._rnd = rnd;
-            ConsoleWrapper = console;
         }
 
         public enum StatTypes
@@ -193,7 +191,7 @@ namespace CustomHeroCreator
 
         internal Hero BreedWith(Hero partner, double mutationRate, double mutationChange)
         {
-            var child = new Hero(_rnd, ConsoleWrapper);
+            var child = new Hero(_rnd);
             child.SkillTreeGenerator = SkillTreeGenerator;
 
             // really the AI is the one we are breeding
@@ -225,6 +223,8 @@ namespace CustomHeroCreator
 
         private void ChoooseNewSkillFromTree(StatNode statNode)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
+
             var hasChoosen = false;
 
             while (!hasChoosen)
@@ -233,17 +233,17 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
-                    ConsoleWrapper.WriteLine();
-                    ConsoleWrapper.WriteLine();
-                    ConsoleWrapper.Write("Current Level: ");
+                    console.WriteLine();
+                    console.WriteLine();
+                    console.Write("Current Level: ");
                     CommandLineTools.PrintWithColor("" + Level, ConsoleColor.Green);
-                    ConsoleWrapper.WriteLine();
-                    ConsoleWrapper.WriteLine("You:");
+                    console.WriteLine();
+                    console.WriteLine("You:");
                     this.PrintStats();
-                    ConsoleWrapper.WriteLine();
-                    ConsoleWrapper.WriteLine("Choose one of the following or press Q to abort");
+                    console.WriteLine();
+                    console.WriteLine("Choose one of the following or press Q to abort");
 
-                    ConsoleWrapper.WriteLine();
+                    console.WriteLine();
                     foreach (var node in statNode.Children.OrderBy(x => (int)x.Stat))
                     {
                         CommandLineTools.PrintWithColor("[" + i++ + "]: " + node.Stat, ConsoleColor.White);
@@ -251,17 +251,17 @@ namespace CustomHeroCreator
                         CommandLineTools.PrintWithColor(" " + GetStatValue(node.Stat).ToString("0.#"), ConsoleColor.Gray);
 
                         CommandLineTools.PrintWithColor(" + " + node.Value.ToString("0.#") + "    ", StatToColor(node.Stat));
-                        ConsoleWrapper.WriteLine();
+                        console.WriteLine();
                     }
-                    ConsoleWrapper.WriteLine();
+                    console.WriteLine();
                 }
                 int option = ChooseOption(statNode);
 
                 if (option >= statNode.Children.Count())
                 {
                     // invalid option
-                    ConsoleWrapper.WriteLine();
-                    ConsoleWrapper.WriteLine("Please choose a valid option");
+                    console.WriteLine();
+                    console.WriteLine("Please choose a valid option");
                     continue;
                 }
 
@@ -283,7 +283,7 @@ namespace CustomHeroCreator
 
                 if (!HasAI)
                 {
-                    ConsoleWrapper.WriteLine();
+                    console.WriteLine();
                 }
             }
 
@@ -301,7 +301,7 @@ namespace CustomHeroCreator
                 // ask for input until we get correct input
                 while (true)
                 {
-                    string input = ConsoleWrapper.ReadLine();
+                    string input = DataHub.Instance.ConsoleWrapper.ReadLine();
 
                     // abort
                     if (input == "q" || input == "Q")
@@ -330,7 +330,7 @@ namespace CustomHeroCreator
         {
             CommandLineTools.PrintWithColor("Fitness: ", ConsoleColor.White);
             CommandLineTools.PrintWithColor("" + this.Fitness, ConsoleColor.Yellow);
-            ConsoleWrapper.WriteLine();
+            DataHub.Instance.ConsoleWrapper.WriteLine();
         }
 
         public void PrintStats()

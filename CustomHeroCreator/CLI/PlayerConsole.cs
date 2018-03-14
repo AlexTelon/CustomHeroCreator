@@ -9,6 +9,12 @@ namespace CustomHeroCreator.CLI
     /// </summary>
     public class PlayerConsole : IConsole
     {
+        public ConsoleColor ForegroundColor
+        {
+            get => Console.ForegroundColor;
+            set => Console.ForegroundColor = value;
+        }
+
         public void Write(string message = "")
         {
             Console.Write(message);
@@ -28,6 +34,5 @@ namespace CustomHeroCreator.CLI
         {
             return Console.ReadLine();
         }
-
     }
 }

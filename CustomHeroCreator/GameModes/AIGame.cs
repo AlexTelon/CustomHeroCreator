@@ -31,10 +31,10 @@ namespace CustomHeroCreator.GameModes
             Arena arena = new Arena();
 
             // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
-            Trials trials = new Trials(AIConsole);
+            Trials trials = new Trials();
             trials.MaxLevel = 5000;
 
-            Evo = new Evolution(rnd, skillTreeGenerator: null, console: AIConsole);
+            Evo = new Evolution(rnd, skillTreeGenerator: null);
             Evo.NrOfHeroesInEachGeneration = 100;
             Evo.MaxGenerations = 20;
             Evo.HeroStartingLevel = 10;

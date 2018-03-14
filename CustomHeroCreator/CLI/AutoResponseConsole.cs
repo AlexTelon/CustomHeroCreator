@@ -15,6 +15,12 @@ namespace CustomHeroCreator.CLI
 
         private readonly bool LoopResponses = true;
 
+        public ConsoleColor ForegroundColor
+        {
+            get => Console.ForegroundColor;
+            set => Console.ForegroundColor = value;
+        }
+
         public void Clear()
         {
         }
@@ -33,10 +39,12 @@ namespace CustomHeroCreator.CLI
 
         public void Write(string message = "")
         {
+            Console.Write(message);
         }
 
         public void WriteLine(string message = "")
         {
+            Console.WriteLine(message);
         }
     }
 }

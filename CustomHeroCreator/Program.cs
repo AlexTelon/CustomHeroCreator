@@ -2,6 +2,7 @@
 using System.Threading;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.GameModes;
+using CustomHeroCreator.Repository;
 
 namespace CustomHeroCreator
 {
@@ -11,21 +12,25 @@ namespace CustomHeroCreator
         {
             // Always use . instead of , as a comma.
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-
 #if DEBUG
             // Running SetWindowsSize below in a linux docker containter gives a plattform not supported exception
             Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
-
-            var autoResponseConsole = new AutoResponseConsole();
-            autoResponseConsole.AutomatedResponses.Add("1");
-
-            var playerConsole = new PlayerConsole();
-
-            var game = new AIGame(playerConsole);
-#else
-            var playerConsole = new PlayerConsole();
-            var game = new PlayerGame(playerConsole);
 #endif
+
+            // Select what type of console we want
+#if DEBUG
+            var console = new AutoResponseConsole();
+            console.AutomatedResponses.Add("1");
+#else
+            var console = new PlayerConsole();
+
+#endif
+
+            DataHub.Instance.ConsoleWrapper = console;
+
+            //var game = new AIGame(playerConsole);
+            var game = new PlayerGame();
+            game.Difficulty = 3;
 
             game.Init();
             game.Start();

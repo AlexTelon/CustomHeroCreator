@@ -1,6 +1,7 @@
 ﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Generators;
+using CustomHeroCreator.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,17 +29,14 @@ namespace CustomHeroCreator.GameModes
 
         private Evolution Evo { get; set; }
 
-        private IConsole PlayerConsole { get; set; }
-
-        public PlayerGame(IConsole console)
+        public PlayerGame()
         {
             _rnd = new Random();
-            PlayerConsole = console;
 
-            Trials = new Trials(PlayerConsole);
+            Trials = new Trials();
             Trials.MaxLevel = 100;
 
-            Player = new Hero(_rnd, PlayerConsole);
+            Player = new Hero(_rnd);
         }
 
 
@@ -47,16 +45,18 @@ namespace CustomHeroCreator.GameModes
         /// </summary>
         public void Init()
         {
+            // Figure out the relative strengths of the available options by letting 
+            // a bunch of AIs through some algorithm figure out the relative strengths
+            // of each option. Then select the best AI to create a SkillTreeGenerator.
+
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
 
-            var autoResponseConsole = new AutoResponseConsole();
-
             // Trials decide what type of trials the heroes will meet (single player survival mode or gladiator arena like stuff)
-            Trials trials = new Trials(autoResponseConsole);
+            Trials trials = new Trials();
             trials.MaxLevel = 5000;
 
-            Evo = new Evolution(_rnd, skillTreeGenerator: null, console: autoResponseConsole);
+            Evo = new Evolution(_rnd, skillTreeGenerator: null);
             Evo.NrOfHeroesInEachGeneration = 100;
             Evo.MaxGenerations = 20;
             Evo.HeroStartingLevel = 10;
@@ -85,30 +85,31 @@ namespace CustomHeroCreator.GameModes
 
         private void ShowPlayerIntro()
         {
-            PlayerConsole.WriteLine("Welcome to Custom Hero Creator!");
-            PlayerConsole.WriteLine("You will begin by selecting a hero!");
-            PlayerConsole.ReadLine();
-            PlayerConsole.Clear();
+            var console = DataHub.Instance.ConsoleWrapper;
+            console.WriteLine("Welcome to Custom Hero Creator!");
+            console.WriteLine("You will begin by selecting a hero!");
+            console.ReadLine();
+            console.Clear();
 
-            PlayerConsole.WriteLine("You have choosen a X hero!");
-            PlayerConsole.WriteLine("...");
-            PlayerConsole.ReadLine();
-            PlayerConsole.Clear();
+            console.WriteLine("You have choosen a X hero!");
+            console.WriteLine("...");
+            console.ReadLine();
+            console.Clear();
 
-            PlayerConsole.WriteLine("You prepare yourself for the comming battles!");
-            PlayerConsole.WriteLine("...");
-            PlayerConsole.ReadLine();
-            PlayerConsole.Clear();
+            console.WriteLine("You prepare yourself for the comming battles!");
+            console.WriteLine("...");
+            console.ReadLine();
+            console.Clear();
 
-            PlayerConsole.WriteLine("Good luck!");
-            PlayerConsole.WriteLine("...");
-            PlayerConsole.ReadLine();
+            console.WriteLine("Good luck!");
+            console.WriteLine("...");
+            console.ReadLine();
         }
 
         public void Start()
         {
             // The heroes get to level up a few times before they run into their trials
-            Trials.LevelUpHero(Player, StartingLevel, PlayerConsole);
+            Trials.LevelUpHero(Player, StartingLevel);
 
             // fight against increasingly strong enemies, survive as long as you can!
             Trials.RunSinglePlayerTrial(Arena, Player);
@@ -124,22 +125,24 @@ namespace CustomHeroCreator.GameModes
 
         private void LooseScreen()
         {
-            PlayerConsole.WriteLine("You lost");
+            DataHub.Instance.ConsoleWrapper.WriteLine("You lost");
             PrintEndGameStatistics();
         }
 
         private void WinScreen()
         {
-            PlayerConsole.WriteLine("You won!");
+            DataHub.Instance.ConsoleWrapper.WriteLine("You won!");
             PrintEndGameStatistics();
         }
 
         private void PrintEndGameStatistics()
         {
-            PlayerConsole.WriteLine("Your result: ");
-            PlayerConsole.WriteLine("Level: " + Player.Level);
+            var console = DataHub.Instance.ConsoleWrapper;
+
+            console.WriteLine("Your result: ");
+            console.WriteLine("Level: " + Player.Level);
             Player.PrintStats();
-            PlayerConsole.WriteLine();
+            console.WriteLine();
         }
 
         public void End()

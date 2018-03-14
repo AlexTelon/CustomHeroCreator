@@ -3,6 +3,7 @@ using CustomHeroCreator.CLI;
 using CustomHeroCreator.Generators;
 using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Logging;
+using CustomHeroCreator.Repository;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,6 @@ namespace CustomHeroCreator
         public List<List<Hero>> Generations { get; private set; } = new List<List<Hero>>();
 
         public SkillTreeGenerator SkillTreeGenerator { get; set; }
-        public IConsole ConsoleWrapper { get; private set; }
 
         public Hero BestHero;
 
@@ -35,17 +35,17 @@ namespace CustomHeroCreator
         public AgentType AgentType { get; set; }
 
 
-        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator, IConsole console)
+        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator)
         {
             _rnd = rnd;
             SkillTreeGenerator = skillTreeGenerator;
-            ConsoleWrapper = console;
 
-            BestHero = new Hero(_rnd, ConsoleWrapper);
+            BestHero = new Hero(_rnd);
         }
 
         public void RunEvolution(Trials trials, Arena arena)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
             var newGeneration = this.CreateNewGeneration(AgentType);
 #if DEBUG
             CommandLineTools.PrintTableHeader();
@@ -59,7 +59,7 @@ namespace CustomHeroCreator
                 Generations.Add(newGeneration);
 
                 // The heroes get to level up a few times before they run into their trials
-                Trials.LevelUpHeroes(Generations[i], HeroStartingLevel, ConsoleWrapper);
+                Trials.LevelUpHeroes(Generations[i], HeroStartingLevel);
 
                 // Run the game on the heroes
                 // fight against increasingly strong enemies, survive as long as you can!
@@ -72,7 +72,7 @@ namespace CustomHeroCreator
                 averagePerGeneration.Add(average);
 
                 CommandLineTools.PrintVerticalBar(average, 0, trials.MaxLevel, ConsoleColor.Red);
-                ConsoleWrapper.WriteLine();
+                console.WriteLine();
 #endif
                 BestHero = Generations[i].MaxBy(x => x.Fitness);
                 bestInEachGenration.Add(BestHero);
@@ -102,8 +102,8 @@ namespace CustomHeroCreator
 
 #if DEBUG
 
-            ConsoleWrapper.Clear();
-            ConsoleWrapper.WriteLine();
+            console.Clear();
+            console.WriteLine();
 
             CommandLineTools.PrintTable(averagePerGeneration, ConsoleColor.Cyan, true);
 #endif
@@ -154,7 +154,7 @@ namespace CustomHeroCreator
             {
                 IAgent ai = AgentFactory.Create(agentType, _rnd);
 
-                Hero hero = new Hero(rnd, ConsoleWrapper)
+                Hero hero = new Hero(rnd)
                 {
                     AI = ai
                 };

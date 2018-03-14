@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CustomHeroCreator.Repository;
 
 namespace CustomHeroCreator.CLI
 {
@@ -10,10 +11,11 @@ namespace CustomHeroCreator.CLI
 
         internal static void PrintTableHeader()
         {
+            var console = DataHub.Instance.ConsoleWrapper;
             PrintWithColor("Row\tValue\tBar", ConsoleColor.Green);
-            Console.WriteLine();
+            console.WriteLine();
             PrintWithColor("===========================", ConsoleColor.Gray);
-            Console.WriteLine();
+            console.WriteLine();
         }
 
         /// <summary>
@@ -22,6 +24,8 @@ namespace CustomHeroCreator.CLI
         /// <param name="items"></param>
         internal static void PrintTable(List<double> items, ConsoleColor color = ConsoleColor.Cyan, bool showExtra = false)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
+
             var max = items.Max();
             var min = items.Min();
 
@@ -36,16 +40,18 @@ namespace CustomHeroCreator.CLI
 
                 if (showExtra)
                 {
-                    Console.Write("\t");
+                    console.Write("\t");
                     PrintVerticalBar(item, min, max, ConsoleColor.Red);
                 }
 
-                Console.WriteLine();
+                console.WriteLine();
             }
         }
 
         internal static void PrintVerticalBar(double value, double min, double max, ConsoleColor color)
         {
+            var console = DataHub.Instance.ConsoleWrapper;
+
             var ratio = 1 - (max - value) / (max - min);
 
             var MAX_NR_OF_BARS = 20;
@@ -72,15 +78,17 @@ namespace CustomHeroCreator.CLI
             PrintWithColor(builder.ToString(), color);
         }
 
-
-        public static void PrintWithColor(string message, ConsoleColor color)
+        public static void PrintWithColor(string message = "", ConsoleColor color = ConsoleColor.White)
         {
-            var originalColor = Console.ForegroundColor;
+            var console = DataHub.Instance.ConsoleWrapper;
 
-            Console.ForegroundColor = color;
-            Console.Write(message);
+            var originalColor = console.ForegroundColor;
 
-            Console.ForegroundColor = originalColor;
+            console.ForegroundColor = color;
+            console.Write(message);
+
+            console.ForegroundColor = originalColor;
         }
+
     }
 }

@@ -1,6 +1,7 @@
 using CustomHeroCreator;
 using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Repository;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -10,7 +11,10 @@ namespace XUnitTests
 {
     public class PerformanceTest
     {
-        public IConsole ConsoleWrapper = new AutoResponseConsole();
+        public PerformanceTest()
+        {
+            DataHub.Instance.ConsoleWrapper = new AutoResponseConsole();
+        }
         //[Fact]
         //public void Test1()
         //{
@@ -47,7 +51,7 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd, ConsoleWrapper);
+            var hero = new Hero(rnd);
             var agent = new Agent(rnd);
 
             hero.AI = agent;
@@ -69,7 +73,7 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd, ConsoleWrapper);
+            var hero = new Hero(rnd);
             var agent = new FastAgent(rnd);
 
             hero.AI = agent;
@@ -93,10 +97,10 @@ namespace XUnitTests
             sw.Start();
             var rnd = new Random();
 
-            var hero = new Hero(rnd, ConsoleWrapper);
+            var hero = new Hero(rnd);
             hero.AI = new Agent(rnd);
 
-            var enemy = new Hero(rnd, ConsoleWrapper);
+            var enemy = new Hero(rnd);
             enemy.AI = new Agent(rnd);
 
             var arena = new Arena();
