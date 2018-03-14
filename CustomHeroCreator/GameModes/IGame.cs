@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CustomHeroCreator.GameModes
 {
-    interface IGame
+    public interface IGame
     {
         void Init();
 

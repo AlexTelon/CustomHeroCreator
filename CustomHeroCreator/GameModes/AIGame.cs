@@ -8,11 +8,18 @@ using System.Text;
 
 namespace CustomHeroCreator.GameModes
 {
-    class AIGame : IGame
+    public class AIGame : IGame
     {
         public Evolution Evo { get; set; }
         public Stopwatch StopWatch { get; set; } = new Stopwatch();
 
+
+        private IConsole AIConsole { get; set; }
+
+        public AIGame(IConsole console)
+        {
+            AIConsole = console;
+        }
 
         public void Init()
         {
@@ -37,11 +44,11 @@ namespace CustomHeroCreator.GameModes
 
             Evo.RunEvolution(trials, arena);
 
-            Console.WriteLine("The value of the different skills:");
+            AIConsole.WriteLine("The value of the different skills:");
             Evo.BestHero.AI.PrintInternalDebugInfo();
-            Console.WriteLine();
+            AIConsole.WriteLine();
 
-            Console.ReadKey();
+            AIConsole.ReadLine();
 
             // we have now trained an AI to know how strong each stat is
 
@@ -55,18 +62,18 @@ namespace CustomHeroCreator.GameModes
 
             var treeRootNode = skillTreeGenerator.GenerateSkillTree(10);
 
-            Console.ReadKey();
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine("Printing Skill Tree");
+            AIConsole.ReadLine();
+            AIConsole.Clear();
+            AIConsole.WriteLine();
+            AIConsole.WriteLine("Printing Skill Tree");
 
             treeRootNode.Print(3);
         }
 
         public void Start()
         {
-            Console.WriteLine("Play the game?");
-            var play = Console.ReadLine() == "y";
+            AIConsole.WriteLine("Play the game?");
+            var play = AIConsole.ReadLine() == "y";
         }
 
         public void End()
@@ -91,14 +98,14 @@ namespace CustomHeroCreator.GameModes
             Console.ReadKey();
 #endif
 
-            Console.WriteLine("Best Configuraion");
-            Console.WriteLine("Level: " + Evo.BestHero.Level);
+            AIConsole.WriteLine("Best Configuraion");
+            AIConsole.WriteLine("Level: " + Evo.BestHero.Level);
             Evo.BestHero.PrintStats();
 
-            Console.WriteLine();
+            AIConsole.WriteLine();
             Evo.BestHero.AI.PrintInternalDebugInfo();
 
-            Console.WriteLine();
+            AIConsole.WriteLine();
 
 
             // in the end let the top performer from each generation all fight each other
@@ -114,12 +121,12 @@ namespace CustomHeroCreator.GameModes
 
 
             StopWatch.Stop();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.Write("Execution time: ");
+            AIConsole.WriteLine();
+            AIConsole.WriteLine();
+            AIConsole.Write("Execution time: ");
             CommandLineTools.PrintWithColor("" + StopWatch.Elapsed, ConsoleColor.Red);
 
-            Console.ReadKey();
+            AIConsole.ReadLine();
         }
     }
 }

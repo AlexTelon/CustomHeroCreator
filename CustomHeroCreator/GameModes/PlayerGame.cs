@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.CLI;
 using CustomHeroCreator.Generators;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace CustomHeroCreator.GameModes
 {
-    class PlayerGame : IGame
+    public class PlayerGame : IGame
     {
         private Random _rnd;
 
@@ -21,10 +22,13 @@ namespace CustomHeroCreator.GameModes
 
         private Evolution Evo { get; set; }
 
-        public PlayerGame()
+        private IConsole PlayerConsole { get; set; }
+
+        public PlayerGame(IConsole console)
         {
             _rnd = new Random();
             Player = new Hero(_rnd);
+            PlayerConsole = console;
 
             Trials.MaxLevel = 100;
         }
@@ -71,24 +75,24 @@ namespace CustomHeroCreator.GameModes
 
         private void ShowPlayerIntro()
         {
-            Console.WriteLine("Welcome to Custom Hero Creator!");
-            Console.WriteLine("You will begin by selecting a hero!");
-            Console.ReadLine();
-            Console.Clear();
+            PlayerConsole.WriteLine("Welcome to Custom Hero Creator!");
+            PlayerConsole.WriteLine("You will begin by selecting a hero!");
+            PlayerConsole.ReadLine();
+            PlayerConsole.Clear();
 
-            Console.WriteLine("You have choosen a X hero!");
-            Console.WriteLine("...");
-            Console.ReadLine();
-            Console.Clear();
+            PlayerConsole.WriteLine("You have choosen a X hero!");
+            PlayerConsole.WriteLine("...");
+            PlayerConsole.ReadLine();
+            PlayerConsole.Clear();
 
-            Console.WriteLine("You prepare yourself for the comming battles!");
-            Console.WriteLine("...");
-            Console.ReadLine();
-            Console.Clear();
+            PlayerConsole.WriteLine("You prepare yourself for the comming battles!");
+            PlayerConsole.WriteLine("...");
+            PlayerConsole.ReadLine();
+            PlayerConsole.Clear();
 
-            Console.WriteLine("Good luck!");
-            Console.WriteLine("...");
-            Console.ReadLine();
+            PlayerConsole.WriteLine("Good luck!");
+            PlayerConsole.WriteLine("...");
+            PlayerConsole.ReadLine();
         }
 
         public void Start()
@@ -110,22 +114,22 @@ namespace CustomHeroCreator.GameModes
 
         private void LooseScreen()
         {
-            Console.WriteLine("You lost");
+            PlayerConsole.WriteLine("You lost");
             PrintEndGameStatistics();
         }
 
         private void WinScreen()
         {
-            Console.WriteLine("You won!");
+            PlayerConsole.WriteLine("You won!");
             PrintEndGameStatistics();
         }
 
         private void PrintEndGameStatistics()
         {
-            Console.WriteLine("Your result: ");
-            Console.WriteLine("Level: " + Player.Level);
+            PlayerConsole.WriteLine("Your result: ");
+            PlayerConsole.WriteLine("Level: " + Player.Level);
             Player.PrintStats();
-            Console.WriteLine();
+            PlayerConsole.WriteLine();
         }
 
         public void End()

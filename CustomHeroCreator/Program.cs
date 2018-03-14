@@ -1,17 +1,6 @@
-﻿using CustomHeroCreator.AI;
-using CustomHeroCreator.CLI;
-using CustomHeroCreator.Fighters;
-using MoreLinq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CustomHeroCreator.Logging;
-using static CustomHeroCreator.Hero;
-using CustomHeroCreator.Helpers;
-
-using System.Diagnostics;
+﻿using System;
 using System.Threading;
-using CustomHeroCreator.Generators;
+using CustomHeroCreator.CLI;
 using CustomHeroCreator.GameModes;
 
 namespace CustomHeroCreator
@@ -27,9 +16,15 @@ namespace CustomHeroCreator
             // Running SetWindowsSize below in a linux docker containter gives a plattform not supported exception
             Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight / 2);
 
-            var game = new AIGame();
+            var autoResponseConsole = new AutoResponseConsole();
+            autoResponseConsole.AutomatedResponses.Add("1");
+
+            var playerConsole = new PlayerConsole();
+
+            var game = new AIGame(playerConsole);
 #else
-            var game = new PlayerGame();
+            var playerConsole = new PlayerConsole();
+            var game = new PlayerGame(playerConsole);
 #endif
 
             game.Init();
