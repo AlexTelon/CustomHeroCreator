@@ -49,10 +49,9 @@ namespace XUnitTests
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var rnd = new Random();
 
-            var hero = new Hero(rnd);
-            var agent = new Agent(rnd);
+            var hero = new Hero();
+            var agent = new Agent();
 
             hero.AI = agent;
 
@@ -71,10 +70,9 @@ namespace XUnitTests
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var rnd = new Random();
 
-            var hero = new Hero(rnd);
-            var agent = new FastAgent(rnd);
+            var hero = new Hero();
+            var agent = new FastAgent();
 
             hero.AI = agent;
 
@@ -95,13 +93,12 @@ namespace XUnitTests
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var rnd = new Random();
 
-            var hero = new Hero(rnd);
-            hero.AI = new Agent(rnd);
+            var hero = new Hero();
+            hero.AI = new Agent();
 
-            var enemy = new Hero(rnd);
-            enemy.AI = new Agent(rnd);
+            var enemy = new Hero();
+            enemy.AI = new Agent();
 
             var arena = new Arena();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CustomHeroCreator.CLI;
 using CustomHeroCreator.Helpers;
+using CustomHeroCreator.Repository;
 using CustomHeroCreator.Trees;
 using static CustomHeroCreator.Hero;
 
@@ -14,11 +15,9 @@ namespace CustomHeroCreator.AI
     /// </summary>
     public class FastAgent : IAgent
     {
-        private Random _rnd;
-
-        public FastAgent(Random rnd)
+        public FastAgent()
         {
-            _rnd = rnd;
+            var rnd = DataHub.Instance.RandomSource;
 
             var nrOfStats = Enum.GetNames(typeof(StatTypes)).Count();
 
@@ -26,11 +25,11 @@ namespace CustomHeroCreator.AI
             {
                 if (i == 2 || i == 3)
                 {
-                    weights.Add(_rnd.NextDouble() * 10);
+                    weights.Add(rnd.NextDouble() * 10);
                 }
                 else
                 {
-                    weights.Add(_rnd.NextDouble());
+                    weights.Add(rnd.NextDouble());
                 }
             }
         }
@@ -42,7 +41,9 @@ namespace CustomHeroCreator.AI
 
         public IAgent BreedWith(IAgent partner, double mutationRate, double mutationChange)
         {
-            var child = new FastAgent(_rnd);
+            var rnd = DataHub.Instance.RandomSource;
+
+            var child = new FastAgent();
 
             var weights = new List<double>();
 
@@ -52,7 +53,7 @@ namespace CustomHeroCreator.AI
                 // create a child that is a perfect mix of the parents
                 for (int i = 0; i < this.weights.Count(); i++)
                 {
-                    var choose = RandomHelper.RandomBool(_rnd);
+                    var choose = RandomHelper.RandomBool();
                     weights.Add(choose ? this.weights[i] : other.weights[i]);
                 }
             }
@@ -60,12 +61,12 @@ namespace CustomHeroCreator.AI
             // now add some random mutations
             for (int i = 0; i < weights.Count(); i++)
             {
-                if (_rnd.NextDouble() < mutationRate)
+                if (rnd.NextDouble() < mutationRate)
                 {
                     // give random constant a modification 
                     // TODO (this never adds new constants, maybe it should?)
                     // TODO give Weight class breed and mutation functionality, this is ugly
-                    weights[i] += (_rnd.NextDouble() * mutationChange) - mutationChange / 2;
+                    weights[i] += (rnd.NextDouble() * mutationChange) - mutationChange / 2;
                 }
             }
             child.weights = weights;

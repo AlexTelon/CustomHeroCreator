@@ -12,14 +12,14 @@ namespace CustomHeroCreator.AI
             FastAgent
         }
 
-        public static IAgent Create(AgentType type, Random rnd)
+        public static IAgent Create(AgentType type)
         {
             switch (type)
             {
                 case AgentType.PolyAgent:
-                    return new Agent(rnd);
+                    return new Agent();
                 case AgentType.FastAgent:
-                    return new FastAgent(rnd);
+                    return new FastAgent();
                 default:
                     throw new NotSupportedException();
             }

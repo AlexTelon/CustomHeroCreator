@@ -25,8 +25,6 @@ namespace CustomHeroCreator.GameModes
         {
             StopWatch.Start();
 
-            var rnd = new Random();
-
             // Create the arena in which the heroes fitness will be evaluated
             Arena arena = new Arena();
 
@@ -34,7 +32,7 @@ namespace CustomHeroCreator.GameModes
             Trials trials = new Trials();
             trials.MaxLevel = 5000;
 
-            Evo = new Evolution(rnd, skillTreeGenerator: null);
+            Evo = new Evolution(skillTreeGenerator: null);
             Evo.NrOfHeroesInEachGeneration = 100;
             Evo.MaxGenerations = 20;
             Evo.HeroStartingLevel = 10;
@@ -52,7 +50,7 @@ namespace CustomHeroCreator.GameModes
 
             // we have now trained an AI to know how strong each stat is
 
-            var skillTreeGenerator = new SkillTreeGenerator(rnd);
+            var skillTreeGenerator = new SkillTreeGenerator();
             skillTreeGenerator.ChoicesPerLevel = 3;
             skillTreeGenerator.MeanStrengthOfOptions = 3;
             skillTreeGenerator.MaxStrengthOptionDiff = 0;

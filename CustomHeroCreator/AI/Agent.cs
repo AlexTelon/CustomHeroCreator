@@ -1,5 +1,6 @@
 ﻿using CustomHeroCreator.CLI;
 using CustomHeroCreator.Helpers;
+using CustomHeroCreator.Repository;
 using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,8 @@ namespace CustomHeroCreator.AI
     {
         protected List<Weight> Weights { get; set; } = new List<Weight>();
 
-        protected Random _rnd;
-
-        public Agent(Random rnd)
+        public Agent()
         {
-            _rnd = rnd;
             InitRandomWeights();
         }
 
@@ -55,6 +53,8 @@ namespace CustomHeroCreator.AI
 
         private void InitRandomWeights()
         {
+            var rnd = DataHub.Instance.RandomSource;
+
             // Init AI weights
             for (int i = 0; i < Enum.GetNames(typeof(Hero.StatTypes)).Count(); i++)
             {
@@ -63,18 +63,18 @@ namespace CustomHeroCreator.AI
                 if (i == 2 || i == 3)
                 {
                     // Remember, rnd.Next is exlusive on the upper end.
-                    for (int x = 0; x < _rnd.Next(1, 3); x++)
+                    for (int x = 0; x < rnd.Next(1, 3); x++)
                     {
-                        weight.Constants.Add(_rnd.NextDouble() * 10);
+                        weight.Constants.Add(rnd.NextDouble() * 10);
                     }
                 }
                 else
                 {
 
                     // Remember, rnd.Next is exlusive on the upper end.
-                    for (int x = 0; x < _rnd.Next(1, 3); x++)
+                    for (int x = 0; x < rnd.Next(1, 3); x++)
                     {
-                        weight.Constants.Add(_rnd.NextDouble());
+                        weight.Constants.Add(rnd.NextDouble());
                     }
                 }
 
@@ -121,7 +121,9 @@ namespace CustomHeroCreator.AI
 
         public IAgent BreedWith(IAgent partner, double mutationRate, double mutationChange)
         {
-            var child = new Agent(_rnd);
+            var rnd = DataHub.Instance.RandomSource;
+
+            var child = new Agent();
 
             var weights = new List<Weight>();
 
@@ -131,7 +133,7 @@ namespace CustomHeroCreator.AI
                 // create a child that is a perfect mix of the parents
                 for (int i = 0; i < this.Weights.Count(); i++)
                 {
-                    var choose = RandomHelper.RandomBool(_rnd);
+                    var choose = RandomHelper.RandomBool();
                     weights.Add(choose ? this.Weights[i] : other.Weights[i]);
                 }
             }
@@ -140,14 +142,14 @@ namespace CustomHeroCreator.AI
             // now add some random mutations
             for (int i = 0; i < weights.Count(); i++)
             {
-                if (_rnd.NextDouble() < mutationRate)
+                if (rnd.NextDouble() < mutationRate)
                 {
                     var constSize = weights[i].Constants.Count();
 
                     // give random constant a modification 
                     // TODO (this never adds new constants, maybe it should?)
                     // TODO give Weight class breed and mutation functionality, this is ugly
-                    weights[i].Constants[_rnd.Next(0, constSize - 1)] += (_rnd.NextDouble() * mutationChange) - mutationChange / 2;
+                    weights[i].Constants[rnd.Next(0, constSize - 1)] += (rnd.NextDouble() * mutationChange) - mutationChange / 2;
                 }
             }
 

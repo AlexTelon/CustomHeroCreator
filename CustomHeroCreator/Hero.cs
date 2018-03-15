@@ -67,11 +67,8 @@ namespace CustomHeroCreator
 
         public double Armor { get; set; }
 
-        private Random _rnd;
-
-        public Hero(Random rnd)
+        public Hero()
         {
-            this._rnd = rnd;
         }
 
         public enum StatTypes
@@ -84,7 +81,7 @@ namespace CustomHeroCreator
         {
             double dmg = AttackDmg;
 
-            if (_rnd.NextDouble() < CritChance)
+            if (DataHub.Instance.RandomSource.NextDouble() < CritChance)
             {
                 dmg *= CritMultiplier;
             }
@@ -146,6 +143,7 @@ namespace CustomHeroCreator
 
         internal virtual StatNode GenerateRandomSkills()
         {
+            var rnd = DataHub.Instance.RandomSource;
             var rootNode = new StatNode();
 
             //var skills = new Dictionary<StatTypes, double>();
@@ -161,24 +159,24 @@ namespace CustomHeroCreator
                     //    child.Value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.MaxHealth:
-                        child.Value = _rnd.Next(1, 5);
+                        child.Value = rnd.Next(1, 5);
                         break;
                     case StatTypes.AttackDmg:
-                        child.Value = _rnd.Next(1, 5);
+                        child.Value = rnd.Next(1, 5);
                         break;
                     //case StatTypes.AttackSpeed:
                     //    child.Value = rnd.Next(1, 5);
                     //    break;
                     case StatTypes.CritChance:
                         // only allow for 1-5% increases
-                        child.Value = _rnd.Next(1, 20) * 0.01;
+                        child.Value = rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.CritMultiplier:
                         // only allow for 1-5% increases
-                        child.Value = _rnd.Next(1, 20) * 0.01;
+                        child.Value = rnd.Next(1, 20) * 0.01;
                         break;
                     case StatTypes.Armor:
-                        child.Value = _rnd.Next(1, 5);
+                        child.Value = rnd.Next(1, 5);
                         break;
                     default:
                         break;
@@ -191,7 +189,7 @@ namespace CustomHeroCreator
 
         internal Hero BreedWith(Hero partner, double mutationRate, double mutationChange)
         {
-            var child = new Hero(_rnd);
+            var child = new Hero();
             child.SkillTreeGenerator = SkillTreeGenerator;
 
             // really the AI is the one we are breeding

@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.Repository;
 using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace CustomHeroCreator.Generators
         private IAgent _agent;
 
 
-        public StatTypes GetRandomStatType() => (StatTypes)_rnd.Next(0, ALL_STAT_TYPES_COUNT);
+        public StatTypes GetRandomStatType() => (StatTypes) DataHub.Instance.RandomSource.Next(0, ALL_STAT_TYPES_COUNT);
 
         //protected StatNode GetRandomStat()
         //{
@@ -76,6 +77,8 @@ namespace CustomHeroCreator.Generators
 
         protected StatNode GetBalancedStat()
         {
+            var rnd = DataHub.Instance.RandomSource;
+
             var node = new StatNode
             {
                 Stat = GetRandomStatType()
@@ -92,7 +95,7 @@ namespace CustomHeroCreator.Generators
 
 
             // calculate a "mean" that might lie some maximum distance away from the true mean
-            var randomShift = (_rnd.NextDouble() * 2 * MaxStrengthOptionDiff) - MaxStrengthOptionDiff;
+            var randomShift = (rnd.NextDouble() * 2 * MaxStrengthOptionDiff) - MaxStrengthOptionDiff;
             // shift is now between -maxDiff and + maxDiff
 
             node.Value = normalizedMeanForGivenStat * (1 + randomShift);
@@ -115,13 +118,8 @@ namespace CustomHeroCreator.Generators
             return node;
         }
 
-
-
-        private Random _rnd;
-
-        public SkillTreeGenerator(Random rnd)
+        public SkillTreeGenerator()
         {
-            _rnd = rnd;
         }
 
         /// <summary>

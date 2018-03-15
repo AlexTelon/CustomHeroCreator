@@ -13,10 +13,10 @@ namespace CustomHeroCreator.Fighters
         /// <summary>
         /// Create a scrub that always stronger in the same deterministic manner when it levels up
         /// </summary>
-        public DeterministicScrub() : base(new Random())
+        public DeterministicScrub() : base()
         {
             // dummy AI
-            this.AI = new Agent(new Random());
+            this.AI = new Agent();
         }
         ///// <summary>
         ///// A scrub gets weeker options

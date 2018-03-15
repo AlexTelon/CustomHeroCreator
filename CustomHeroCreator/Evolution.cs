@@ -30,17 +30,13 @@ namespace CustomHeroCreator
 
         public Hero BestHero;
 
-        private Random _rnd;
-
         public AgentType AgentType { get; set; }
 
 
-        public Evolution(Random rnd, SkillTreeGenerator skillTreeGenerator)
+        public Evolution(SkillTreeGenerator skillTreeGenerator)
         {
-            _rnd = rnd;
             SkillTreeGenerator = skillTreeGenerator;
-
-            BestHero = new Hero(_rnd);
+            BestHero = new Hero();
         }
 
         public void RunEvolution(Trials trials, Arena arena)
@@ -127,7 +123,7 @@ namespace CustomHeroCreator
         /// <param name="heroes"></param>
         internal List<Hero> Breed(List<Hero> elites, int sizeOfNewGeneration)
         {
-            var rnd = new Random();
+            var rnd = DataHub.Instance.RandomSource;
             var newGeneration = new List<Hero>();
 
             var eliteSize = elites.Count();
@@ -152,9 +148,9 @@ namespace CustomHeroCreator
 
             for (int i = 0; i < NrOfHeroesInEachGeneration; i++)
             {
-                IAgent ai = AgentFactory.Create(agentType, _rnd);
+                IAgent ai = AgentFactory.Create(agentType);
 
-                Hero hero = new Hero(rnd)
+                Hero hero = new Hero()
                 {
                     AI = ai
                 };
