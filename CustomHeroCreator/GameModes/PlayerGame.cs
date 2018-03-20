@@ -117,9 +117,8 @@ namespace CustomHeroCreator.GameModes
                 options.Add(hero);
 
                 console.Write("[" + i + "] ");
-                hero.PrintStats();
-                console.Write(" ");
-                console.WriteLine("Str: " + hero.Str + " Agi: " + hero.Agi + " Int: " + hero.Int);
+                hero.StatGain.Print();
+                console.WriteLine();
             }
 
             console.ReadLine();

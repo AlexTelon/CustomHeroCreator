@@ -21,11 +21,7 @@ namespace CustomHeroCreator.Enteties
         public uint Level { get; protected set; } = 1;
         public bool IsActive { get; internal set; } = true;
 
-        // Some stats for the Hero
-        //public string Stats => "MaxHealth: " + MaxHealth + " Strength: " + Str + " Agility: " + Agi + " Intelligence: " + Int;
-        public double Str { get; private set; } = 1;
-        public double Agi { get; private set; } = 1;
-        public double Int { get; private set; } = 1;
+        public StatGain StatGain { get; set; } = new StatGain();
 
         public double MaxHealth { get; set; } = 100;
 
@@ -72,7 +68,7 @@ namespace CustomHeroCreator.Enteties
 
         public enum StatTypes
         {
-            MaxHealth, AttackDmg, CritChance, CritMultiplier, Armor
+            Str, Agi, Int, MaxHealth, AttackDmg, CritChance, CritMultiplier, Armor
         };
         //Str, Agi, Int, MaxHealth, AttackDmg, AttackSpeed, CritChance, CritMultiplier, Armor
 
@@ -138,6 +134,11 @@ namespace CustomHeroCreator.Enteties
         {
             ChooseNewSkill();
             Level++;
+
+            // some simple rules for how stat gain works
+            MaxHealth += StatGain.Str;
+            AttackDmg += StatGain.Agi;
+            CritChance += StatGain.Int;
         }
 
         internal virtual StatNode GenerateRandomSkills()
@@ -152,11 +153,11 @@ namespace CustomHeroCreator.Enteties
                 child.Stat = stat;
                 switch (stat)
                 {
-                    //case StatTypes.Str:
-                    //case StatTypes.Agi:
-                    //case StatTypes.Int:
-                    //    child.Value = rnd.Next(1, 5);
-                    //    break;
+                    case StatTypes.Str:
+                    case StatTypes.Agi:
+                    case StatTypes.Int:
+                        child.Value = rnd.Next(1, 5);
+                        break;
                     case StatTypes.MaxHealth:
                         child.Value = rnd.Next(1, 5);
                         break;
@@ -378,12 +379,12 @@ namespace CustomHeroCreator.Enteties
         {
             switch (type)
             {
-                //case StatTypes.Str:
-                //    return ConsoleColor.Red;
-                //case StatTypes.Agi:
-                //    return ConsoleColor.Green;
-                //case StatTypes.Int:
-                //return ConsoleColor.Cyan;
+                case StatTypes.Str:
+                    return ConsoleColor.Red;
+                case StatTypes.Agi:
+                    return ConsoleColor.Green;
+                case StatTypes.Int:
+                    return ConsoleColor.Cyan;
                 case StatTypes.MaxHealth:
                     return ConsoleColor.Magenta;
                 case StatTypes.AttackDmg:
@@ -405,15 +406,15 @@ namespace CustomHeroCreator.Enteties
         {
             switch (type)
             {
-                //case StatTypes.Str:
-                //    Str += value;
-                //    break;
-                //case StatTypes.Agi:
-                //    Agi += value;
-                //    break;
-                //case StatTypes.Int:
-                //    Int += value;
-                //    break;
+                case StatTypes.Str:
+                    StatGain.Str += value;
+                    break;
+                case StatTypes.Agi:
+                    StatGain.Agi += value;
+                    break;
+                case StatTypes.Int:
+                    StatGain.Int += value;
+                    break;
                 case StatTypes.MaxHealth:
                     MaxHealth += value;
                     break;
@@ -441,12 +442,12 @@ namespace CustomHeroCreator.Enteties
         {
             switch (type)
             {
-                //case StatTypes.Str:
-                //    return Str;
-                //case StatTypes.Agi:
-                //    return Agi;
-                //case StatTypes.Int:
-                //    return Int;
+                case StatTypes.Str:
+                    return StatGain.Str;
+                case StatTypes.Agi:
+                    return StatGain.Agi;
+                case StatTypes.Int:
+                    return StatGain.Int;
                 case StatTypes.MaxHealth:
                     return MaxHealth;
                 case StatTypes.AttackDmg:
