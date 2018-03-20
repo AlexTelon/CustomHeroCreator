@@ -10,7 +10,7 @@ using CustomHeroCreator.Repository;
 
 namespace CustomHeroCreator.Enteties
 {
-    public class Hero
+    public class Hero : IEntity
     {
         private static readonly ConsoleColor DEFAULT_TEXT_COLOR = ConsoleColor.Gray;
         private static int SkillOptionsPerLevelUp => Enum.GetNames(typeof(StatTypes)).Count();
