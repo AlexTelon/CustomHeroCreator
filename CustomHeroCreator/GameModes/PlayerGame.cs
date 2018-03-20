@@ -84,8 +84,8 @@ namespace CustomHeroCreator.GameModes
         {
             var console = DataHub.Instance.ConsoleWrapper;
             console.WriteLine("Welcome to Custom Hero Creator!");
-            console.WriteLine("You will begin by selecting a hero!");
-            console.ReadLine();
+            HeroSelection();
+
             console.Clear();
 
             console.WriteLine("You have choosen a X hero!");
@@ -100,6 +100,28 @@ namespace CustomHeroCreator.GameModes
 
             console.WriteLine("Good luck!");
             console.WriteLine("...");
+            console.ReadLine();
+        }
+
+        private void HeroSelection()
+        {
+            var console = DataHub.Instance.ConsoleWrapper;
+
+            console.WriteLine("You will begin by selecting a hero!");
+
+            var options = new List<Hero>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                var hero = new Hero();
+                options.Add(hero);
+
+                console.Write("[" + i + "] ");
+                hero.PrintStats();
+                console.Write(" ");
+                console.WriteLine("Str: " + hero.Str + " Agi: " + hero.Agi + " Int: " + hero.Int);
+            }
+
             console.ReadLine();
         }
 
