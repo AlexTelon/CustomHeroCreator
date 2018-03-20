@@ -24,7 +24,7 @@ namespace CustomHeroCreator.AI
 
             for (int i = 0; i < nrOfStats; i++)
             {
-                if (i == 2 || i == 3)
+                if (i == (int)StatTypes.CritChance || i == (int)StatTypes.CritMultiplier)
                 {
                     weights.Add(rnd.NextDouble() * 10);
                 }

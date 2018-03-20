@@ -61,7 +61,7 @@ namespace CustomHeroCreator.AI
             {
                 var weight = new Weight();
 
-                if (i == 2 || i == 3)
+                if (i == (int)StatTypes.CritChance || i == (int)StatTypes.CritMultiplier)
                 {
                     // Remember, rnd.Next is exlusive on the upper end.
                     for (int x = 0; x < rnd.Next(1, 3); x++)

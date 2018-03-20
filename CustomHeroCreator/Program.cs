@@ -18,19 +18,21 @@ namespace CustomHeroCreator
 #endif
 
             // Select what type of console we want
-#if DEBUG
-            var console = new AutoResponseConsole();
-            console.AutomatedResponses.Add("1");
-#else
-            var console = new PlayerConsole();
+//#if DEBUG
+//            var console = new AutoResponseConsole();
+//            console.AutomatedResponses.Add("1");
+//#else
+//            var console = new PlayerConsole();
 
-#endif
+//#endif
+
+            var console = new PlayerConsole();
 
             DataHub.Instance.ConsoleWrapper = console;
 
-            //var game = new AIGame(playerConsole);
+            //var game = new AIGame(DataHub.Instance.ConsoleWrapper);
             var game = new PlayerGame();
-            game.Difficulty = 3;
+            game.Difficulty = 30;
 
             game.Init();
             game.Start();

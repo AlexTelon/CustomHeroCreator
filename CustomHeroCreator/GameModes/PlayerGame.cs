@@ -63,6 +63,12 @@ namespace CustomHeroCreator.GameModes
 
             Evo.RunEvolution(trials, arena);
 
+            DataHub.Instance.ConsoleWrapper.WriteLine("The value of the different skills:");
+            Evo.BestHero.AI.PrintInternalDebugInfo();
+            DataHub.Instance.ConsoleWrapper.WriteLine();
+
+            DataHub.Instance.ConsoleWrapper.ReadLine();
+
             // we have now trained an AI to know how strong each stat is
             // Now a skill tree generator can be created
             var skillTreeGenerator = new SkillTreeGenerator();
