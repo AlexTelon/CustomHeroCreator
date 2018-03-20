@@ -1,11 +1,11 @@
 ﻿using CustomHeroCreator.CLI;
-using CustomHeroCreator.Fighters;
+using CustomHeroCreator.Enteties;
 using CustomHeroCreator.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static CustomHeroCreator.Hero;
+using static CustomHeroCreator.Enteties.Hero;
 
 namespace CustomHeroCreator
 {

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Enteties;
 using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Repository;
 using CustomHeroCreator.Trees;
-using static CustomHeroCreator.Hero;
+using static CustomHeroCreator.Enteties.Hero;
 
 namespace CustomHeroCreator.AI
 {
@@ -90,7 +91,7 @@ namespace CustomHeroCreator.AI
             return maxIndex;
         }
 
-        public double GetScore(Hero.StatTypes type, double value) => weights[(int)type] * value;
+        public double GetScore(StatTypes type, double value) => weights[(int)type] * value;
 
         public void PrintInternalDebugInfo()
         {

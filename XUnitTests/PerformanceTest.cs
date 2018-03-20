@@ -1,6 +1,7 @@
 using CustomHeroCreator;
 using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Enteties;
 using CustomHeroCreator.Repository;
 using System;
 using System.Diagnostics;

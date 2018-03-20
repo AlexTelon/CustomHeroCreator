@@ -3,7 +3,7 @@ using CustomHeroCreator.Generators;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static CustomHeroCreator.Hero;
+using static CustomHeroCreator.Enteties.Hero;
 
 namespace CustomHeroCreator.Trees
 {

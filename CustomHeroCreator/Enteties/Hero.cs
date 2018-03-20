@@ -6,10 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
-using System.Text;
 using CustomHeroCreator.Repository;
 
-namespace CustomHeroCreator
+namespace CustomHeroCreator.Enteties
 {
     public class Hero
     {

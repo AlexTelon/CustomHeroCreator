@@ -1,10 +1,6 @@
 ﻿using CustomHeroCreator.AI;
-using CustomHeroCreator.CLI;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace CustomHeroCreator.Fighters
+namespace CustomHeroCreator.Enteties
 {
     class DeterministicScrub : Hero
     {

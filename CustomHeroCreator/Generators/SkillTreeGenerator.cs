@@ -1,4 +1,5 @@
 ﻿using CustomHeroCreator.AI;
+using CustomHeroCreator.Enteties;
 using CustomHeroCreator.Repository;
 using CustomHeroCreator.Trees;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using static CustomHeroCreator.Hero;
+using static CustomHeroCreator.Enteties.Hero;
 
 namespace CustomHeroCreator.Generators
 {

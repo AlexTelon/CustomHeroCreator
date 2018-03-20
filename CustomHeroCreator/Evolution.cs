@@ -1,5 +1,6 @@
 ﻿using CustomHeroCreator.AI;
 using CustomHeroCreator.CLI;
+using CustomHeroCreator.Enteties;
 using CustomHeroCreator.Generators;
 using CustomHeroCreator.Helpers;
 using CustomHeroCreator.Logging;

@@ -1,8 +1,9 @@
-﻿using CustomHeroCreator.Trees;
+﻿using CustomHeroCreator.Enteties;
+using CustomHeroCreator.Trees;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static CustomHeroCreator.Hero;
+using static CustomHeroCreator.Enteties.Hero;
 
 namespace CustomHeroCreator.AI
 {
